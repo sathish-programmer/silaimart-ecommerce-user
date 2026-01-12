@@ -3,6 +3,7 @@ import { StarIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarSolid } from '@heroicons/react/24/solid';
 import { useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
 const CustomerReviews = ({ productId }) => {
   const [reviews, setReviews] = useState([]);
@@ -27,7 +28,7 @@ const CustomerReviews = ({ productId }) => {
 
   const fetchReviews = async () => {
     try {
-      const response = await fetch(`http://localhost:5001/api/reviews/product/${productId}`);
+      const response = await fetch(`${API_URL}/reviews/product/${productId}`);
       const data = await response.json();
       setReviews(data.reviews);
       setStats(data.stats);
@@ -41,7 +42,7 @@ const CustomerReviews = ({ productId }) => {
   const fetchUserOrders = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5001/api/orders', {
+      const response = await fetch(`${API_URL}/orders`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -82,7 +83,7 @@ const CustomerReviews = ({ productId }) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5001/api/reviews', {
+      const response = await fetch(`${API_URL}/reviews`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
