@@ -37,6 +37,8 @@ const Checkout = () => {
 
   useEffect(() => {
     if (!user) {
+      // Save current location to return after login
+      localStorage.setItem('redirectAfterLogin', '/checkout');
       navigate('/login');
       return;
     }
@@ -65,11 +67,13 @@ const Checkout = () => {
       console.log('Payment settings:', settings); // Debug log
       setPaymentSettings(settings);
       
-      // Set default payment method based on enabled options
-      if (settings.razorpay?.enabled) setPaymentMethod('razorpay');
-      else if (settings.stripe?.enabled) setPaymentMethod('stripe');
-      else if (settings.cod?.enabled) setPaymentMethod('cod');
-      else if (settings.qr?.enabled) setPaymentMethod('qr');
+      // Set default payment method only if no method is selected yet
+      if (!paymentMethod) {
+        if (settings.razorpay?.enabled) setPaymentMethod('razorpay');
+        else if (settings.stripe?.enabled) setPaymentMethod('stripe');
+        else if (settings.cod?.enabled) setPaymentMethod('cod');
+        else if (settings.qr?.enabled) setPaymentMethod('qr');
+      }
     } catch (error) {
       console.error('Error fetching payment settings:', error);
     }
@@ -145,8 +149,45 @@ const Checkout = () => {
     }
   };
 
-  const nextStep = () => {
+  const handleQRCodeGeneration = async () => {
+    try {
+      setLoading(true);
+      // Calculate totals for QR code
+      const { total } = calculateTotals();
+      
+      // Generate QR code with temporary order data (order will be created in step 4)
+      const response = await axios.post(`${API_URL}/payments/qr/generate`, {
+        amount: total,
+        orderId: 'preview' // Temporary ID for preview
+      }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      
+      if (response.data && response.data.qrCode) {
+        setQrCodeData({ 
+          ...response.data, 
+          previewAmount: total,
+          isPreview: true 
+        });
+        setShowQRCode(true);
+      } else {
+        toast.error('Invalid QR code response from server');
+      }
+    } catch (error) {
+      console.error('QR Code generation error:', error);
+      toast.error(error.response?.data?.message || 'Failed to generate QR code');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const nextStep = async () => {
     if (validateStep(currentStep)) {
+      // If on step 3 and QR payment is selected, generate and show QR code first
+      if (currentStep === 3 && paymentMethod === 'qr') {
+        await handleQRCodeGeneration();
+        return; // Don't proceed to next step yet
+      }
       setCurrentStep(prev => Math.min(5, prev + 1));
     } else {
       toast.error('Please fill in all required fields');
@@ -199,9 +240,12 @@ const Checkout = () => {
           quantity: item.quantity
         })),
         shippingAddress: formData,
-        paymentMethod,
+        paymentMethod: paymentMethod, // Ensure payment method is set correctly
         couponCode: appliedCoupon?.code
       };
+
+      console.log('Creating order with payment method:', paymentMethod); // Debug log
+      console.log('Order data:', orderData); // Debug log
 
       const orderResponse = await axios.post(`${API_URL}/orders`, orderData, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
@@ -215,8 +259,9 @@ const Checkout = () => {
         clearCart();
         navigate(`/order-success/${order._id}`);
       } else if (paymentMethod === 'qr') {
-        // QR Code Payment - Generate QR and show
-        await handleQRPayment(order);
+        // QR Code Payment - User already saw QR code before review, just go to success page
+        clearCart();
+        navigate(`/order-success/${order._id}`);
       } else if (paymentMethod === 'razorpay') {
         // Initialize Razorpay payment
         await handleRazorpayPayment(order);
@@ -241,11 +286,16 @@ const Checkout = () => {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
       
-      setQrCodeData({ ...response.data, order });
-      setShowQRCode(true);
-      toast.success('QR Code generated! Please scan to pay.');
+      if (response.data && response.data.qrCode) {
+        setQrCodeData({ ...response.data, order, isPreview: false });
+        setShowQRCode(true);
+        toast.success('QR Code generated! Please scan to pay.');
+      } else {
+        toast.error('Invalid QR code response from server');
+      }
     } catch (error) {
-      toast.error('Failed to generate QR code');
+      console.error('QR Code generation error:', error);
+      toast.error(error.response?.data?.message || 'Failed to generate QR code');
     }
   };
 
@@ -319,6 +369,66 @@ const Checkout = () => {
   };
 
   if (showQRCode && qrCodeData) {
+    // If this is a preview QR code (before order creation), show continue button
+    if (qrCodeData.isPreview) {
+      return (
+        <div className="min-h-screen flex items-center justify-center py-8">
+          <div className="max-w-md mx-auto text-center bg-gradient-to-br from-gray-900 to-gray-800 p-8 rounded-2xl border border-gray-700">
+            <div className="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
+              <QrCodeIcon className="h-12 w-12 text-white" />
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-4">Scan QR Code to Pay</h2>
+            <p className="text-gray-300 mb-6">
+              Amount: ₹{qrCodeData.previewAmount?.toLocaleString() || total.toLocaleString()}
+            </p>
+            
+            <div className="bg-white p-4 rounded-xl mb-6">
+              <img 
+                src={qrCodeData.qrCode} 
+                alt="Payment QR Code" 
+                className="w-full max-w-xs mx-auto"
+              />
+            </div>
+            
+            <div className="text-left mb-6">
+              <h3 className="text-white font-semibold mb-2">Instructions:</h3>
+              <ul className="text-gray-300 text-sm space-y-1">
+                {qrCodeData.instructions?.map((instruction, index) => (
+                  <li key={index} className="flex items-start">
+                    <span className="text-bronze mr-2">•</span>
+                    {instruction}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            
+            <div className="space-y-3">
+              <button
+                onClick={() => {
+                  setShowQRCode(false);
+                  setQrCodeData(null);
+                  setCurrentStep(4); // Go to review step
+                }}
+                className="w-full bg-bronze text-black py-3 rounded-xl font-semibold hover:bg-gold transition-colors"
+              >
+                Continue to Review
+              </button>
+              <button
+                onClick={() => {
+                  setShowQRCode(false);
+                  setQrCodeData(null);
+                }}
+                className="w-full bg-gray-800 text-white py-3 rounded-xl font-semibold hover:bg-gray-700 transition-colors"
+              >
+                Back
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
+    // If order is created, show completion button
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="max-w-md mx-auto text-center bg-gradient-to-br from-gray-900 to-gray-800 p-8 rounded-2xl border border-gray-700">
@@ -327,7 +437,7 @@ const Checkout = () => {
           </div>
           <h2 className="text-3xl font-bold text-white mb-4">Scan QR Code to Pay</h2>
           <p className="text-gray-300 mb-6">
-            Order #{qrCodeData.order?._id?.slice(-8)} - Amount: ₹{total.toLocaleString()}
+            Order #{qrCodeData.order?.orderNumber || qrCodeData.order?._id?.slice(-8)} - Amount: ₹{qrCodeData.order?.total?.toLocaleString() || total.toLocaleString()}
           </p>
           
           <div className="bg-white p-4 rounded-xl mb-6">
@@ -467,7 +577,11 @@ const Checkout = () => {
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="text-white font-semibold">Apply Coupon</h3>
                       <button
-                        onClick={() => setShowCoupons(!showCoupons)}
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setShowCoupons(!showCoupons);
+                        }}
                         className="text-bronze text-sm hover:text-gold transition-colors"
                       >
                         {showCoupons ? 'Hide' : 'Show'} Available Coupons

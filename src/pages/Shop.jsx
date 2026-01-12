@@ -10,6 +10,21 @@ import toast from 'react-hot-toast';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
+// Helper function to strip HTML tags from text
+const stripHtmlTags = (html) => {
+  if (!html) return '';
+  // Remove HTML tags and decode HTML entities
+  return html
+    .replace(/<[^>]*>/g, '') // Remove HTML tags
+    .replace(/&nbsp;/g, ' ') // Replace &nbsp; with space
+    .replace(/&amp;/g, '&') // Replace &amp; with &
+    .replace(/&lt;/g, '<') // Replace &lt; with <
+    .replace(/&gt;/g, '>') // Replace &gt; with >
+    .replace(/&quot;/g, '"') // Replace &quot; with "
+    .replace(/&#39;/g, "'") // Replace &#39; with '
+    .trim();
+};
+
 const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
@@ -733,7 +748,7 @@ const Shop = () => {
                               </div>
                               
                               <p className="text-gray-300 text-sm mb-4 line-clamp-2">
-                                {product.description}
+                                {stripHtmlTags(product.description)}
                               </p>
                               
                               {product.rating?.average > 0 && (

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
 
@@ -7,6 +7,7 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const { login, isLoading } = useAuthStore();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,7 +15,10 @@ const Login = () => {
     
     if (result.success) {
       toast.success('Login successful!');
-      navigate('/');
+      // Check for redirect URL from localStorage or location state
+      const redirectTo = localStorage.getItem('redirectAfterLogin') || location.state?.from?.pathname || '/';
+      localStorage.removeItem('redirectAfterLogin');
+      navigate(redirectTo);
     } else {
       toast.error(result.message);
     }
