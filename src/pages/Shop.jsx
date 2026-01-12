@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { MagnifyingGlassIcon, FunnelIcon, StarIcon, XMarkIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { MagnifyingGlassIcon, FunnelIcon, StarIcon, XMarkIcon, AdjustmentsHorizontalIcon, PlusIcon, MinusIcon } from '@heroicons/react/24/outline';
 import { HeartIcon, ShoppingCartIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
 import { useCartStore } from '../store/cartStore';
@@ -51,6 +51,8 @@ const Shop = () => {
   
   const [filterOptions, setFilterOptions] = useState({});
   const [viewMode, setViewMode] = useState('grid'); // grid or list
+  const [quantities, setQuantities] = useState({}); // Track quantity for each product
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCategories();
@@ -105,9 +107,22 @@ const Shop = () => {
     setSearchParams(newParams);
   };
 
-  const handleAddToCart = (product) => {
-    addItem(product);
-    toast.success('Added to cart!');
+  const handleAddToCart = (product, quantity = 1) => {
+    addItem(product, quantity);
+    toast.success(`Added ${quantity} item(s) to cart!`);
+  };
+
+  const handleBuyNow = (product, quantity = 1) => {
+    addItem(product, quantity);
+    navigate('/checkout');
+  };
+
+  const updateQuantity = (productId, change) => {
+    setQuantities(prev => {
+      const currentQty = prev[productId] || 1;
+      const newQty = Math.max(1, Math.min(change === 'inc' ? currentQty + 1 : currentQty - 1, 999));
+      return { ...prev, [productId]: newQty };
+    });
   };
 
   const clearFilters = () => {
@@ -531,7 +546,7 @@ const Shop = () => {
                   {products.map((product) => (
                     viewMode === 'grid' ? (
                       // Grid View
-                      <div key={product._id} className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 group border border-gray-700 hover:border-bronze/50">
+                      <div key={product._id} className="bg-gradient-to-br from-gray-900/95 via-gray-800/95 to-gray-900/95 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-bronze/10 transition-all duration-300 group border border-gray-700/50 hover:border-bronze/60 hover:-translate-y-1">
                         <Link to={`/product/${product._id}`}>
                           <div className="relative aspect-square overflow-hidden">
                             {product.images?.[0]?.url ? (
@@ -603,9 +618,9 @@ const Shop = () => {
                           </div>
                         </Link>
                         
-                        <div className="p-6">
+                        <div className="p-5">
                           <Link to={`/product/${product._id}`}>
-                            <h3 className="text-white font-bold text-lg mb-2 group-hover:text-bronze transition-colors line-clamp-2 leading-tight">
+                            <h3 className="text-white font-bold text-lg mb-2 group-hover:text-bronze transition-colors line-clamp-2 leading-tight hover:underline decoration-bronze/50">
                               {product.name}
                             </h3>
                           </Link>
@@ -644,38 +659,85 @@ const Shop = () => {
                           )}
                           
                           {/* Price */}
-                          <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center space-x-2">
-                              <span className="text-bronze font-bold text-xl">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-baseline space-x-2">
+                              <span className="text-bronze font-bold text-2xl">
                                 ₹{(product.discountPrice || product.price).toLocaleString()}
                               </span>
                               {product.discountPrice && (
-                                <span className="text-gray-500 line-through text-sm">
+                                <span className="text-gray-500 line-through text-sm font-medium">
                                   ₹{product.price.toLocaleString()}
                                 </span>
                               )}
                             </div>
                             {product.stock <= 5 && product.stock > 0 && (
-                              <span className="text-orange-400 text-xs font-medium">
+                              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-orange-500/20 text-orange-400 border border-orange-500/30">
                                 Only {product.stock} left
                               </span>
                             )}
                           </div>
-                          
-                          {/* Action Button */}
-                          <button
-                            onClick={() => handleAddToCart(product)}
-                            disabled={product.stock === 0}
-                            className="w-full bg-gradient-to-r from-bronze to-gold text-black py-3 rounded-xl font-bold hover:from-gold hover:to-bronze transition-all duration-300 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl"
-                          >
-                            <ShoppingCartIcon className="h-5 w-5" />
-                            <span>{product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}</span>
-                          </button>
+
+                          {/* Quantity Selector & Actions */}
+                          <div className="space-y-3 mt-4 pt-4 border-t border-gray-700/50">
+                            <div className="flex items-center justify-between">
+                              <label className="text-gray-300 text-xs font-medium uppercase tracking-wide">Quantity</label>
+                              <div className="flex items-center bg-gray-800/80 backdrop-blur-sm border border-gray-700/50 rounded-xl overflow-hidden shadow-inner">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    updateQuantity(product._id, 'dec');
+                                  }}
+                                  disabled={product.stock === 0 || (quantities[product._id] || 1) <= 1}
+                                  className="p-2.5 text-gray-400 hover:text-bronze hover:bg-gray-700/50 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-gray-400 disabled:hover:bg-transparent"
+                                >
+                                  <MinusIcon className="h-4 w-4" />
+                                </button>
+                                <span className="px-4 py-2 text-white font-bold text-base min-w-[3.5rem] text-center bg-gray-900/50 border-x border-gray-700/50">
+                                  {quantities[product._id] || 1}
+                                </span>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    updateQuantity(product._id, 'inc');
+                                  }}
+                                  disabled={product.stock === 0 || (quantities[product._id] || 1) >= Math.min(product.stock, 99)}
+                                  className="p-2.5 text-gray-400 hover:text-bronze hover:bg-gray-700/50 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-gray-400 disabled:hover:bg-transparent"
+                                >
+                                  <PlusIcon className="h-4 w-4" />
+                                </button>
+                              </div>
+                            </div>
+                            
+                            {/* Action Buttons */}
+                            <div className="grid grid-cols-2 gap-2">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleAddToCart(product, quantities[product._id] || 1);
+                                }}
+                                disabled={product.stock === 0}
+                                className="group relative bg-gradient-to-br from-bronze via-bronze to-[#B8731E] text-black py-3 rounded-xl font-bold hover:from-gold hover:to-bronze transition-all duration-300 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-sm shadow-lg shadow-bronze/20 hover:shadow-xl hover:shadow-bronze/30 hover:scale-[1.02] active:scale-[0.98]"
+                              >
+                                <ShoppingCartIcon className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                                <span className="font-semibold">{product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}</span>
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleBuyNow(product, quantities[product._id] || 1);
+                                }}
+                                disabled={product.stock === 0}
+                                className="group bg-white/95 text-black py-3 rounded-xl font-bold hover:bg-white transition-all duration-300 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed text-sm shadow-lg shadow-white/10 hover:shadow-xl hover:shadow-white/20 hover:scale-[1.02] active:scale-[0.98]"
+                              >
+                                <span className="font-semibold">Buy Now</span>
+                              </button>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     ) : (
                       // List View
-                      <div key={product._id} className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 group border border-gray-700 hover:border-bronze/50">
+                      <div key={product._id} className="bg-gradient-to-r from-gray-900/95 via-gray-800/95 to-gray-900/95 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-bronze/10 transition-all duration-300 group border border-gray-700/50 hover:border-bronze/60 hover:-translate-y-0.5">
                         <div className="flex flex-col md:flex-row">
                           <Link to={`/product/${product._id}`} className="md:w-80 flex-shrink-0">
                             <div className="relative aspect-square md:aspect-[4/3] overflow-hidden">
@@ -772,26 +834,76 @@ const Shop = () => {
                               )}
                             </div>
                             
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center space-x-3">
-                                <span className="text-bronze font-bold text-2xl">
-                                  ₹{(product.discountPrice || product.price).toLocaleString()}
-                                </span>
-                                {product.discountPrice && (
-                                  <span className="text-gray-500 line-through text-lg">
-                                    ₹{product.price.toLocaleString()}
+                            <div className="space-y-3">
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center space-x-3">
+                                  <span className="text-bronze font-bold text-2xl">
+                                    ₹{(product.discountPrice || product.price).toLocaleString()}
                                   </span>
-                                )}
+                                  {product.discountPrice && (
+                                    <span className="text-gray-500 line-through text-lg">
+                                      ₹{product.price.toLocaleString()}
+                                    </span>
+                                  )}
+                                </div>
                               </div>
-                              
-                              <button
-                                onClick={() => handleAddToCart(product)}
-                                disabled={product.stock === 0}
-                                className="bg-gradient-to-r from-bronze to-gold text-black px-6 py-3 rounded-xl font-bold hover:from-gold hover:to-bronze transition-all duration-300 disabled:from-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed flex items-center space-x-2"
-                              >
-                                <ShoppingCartIcon className="h-5 w-5" />
-                                <span>{product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}</span>
-                              </button>
+
+                              {/* Quantity Selector & Actions */}
+                              <div className="space-y-3 pt-3 border-t border-gray-700/50">
+                                <div className="flex items-center justify-between">
+                                  <label className="text-gray-300 text-xs font-medium uppercase tracking-wide">Quantity</label>
+                                  <div className="flex items-center bg-gray-800/80 backdrop-blur-sm border border-gray-700/50 rounded-xl overflow-hidden shadow-inner">
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        updateQuantity(product._id, 'dec');
+                                      }}
+                                      disabled={product.stock === 0 || (quantities[product._id] || 1) <= 1}
+                                      className="p-2.5 text-gray-400 hover:text-bronze hover:bg-gray-700/50 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-gray-400 disabled:hover:bg-transparent"
+                                    >
+                                      <MinusIcon className="h-4 w-4" />
+                                    </button>
+                                    <span className="px-4 py-2 text-white font-bold text-base min-w-[3.5rem] text-center bg-gray-900/50 border-x border-gray-700/50">
+                                      {quantities[product._id] || 1}
+                                    </span>
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        updateQuantity(product._id, 'inc');
+                                      }}
+                                      disabled={product.stock === 0 || (quantities[product._id] || 1) >= Math.min(product.stock, 99)}
+                                      className="p-2.5 text-gray-400 hover:text-bronze hover:bg-gray-700/50 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-gray-400 disabled:hover:bg-transparent"
+                                    >
+                                      <PlusIcon className="h-4 w-4" />
+                                    </button>
+                                  </div>
+                                </div>
+                                
+                                {/* Action Buttons */}
+                                <div className="flex space-x-3">
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleAddToCart(product, quantities[product._id] || 1);
+                                    }}
+                                    disabled={product.stock === 0}
+                                    className="group flex-1 bg-gradient-to-br from-bronze via-bronze to-[#B8731E] text-black px-4 py-3 rounded-xl font-bold hover:from-gold hover:to-bronze transition-all duration-300 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed flex items-center justify-center space-x-2 shadow-lg shadow-bronze/20 hover:shadow-xl hover:shadow-bronze/30 hover:scale-[1.02] active:scale-[0.98]"
+                                  >
+                                    <ShoppingCartIcon className="h-5 w-5 group-hover:scale-110 transition-transform" />
+                                    <span className="font-semibold">{product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}</span>
+                                  </button>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleBuyNow(product, quantities[product._id] || 1);
+                                    }}
+                                    disabled={product.stock === 0}
+                                    className="group flex-1 bg-white/95 text-black px-4 py-3 rounded-xl font-bold hover:bg-white transition-all duration-300 disabled:bg-gray-700 disabled:text-gray-500 disabled:cursor-not-allowed shadow-lg shadow-white/10 hover:shadow-xl hover:shadow-white/20 hover:scale-[1.02] active:scale-[0.98]"
+                                  >
+                                    <span className="font-semibold">Buy Now</span>
+                                  </button>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>

@@ -46,12 +46,21 @@ const Cart = () => {
           <div className="lg:col-span-2 space-y-4">
             {items.map((item) => (
               <div key={item.product._id} className="bg-gray-900 rounded-lg p-6 flex items-center space-x-4">
-                <div className="w-24 h-24 flex-shrink-0">
-                  <img
-                    src={item.product.images?.[0]?.url || '/placeholder-product.jpg'}
-                    alt={item.product.name}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
+                <div className="w-24 h-24 flex-shrink-0 bg-gradient-to-br from-gray-800 to-gray-700 rounded-lg flex items-center justify-center overflow-hidden">
+                  {item.product.images?.[0]?.url ? (
+                    <img
+                      src={item.product.images[0].url}
+                      alt={item.product.name}
+                      className="w-full h-full object-cover rounded-lg"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextElementSibling.style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
+                  <div className="hidden w-full h-full flex-col items-center justify-center p-2 text-center">
+                    <span className="text-bronze font-bold text-xs leading-tight break-words">{item.product.name}</span>
+                  </div>
                 </div>
 
                 <div className="flex-1">

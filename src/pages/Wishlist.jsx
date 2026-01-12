@@ -156,12 +156,27 @@ const Wishlist = () => {
                 </div>
 
                 {/* Product Image */}
-                <div className="relative aspect-square overflow-hidden">
-                  <img 
-                    src={product.images?.[0]?.url || '/placeholder-product.jpg'} 
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
+                <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-800 to-gray-700">
+                  {product.images?.[0]?.url ? (
+                    <>
+                      <img 
+                        src={product.images[0].url} 
+                        alt={product.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextElementSibling.style.display = 'flex';
+                        }}
+                      />
+                      <div className="hidden w-full h-full absolute inset-0 flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-gray-800 to-gray-700">
+                        <span className="text-bronze font-bold text-sm leading-tight break-words">{product.name}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
+                      <span className="text-bronze font-bold text-sm leading-tight break-words">{product.name}</span>
+                    </div>
+                  )}
                   
                   {/* Discount Badge */}
                   {product.discountPrice && (

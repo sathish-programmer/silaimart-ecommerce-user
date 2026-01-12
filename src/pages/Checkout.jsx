@@ -552,12 +552,21 @@ const Checkout = () => {
                   <div className="space-y-4">
                     {items.map((item) => (
                       <div key={item.product._id} className="flex items-center space-x-4 p-4 bg-gray-800 rounded-xl">
-                        <div className="w-16 h-16 flex-shrink-0">
-                          <img
-                            src={item.product.images?.[0]?.url || '/placeholder-product.jpg'}
-                            alt={item.product.name}
-                            className="w-full h-full object-cover rounded-lg"
-                          />
+                        <div className="w-16 h-16 flex-shrink-0 bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center overflow-hidden">
+                          {item.product.images?.[0]?.url ? (
+                            <img
+                              src={item.product.images[0].url}
+                              alt={item.product.name}
+                              className="w-full h-full object-cover rounded-lg"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.nextElementSibling.style.display = 'flex';
+                              }}
+                            />
+                          ) : null}
+                          <div className="hidden w-full h-full flex-col items-center justify-center p-1 text-center">
+                            <span className="text-bronze font-bold text-[10px] leading-tight break-words">{item.product.name}</span>
+                          </div>
                         </div>
                         <div className="flex-1">
                           <h3 className="text-white font-semibold">{item.product.name}</h3>
@@ -942,11 +951,22 @@ const Checkout = () => {
                       <div className="space-y-3 max-h-60 overflow-y-auto">
                         {items.map((item) => (
                           <div key={item.product._id} className="flex items-center space-x-3 p-3 bg-gray-800 rounded-lg">
-                            <img
-                              src={item.product.images?.[0]?.url || '/placeholder-product.jpg'}
-                              alt={item.product.name}
-                              className="w-12 h-12 object-cover rounded-lg"
-                            />
+                            <div className="w-12 h-12 flex-shrink-0 bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center overflow-hidden">
+                              {item.product.images?.[0]?.url ? (
+                                <img
+                                  src={item.product.images[0].url}
+                                  alt={item.product.name}
+                                  className="w-full h-full object-cover rounded-lg"
+                                  onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    e.target.nextElementSibling.style.display = 'flex';
+                                  }}
+                                />
+                              ) : null}
+                              <div className="hidden w-full h-full flex-col items-center justify-center p-1 text-center">
+                                <span className="text-bronze font-bold text-[9px] leading-tight break-words">{item.product.name}</span>
+                              </div>
+                            </div>
                             <div className="flex-1">
                               <p className="text-white font-medium text-sm">{item.product.name}</p>
                               <p className="text-gray-400 text-xs">₹{(item.product.discountPrice || item.product.price).toLocaleString()} × {item.quantity}</p>
@@ -1091,12 +1111,21 @@ const Checkout = () => {
               <div className="space-y-3 mb-6 max-h-60 overflow-y-auto">
                 {items.map((item) => (
                   <div key={item.product._id} className="flex items-center space-x-3">
-                    <div className="w-12 h-12 flex-shrink-0">
-                      <img
-                        src={item.product.images?.[0]?.url || '/placeholder-product.jpg'}
-                        alt={item.product.name}
-                        className="w-full h-full object-cover rounded-lg"
-                      />
+                    <div className="w-12 h-12 flex-shrink-0 bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center overflow-hidden">
+                      {item.product.images?.[0]?.url ? (
+                        <img
+                          src={item.product.images[0].url}
+                          alt={item.product.name}
+                          className="w-full h-full object-cover rounded-lg"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextElementSibling.style.display = 'flex';
+                          }}
+                        />
+                      ) : null}
+                      <div className="hidden w-full h-full flex-col items-center justify-center p-1 text-center">
+                        <span className="text-bronze font-bold text-[9px] leading-tight break-words">{item.product.name}</span>
+                      </div>
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-white text-sm font-medium truncate">{item.product.name}</p>

@@ -155,29 +155,44 @@ const ProductDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
           {/* Enhanced Image Gallery */}
           <div className="space-y-4">
-            <div className="relative aspect-square overflow-hidden rounded-2xl bg-gray-900 group">
+            <div className="relative aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-gray-800 to-gray-700 group">
               <div 
                 className="relative w-full h-full cursor-zoom-in"
                 onMouseEnter={() => setShowZoom(true)}
                 onMouseLeave={() => setShowZoom(false)}
                 onMouseMove={handleMouseMove}
               >
-                <img
-                  src={product.images?.[selectedImage]?.url || '/placeholder-product.jpg'}
-                  alt={product.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                
-                {/* Zoom Overlay */}
-                {showZoom && (
-                  <div 
-                    className="absolute inset-0 bg-no-repeat pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{
-                      backgroundImage: `url(${product.images?.[selectedImage]?.url})`,
-                      backgroundSize: '200%',
-                      backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`
-                    }}
-                  />
+                {product.images?.[selectedImage]?.url ? (
+                  <>
+                    <img
+                      src={product.images[selectedImage].url}
+                      alt={product.name}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextElementSibling.style.display = 'flex';
+                      }}
+                    />
+                    <div className="hidden w-full h-full absolute inset-0 flex-col items-center justify-center p-8 text-center bg-gradient-to-br from-gray-800 to-gray-700">
+                      <span className="text-bronze font-bold text-xl leading-tight break-words">{product.name}</span>
+                    </div>
+                    
+                    {/* Zoom Overlay */}
+                    {showZoom && product.images?.[selectedImage]?.url && (
+                      <div 
+                        className="absolute inset-0 bg-no-repeat pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        style={{
+                          backgroundImage: `url(${product.images[selectedImage].url})`,
+                          backgroundSize: '200%',
+                          backgroundPosition: `${zoomPosition.x}% ${zoomPosition.y}%`
+                        }}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center">
+                    <span className="text-bronze font-bold text-xl leading-tight break-words">{product.name}</span>
+                  </div>
                 )}
               </div>
               
@@ -651,12 +666,27 @@ const ProductDetail = () => {
               {relatedProducts.map((relatedProduct) => (
                 <Link key={relatedProduct._id} to={`/product/${relatedProduct._id}`}>
                   <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 group border border-gray-700 hover:border-bronze/50">
-                    <div className="relative aspect-square overflow-hidden">
-                      <img 
-                        src={relatedProduct.images?.[0]?.url || '/placeholder-product.jpg'} 
-                        alt={relatedProduct.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
+                    <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-800 to-gray-700">
+                      {relatedProduct.images?.[0]?.url ? (
+                        <>
+                          <img 
+                            src={relatedProduct.images[0].url} 
+                            alt={relatedProduct.name}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              e.target.nextElementSibling.style.display = 'flex';
+                            }}
+                          />
+                          <div className="hidden w-full h-full absolute inset-0 flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-gray-800 to-gray-700">
+                            <span className="text-bronze font-bold text-sm leading-tight break-words">{relatedProduct.name}</span>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
+                          <span className="text-bronze font-bold text-sm leading-tight break-words">{relatedProduct.name}</span>
+                        </div>
+                      )}
                       {relatedProduct.discountPrice && (
                         <div className="absolute top-3 left-3 bg-red-600 text-white px-2 py-1 rounded-full text-sm font-bold">
                           -{Math.round(((relatedProduct.price - relatedProduct.discountPrice) / relatedProduct.price) * 100)}%

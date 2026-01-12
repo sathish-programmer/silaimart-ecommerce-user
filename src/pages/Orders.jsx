@@ -313,16 +313,21 @@ const Orders = () => {
                   <div className="flex items-center space-x-4 overflow-x-auto pb-2">
                     {order.items?.slice(0, 3).map((item, index) => (
                       <div key={index} className="flex-shrink-0 flex items-center space-x-3 bg-gray-800 rounded-lg p-3">
-                        <div className="w-12 h-12 bg-gray-700 rounded-lg flex items-center justify-center">
-                          {item.product?.images?.[0] ? (
+                        <div className="w-12 h-12 bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center overflow-hidden">
+                          {item.product?.images?.[0]?.url ? (
                             <img 
                               src={item.product.images[0].url} 
                               alt={item.product.name} 
-                              className="w-full h-full object-cover rounded-lg" 
+                              className="w-full h-full object-cover rounded-lg"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.nextElementSibling.style.display = 'flex';
+                              }}
                             />
-                          ) : (
-                            <span className="text-gray-500 text-xs">No Image</span>
-                          )}
+                          ) : null}
+                          <div className={`${item.product?.images?.[0]?.url ? 'hidden' : 'flex'} w-full h-full flex-col items-center justify-center p-1 text-center`}>
+                            <span className="text-bronze font-bold text-[9px] leading-tight break-words">{item.product?.name || 'Product'}</span>
+                          </div>
                         </div>
                         <div className="flex-1">
                           <p className="text-white text-sm font-medium">{item.product?.name || 'Product'}</p>
@@ -439,12 +444,21 @@ const Orders = () => {
                   <div className="space-y-3">
                     {selectedOrder.items?.map((item, index) => (
                       <div key={index} className="flex items-center space-x-4 p-4 bg-gray-800 rounded-xl">
-                        <div className="w-16 h-16 bg-gray-700 rounded-lg flex items-center justify-center">
-                          {item.product?.images?.[0] ? (
-                            <img src={item.product.images[0].url} alt={item.product.name} className="w-full h-full object-cover rounded-lg" />
-                          ) : (
-                            <span className="text-gray-500 text-xs">No Image</span>
-                          )}
+                        <div className="w-16 h-16 bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center overflow-hidden">
+                          {item.product?.images?.[0]?.url ? (
+                            <img 
+                              src={item.product.images[0].url} 
+                              alt={item.product.name} 
+                              className="w-full h-full object-cover rounded-lg"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.nextElementSibling.style.display = 'flex';
+                              }}
+                            />
+                          ) : null}
+                          <div className={`${item.product?.images?.[0]?.url ? 'hidden' : 'flex'} w-full h-full flex-col items-center justify-center p-1 text-center`}>
+                            <span className="text-bronze font-bold text-[10px] leading-tight break-words">{item.product?.name || 'Product'}</span>
+                          </div>
                         </div>
                         <div className="flex-1">
                           <h5 className="text-white font-medium">{item.product?.name || 'Product'}</h5>
@@ -563,12 +577,21 @@ const Orders = () => {
               <div className="p-6">
                 {/* Product Info */}
                 <div className="flex items-center space-x-4 mb-6 p-4 bg-gray-800 rounded-xl">
-                  <div className="w-16 h-16 bg-gray-700 rounded-lg flex items-center justify-center">
-                    {reviewProduct.images?.[0] ? (
-                      <img src={reviewProduct.images[0].url} alt={reviewProduct.name} className="w-full h-full object-cover rounded-lg" />
-                    ) : (
-                      <span className="text-gray-500 text-xs">No Image</span>
-                    )}
+                  <div className="w-16 h-16 bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center overflow-hidden">
+                    {reviewProduct.images?.[0]?.url ? (
+                      <img 
+                        src={reviewProduct.images[0].url} 
+                        alt={reviewProduct.name} 
+                        className="w-full h-full object-cover rounded-lg"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextElementSibling.style.display = 'flex';
+                        }}
+                      />
+                    ) : null}
+                    <div className={`${reviewProduct.images?.[0]?.url ? 'hidden' : 'flex'} w-full h-full flex-col items-center justify-center p-1 text-center`}>
+                      <span className="text-bronze font-bold text-[10px] leading-tight break-words">{reviewProduct.name}</span>
+                    </div>
                   </div>
                   <div>
                     <h3 className="text-white font-semibold">{reviewProduct.name}</h3>

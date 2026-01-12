@@ -141,12 +141,21 @@ const OrderSuccess = () => {
             <div className="space-y-4">
               {order.items.map((item, index) => (
                 <div key={index} className="flex items-center space-x-4 p-4 bg-gray-800 rounded-xl">
-                  <div className="w-16 h-16 flex-shrink-0">
-                    <img
-                      src={item.product?.images?.[0]?.url || '/placeholder-product.jpg'}
-                      alt={item.product?.name || 'Product'}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
+                  <div className="w-16 h-16 flex-shrink-0 bg-gradient-to-br from-gray-700 to-gray-800 rounded-lg flex items-center justify-center overflow-hidden">
+                    {item.product?.images?.[0]?.url ? (
+                      <img
+                        src={item.product.images[0].url}
+                        alt={item.product?.name || 'Product'}
+                        className="w-full h-full object-cover rounded-lg"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextElementSibling.style.display = 'flex';
+                        }}
+                      />
+                    ) : null}
+                    <div className={`${item.product?.images?.[0]?.url ? 'hidden' : 'flex'} w-full h-full flex-col items-center justify-center p-1 text-center`}>
+                      <span className="text-bronze font-bold text-[10px] leading-tight break-words">{item.product?.name || 'Product'}</span>
+                    </div>
                   </div>
                   <div className="flex-1">
                     <h4 className="text-white font-semibold">{item.product?.name || 'Product'}</h4>

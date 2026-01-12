@@ -28,12 +28,27 @@ const ProductCard = ({ product, index = 0 }) => {
       <Link to={`/product/${product._id}`} className=\"block\">
         <div className=\"bg-gray-900 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 group-hover:scale-105\">
           {/* Image */}
-          <div className=\"relative aspect-square overflow-hidden\">
-            <img 
-              src={product.images?.[0]?.url || '/placeholder-product.jpg'} 
-              alt={product.name}
-              className=\"w-full h-full object-cover group-hover:scale-110 transition-transform duration-300\"
-            />
+          <div className=\"relative aspect-square overflow-hidden bg-gradient-to-br from-gray-800 to-gray-700\">
+            {product.images?.[0]?.url ? (
+              <>
+                <img 
+                  src={product.images[0].url} 
+                  alt={product.name}
+                  className=\"w-full h-full object-cover group-hover:scale-110 transition-transform duration-300\"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextElementSibling.style.display = 'flex';
+                  }}
+                />
+                <div className=\"hidden w-full h-full absolute inset-0 flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-gray-800 to-gray-700\">
+                  <span className=\"text-bronze font-bold text-sm leading-tight break-words\">{product.name}</span>
+                </div>
+              </>
+            ) : (
+              <div className=\"w-full h-full flex flex-col items-center justify-center p-4 text-center\">
+                <span className=\"text-bronze font-bold text-sm leading-tight break-words\">{product.name}</span>
+              </div>
+            )}
             {discountPercentage > 0 && (
               <div className=\"absolute top-2 left-2 bg-red-600 text-white px-2 py-1 rounded text-sm font-semibold\">
                 -{discountPercentage}%
