@@ -189,6 +189,8 @@ const Checkout = () => {
         return; // Don't proceed to next step yet
       }
       setCurrentStep(prev => Math.min(5, prev + 1));
+      // Scroll to top when moving to next step
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       toast.error('Please fill in all required fields');
     }
@@ -196,6 +198,8 @@ const Checkout = () => {
 
   const prevStep = () => {
     setCurrentStep(prev => Math.max(1, prev - 1));
+    // Scroll to top when going to previous step
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleSubmit = async (e) => {
@@ -408,6 +412,8 @@ const Checkout = () => {
                   setShowQRCode(false);
                   setQrCodeData(null);
                   setCurrentStep(4); // Go to review step
+                  // Scroll to top when continuing to review
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
                 className="w-full bg-bronze text-black py-3 rounded-xl font-semibold hover:bg-gold transition-colors"
               >
