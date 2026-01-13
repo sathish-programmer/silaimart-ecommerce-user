@@ -136,6 +136,7 @@ const Checkout = () => {
       case 2:
         return formData.name.trim() && 
                formData.phone.trim() && 
+               formData.email.trim() &&
                formData.street.trim() && 
                formData.city.trim() && 
                formData.state.trim() && 
@@ -212,6 +213,10 @@ const Checkout = () => {
     }
     if (!formData.phone.trim()) {
       toast.error('Please enter your phone number');
+      return;
+    }
+    if (!formData.email.trim()) {
+      toast.error('Please enter your email address');
       return;
     }
     if (!formData.street.trim()) {

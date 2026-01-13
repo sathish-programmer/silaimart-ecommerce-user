@@ -291,6 +291,15 @@ const Orders = () => {
                         month: 'long',
                         day: 'numeric'
                       })}</p>
+                      {order.estimatedDeliveryDate && (
+                        <p className="text-bronze text-sm font-medium mt-1">
+                          Expected Delivery: {new Date(order.estimatedDeliveryDate).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })}
+                        </p>
+                      )}
                       <div className="flex items-center space-x-2 mt-1">
                         {getPaymentIcon(order.paymentMethod)}
                         <span className="text-gray-400 text-sm capitalize">{order.paymentMethod}</span>
