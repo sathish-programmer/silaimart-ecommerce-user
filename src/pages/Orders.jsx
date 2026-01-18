@@ -58,7 +58,16 @@ const Orders = () => {
       const response = await axios.get(`${API_URL}/orders/${orderId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
-      setSelectedOrder(response.data);
+      
+      // Handle both response.data and response.data.order formats
+      const orderData = response.data.order || response.data;
+      
+      if (!orderData || !orderData._id) {
+        toast.error('Order data is incomplete');
+        return;
+      }
+      
+      setSelectedOrder(orderData);
       setShowModal(true);
     } catch (error) {
       console.error('Error fetching order details:', error);
@@ -77,7 +86,7 @@ const Orders = () => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `invoice-${orderId.slice(-8)}.pdf`;
+      link.download = `invoice-${orderId?.slice(-8) || 'order'}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -196,7 +205,7 @@ const Orders = () => {
     const matchesStatus = statusFilter === 'all' || order.orderStatus === statusFilter;
     const matchesSearch = searchTerm === '' || 
       order.orderNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order._id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.items?.some(item => 
         item.product?.name?.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -303,10 +312,10 @@ const Orders = () => {
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-6 space-y-4 sm:space-y-0">
                   <div className="flex items-center space-x-4">
                     <div className="w-16 h-16 bg-bronze/20 rounded-xl flex items-center justify-center">
-                      <span className="text-bronze font-bold text-lg">#{order.orderNumber?.slice(-4) || order._id.slice(-4)}</span>
+                      <span className="text-bronze font-bold text-lg">#{order.orderNumber?.slice(-4) || order._id?.slice(-4) || '????'}</span>
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold text-white">Order #{order.orderNumber || order._id.slice(-8)}</h3>
+                      <h3 className="text-xl font-semibold text-white">Order #{order.orderNumber || order._id?.slice(-8) || 'Unknown'}</h3>
                       <p className="text-gray-400">{new Date(order.createdAt).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
@@ -456,14 +465,14 @@ const Orders = () => {
                 {/* Order Header */}
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-xl font-semibold text-white">Order #{selectedOrder.orderNumber || selectedOrder._id.slice(-8)}</h3>
-                    <p className="text-gray-400">{new Date(selectedOrder.createdAt).toLocaleString()}</p>
+                    <h3 className="text-xl font-semibold text-white">Order #{selectedOrder.orderNumber || selectedOrder._id?.slice(-8) || 'Unknown'}</h3>
+                    <p className="text-gray-400">{selectedOrder.createdAt ? new Date(selectedOrder.createdAt).toLocaleString() : 'Date unavailable'}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-bronze">₹{selectedOrder.total?.toLocaleString()}</p>
+                    <p className="text-2xl font-bold text-bronze">₹{selectedOrder.total?.toLocaleString() || '0'}</p>
                     <div className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full border ${getStatusColor(selectedOrder.orderStatus)} mt-2`}>
                       {getStatusIcon(selectedOrder.orderStatus)}
-                      <span className="font-medium capitalize">{selectedOrder.orderStatus}</span>
+                      <span className="font-medium capitalize">{selectedOrder.orderStatus || 'Unknown'}</span>
                     </div>
                   </div>
                 </div>
@@ -520,25 +529,25 @@ const Orders = () => {
                   <div className="space-y-2">
                     <div className="flex justify-between text-gray-300">
                       <span>Subtotal:</span>
-                      <span>₹{selectedOrder.subtotal?.toLocaleString()}</span>
+                      <span>₹{selectedOrder.subtotal?.toLocaleString() || '0'}</span>
                     </div>
-                    {selectedOrder.discount > 0 && (
+                    {(selectedOrder.discount || 0) > 0 && (
                       <div className="flex justify-between text-green-400">
                         <span>Discount:</span>
-                        <span>-₹{selectedOrder.discount?.toLocaleString()}</span>
+                        <span>-₹{selectedOrder.discount?.toLocaleString() || '0'}</span>
                       </div>
                     )}
                     <div className="flex justify-between text-gray-300">
                       <span>Shipping:</span>
-                      <span>{selectedOrder.shippingCost === 0 ? 'Free' : `₹${selectedOrder.shippingCost}`}</span>
+                      <span>{(selectedOrder.shippingCost || 0) === 0 ? 'Free' : `₹${selectedOrder.shippingCost || 0}`}</span>
                     </div>
                     <div className="flex justify-between text-gray-300">
                       <span>Tax (18% GST):</span>
-                      <span>₹{selectedOrder.tax?.toLocaleString()}</span>
+                      <span>₹{selectedOrder.tax?.toLocaleString() || '0'}</span>
                     </div>
                     <div className="flex justify-between text-xl font-bold text-bronze border-t border-gray-700 pt-2">
                       <span>Total:</span>
-                      <span>₹{selectedOrder.total?.toLocaleString()}</span>
+                      <span>₹{selectedOrder.total?.toLocaleString() || '0'}</span>
                     </div>
                   </div>
                 </div>
