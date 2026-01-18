@@ -533,8 +533,14 @@ const Orders = () => {
                     </div>
                     {(selectedOrder.discount || 0) > 0 && (
                       <div className="flex justify-between text-green-400">
-                        <span>Discount:</span>
+                        <span>Coupon Discount:</span>
                         <span>-₹{selectedOrder.discount?.toLocaleString() || '0'}</span>
+                      </div>
+                    )}
+                    {(selectedOrder.loyaltyDiscount || 0) > 0 && (
+                      <div className="flex justify-between text-blue-400">
+                        <span>Loyalty Points Used ({selectedOrder.loyaltyPointsUsed || 0} points):</span>
+                        <span>-₹{selectedOrder.loyaltyDiscount?.toLocaleString() || '0'}</span>
                       </div>
                     )}
                     <div className="flex justify-between text-gray-300">
@@ -542,7 +548,7 @@ const Orders = () => {
                       <span>{(selectedOrder.shippingCost || 0) === 0 ? 'Free' : `₹${selectedOrder.shippingCost || 0}`}</span>
                     </div>
                     <div className="flex justify-between text-gray-300">
-                      <span>Tax (18% GST):</span>
+                      <span>Tax (GST):</span>
                       <span>₹{selectedOrder.tax?.toLocaleString() || '0'}</span>
                     </div>
                     <div className="flex justify-between text-xl font-bold text-bronze border-t border-gray-700 pt-2">

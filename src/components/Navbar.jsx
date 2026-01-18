@@ -93,6 +93,7 @@ const Navbar = () => {
                 </button>
                 <div className="absolute right-0 mt-2 w-48 bg-gray-900 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
                   <Link to="/orders" className="block px-4 py-2 text-white hover:bg-gray-800">My Orders</Link>
+                  <Link to="/loyalty-history" className="block px-4 py-2 text-white hover:bg-gray-800">Loyalty History</Link>
                   <Link to="/profile" className="block px-4 py-2 text-white hover:bg-gray-800">My Profile</Link>
                   <Link to="/notifications" className="block px-4 py-2 text-white hover:bg-gray-800">Notifications</Link>
                   <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-white hover:bg-gray-800">

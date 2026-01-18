@@ -760,10 +760,10 @@ const Checkout = () => {
                           </div>
                           
                           {loyaltyDiscount > 0 && (
-                            <div className="flex items-center justify-between p-3 bg-green-900/20 border border-green-500/30 rounded-lg">
+                            <div className="flex items-center justify-between p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg">
                               <div>
-                                <span className="text-green-400 font-semibold">{loyaltyPointsToUse} points</span>
-                                <p className="text-green-300 text-sm">₹{loyaltyDiscount} discount applied</p>
+                                <span className="text-blue-400 font-semibold">{loyaltyPointsToUse} points selected</span>
+                                <p className="text-blue-300 text-sm">₹{loyaltyDiscount} discount will be applied to your order</p>
                               </div>
                               <button
                                 type="button"

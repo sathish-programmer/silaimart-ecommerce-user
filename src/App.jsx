@@ -26,6 +26,7 @@ import About from './pages/About';
 import Support from './pages/Support';
 import UserProfile from './pages/UserProfile';
 import CustomOrder from './pages/CustomOrder';
+import LoyaltyHistory from './pages/LoyaltyHistory';
 
 function App() {
   return (
@@ -79,6 +80,7 @@ function AppContent() {
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/orders/:orderId" element={<Orders />} />
+          <Route path="/loyalty-history" element={<LoyaltyHistory />} />
           <Route path="/order-success/:orderId" element={<OrderSuccess />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/blogs" element={<Blogs />} />

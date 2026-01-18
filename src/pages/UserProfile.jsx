@@ -826,7 +826,7 @@ const LoyaltySection = ({ user, loyaltySettings, pointsToRedeem, setPointsToRede
         <p className="text-sm opacity-80">Earn 1 point per ₹10 spent</p>
       </div>
       
-      <div className="bg-gray-800 rounded-xl p-6">
+      {/* <div className="bg-gray-800 rounded-xl p-6 d-none">
         <h3 className="text-xl font-bold text-white mb-4">Redeem Points</h3>
         <div className="space-y-4">
           <input
@@ -838,20 +838,20 @@ const LoyaltySection = ({ user, loyaltySettings, pointsToRedeem, setPointsToRede
             max={user.loyaltyPoints || 0}
             className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white"
           />
-          <button
+           <button
             onClick={handleRedeemPoints}
             disabled={isLoading || pointsToRedeem <= 0}
             className="w-full px-4 py-3 bg-bronze text-black rounded-xl hover:bg-gold transition-colors disabled:opacity-50"
           >
             {isLoading ? 'Redeeming...' : 'Redeem Points'}
-          </button>
+          </button> 
         </div>
         {loyaltySettings && (
           <p className="text-gray-400 text-sm mt-2">
             Minimum: {loyaltySettings.minimumRedeemPoints} points
           </p>
         )}
-      </div>
+      </div> */}
     </div>
     
     <div className="bg-gray-800 rounded-xl p-4">
