@@ -249,12 +249,12 @@ const Orders = () => {
     <div className="min-h-screen py-8">
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 space-y-4 sm:space-y-0">
           <div>
-            <h1 className="text-4xl font-bold text-white mb-2">My Orders</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">My Orders</h1>
             <p className="text-gray-400">Track and manage your sculpture orders</p>
           </div>
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
             <div className="relative">
               <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
               <input
@@ -262,13 +262,13 @@ const Orders = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search orders..."
-                className="pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-xl text-white focus:border-bronze focus:outline-none w-64"
+                className="pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-xl text-white focus:border-bronze focus:outline-none w-full sm:w-64"
               />
             </div>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-gray-800 border border-gray-700 rounded-xl px-4 py-2 text-white focus:border-bronze focus:outline-none"
+              className="bg-gray-800 border border-gray-700 rounded-xl px-4 py-2 text-white focus:border-bronze focus:outline-none w-full sm:w-auto"
             >
               <option value="all">All Orders</option>
               <option value="pending">Pending</option>
@@ -300,7 +300,7 @@ const Orders = () => {
           <div className="space-y-6">
             {filteredOrders.map((order) => (
               <div key={order._id} className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 border border-gray-700 hover:border-bronze/50 transition-all">
-                <div className="flex items-start justify-between mb-6">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-6 space-y-4 sm:space-y-0">
                   <div className="flex items-center space-x-4">
                     <div className="w-16 h-16 bg-bronze/20 rounded-xl flex items-center justify-center">
                       <span className="text-bronze font-bold text-lg">#{order.orderNumber?.slice(-4) || order._id.slice(-4)}</span>
@@ -329,11 +329,11 @@ const Orders = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-3xl font-bold text-bronze mb-2">₹{order.total?.toLocaleString()}</p>
-                    <div className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full border ${getStatusColor(order.orderStatus)}`}>
+                  <div className="flex flex-col sm:text-right space-y-2">
+                    <p className="text-2xl sm:text-3xl font-bold text-bronze">₹{order.total?.toLocaleString()}</p>
+                    <div className={`inline-flex items-center space-x-2 px-3 py-2 rounded-full border ${getStatusColor(order.orderStatus)} self-start sm:self-end`}>
                       {getStatusIcon(order.orderStatus)}
-                      <span className="font-medium capitalize">{order.orderStatus}</span>
+                      <span className="font-medium capitalize text-sm">{order.orderStatus}</span>
                     </div>
                   </div>
                 </div>
@@ -407,11 +407,11 @@ const Orders = () => {
                 </div>
 
                 {/* Actions */}
-                <div className="flex items-center justify-between pt-4 border-t border-gray-700">
-                  <div className="flex items-center space-x-4">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center sm:justify-between pt-4 border-t border-gray-700 space-y-3 sm:space-y-0">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                     <button
                       onClick={() => viewOrderDetails(order._id)}
-                      className="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+                      className="flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
                     >
                       <EyeIcon className="h-4 w-4" />
                       <span>View Details</span>
@@ -419,7 +419,7 @@ const Orders = () => {
                     {order.orderStatus === 'delivered' && (
                       <button
                         onClick={() => downloadInvoice(order._id)}
-                        className="flex items-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
+                        className="flex items-center justify-center space-x-2 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
                       >
                         <DocumentArrowDownIcon className="h-4 w-4" />
                         <span>Download Invoice</span>
@@ -427,9 +427,9 @@ const Orders = () => {
                     )}
                   </div>
                   {order.trackingNumber && (
-                    <div className="text-right">
+                    <div className="text-left sm:text-right">
                       <p className="text-gray-400 text-sm">Tracking Number</p>
-                      <p className="text-bronze font-mono">{order.trackingNumber}</p>
+                      <p className="text-bronze font-mono text-sm">{order.trackingNumber}</p>
                     </div>
                   )}
                 </div>
