@@ -29,6 +29,7 @@ const Shop = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [masterValues, setMasterValues] = useState({});
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const [pagination, setPagination] = useState({ currentPage: 1, totalPages: 1, total: 0 });
@@ -56,6 +57,7 @@ const Shop = () => {
 
   useEffect(() => {
     fetchCategories();
+    fetchMasterValues();
   }, []);
 
   useEffect(() => {
@@ -69,6 +71,15 @@ const Shop = () => {
     } catch (error) {
       console.error('Error fetching categories:', error);
       setCategories([]);
+    }
+  };
+
+  const fetchMasterValues = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/master-values`);
+      setMasterValues(response.data.masterValues || {});
+    } catch (error) {
+      console.error('Error fetching master values:', error);
     }
   };
 
@@ -369,8 +380,8 @@ const Shop = () => {
                 </div>
               </div>
 
-              {/* Sculpture Specific Filters */}
-              {filterOptions.stones && filterOptions.stones.length > 0 && (
+              {/* Stone Type Filter */}
+              {masterValues.stone_types && masterValues.stone_types.length > 0 && (
                 <div className="mb-6">
                   <h4 className="text-white font-semibold mb-4 flex items-center">
                     <span className="w-2 h-2 bg-bronze rounded-full mr-2"></span>
@@ -382,14 +393,15 @@ const Shop = () => {
                     className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-bronze focus:outline-none focus:ring-2 focus:ring-bronze/20 transition-all"
                   >
                     <option value="">All Stones</option>
-                    {filterOptions.stones.filter(stone => stone).map((stone) => (
-                      <option key={stone} value={stone}>{stone}</option>
+                    {masterValues.stone_types.map((stone) => (
+                      <option key={stone._id} value={stone.value}>{stone.label}</option>
                     ))}
                   </select>
                 </div>
               )}
               
-              {filterOptions.finishes && filterOptions.finishes.length > 0 && (
+              {/* Finish Filter */}
+              {masterValues.finishes && masterValues.finishes.length > 0 && (
                 <div className="mb-6">
                   <h4 className="text-white font-semibold mb-4 flex items-center">
                     <span className="w-2 h-2 bg-bronze rounded-full mr-2"></span>
@@ -401,8 +413,8 @@ const Shop = () => {
                     className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-bronze focus:outline-none focus:ring-2 focus:ring-bronze/20 transition-all"
                   >
                     <option value="">All Finishes</option>
-                    {filterOptions.finishes.filter(finish => finish).map((finish) => (
-                      <option key={finish} value={finish}>{finish}</option>
+                    {masterValues.finishes.map((finish) => (
+                      <option key={finish._id} value={finish.value}>{finish.label}</option>
                     ))}
                   </select>
                 </div>

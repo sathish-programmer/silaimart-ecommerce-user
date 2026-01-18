@@ -46,13 +46,19 @@ export const useAuthStore = create(
 
       checkAuth: async () => {
         const token = get().token || localStorage.getItem('token');
-        if (!token) return;
+        if (!token) {
+          set({ user: null, token: null });
+          return false;
+        }
 
         try {
           const response = await authAPI.getProfile();
           set({ user: response.data, token });
+          return true;
         } catch (error) {
+          console.error('checkAuth: Profile fetch failed, logging out', error);
           get().logout();
+          return false;
         }
       }
     }),

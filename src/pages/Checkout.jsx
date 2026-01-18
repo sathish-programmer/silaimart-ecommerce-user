@@ -21,12 +21,15 @@ const Checkout = () => {
     country: 'India'
   });
   const [paymentMethod, setPaymentMethod] = useState('');
-  const [paymentSettings, setPaymentSettings] = useState({});
+  const [appSettings, setAppSettings] = useState({});
   const [couponCode, setCouponCode] = useState('');
   const [discount, setDiscount] = useState(0);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [availableCoupons, setAvailableCoupons] = useState([]);
   const [showCoupons, setShowCoupons] = useState(false);
+  const [useLoyaltyPoints, setUseLoyaltyPoints] = useState(false);
+  const [loyaltyPointsToUse, setLoyaltyPointsToUse] = useState(0);
+  const [loyaltyDiscount, setLoyaltyDiscount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [showQRCode, setShowQRCode] = useState(false);
   const [qrCodeData, setQrCodeData] = useState(null);
@@ -47,7 +50,7 @@ const Checkout = () => {
       navigate('/cart');
       return;
     }
-    fetchPaymentSettings();
+    fetchAppSettings();
     fetchAvailableCoupons();
     // Pre-fill user data
     if (user) {
@@ -60,19 +63,19 @@ const Checkout = () => {
     }
   }, [user, items, navigate, currentStep]);
 
-  const fetchPaymentSettings = async () => {
+  const fetchAppSettings = async () => {
     try {
       const response = await axios.get(`${API_URL}/settings/public`);
-      const settings = response.data.settings?.payment || {};
-      console.log('Payment settings:', settings); // Debug log
-      setPaymentSettings(settings);
+      const settings = response.data.settings || {};
+      console.log('App settings:', settings); // Debug log
+      setAppSettings(settings);
       
       // Set default payment method only if no method is selected yet
       if (!paymentMethod) {
-        if (settings.razorpay?.enabled) setPaymentMethod('razorpay');
-        else if (settings.stripe?.enabled) setPaymentMethod('stripe');
-        else if (settings.cod?.enabled) setPaymentMethod('cod');
-        else if (settings.qr?.enabled) setPaymentMethod('qr');
+        if (settings.payment?.razorpay?.enabled) setPaymentMethod('razorpay');
+        else if (settings.payment?.stripe?.enabled) setPaymentMethod('stripe');
+        else if (settings.payment?.cod?.enabled) setPaymentMethod('cod');
+        else if (settings.payment?.qr?.enabled) setPaymentMethod('qr');
       }
     } catch (error) {
       console.error('Error fetching payment settings:', error);
@@ -120,14 +123,40 @@ const Checkout = () => {
 
   const calculateTotals = () => {
     const subtotal = getTotal();
-    const shippingCost = subtotal >= 1000 ? 0 : 50;
-    const taxAmount = Math.round((subtotal - discount) * 0.18);
-    const total = subtotal - discount + shippingCost + taxAmount;
+    const freeShippingThreshold = appSettings.shipping?.freeShippingThreshold || 1000;
+    const standardShippingCost = appSettings.shipping?.standardShipping || 50;
+    const shippingCost = subtotal >= freeShippingThreshold ? 0 : standardShippingCost;
     
-    return { subtotal, shippingCost, taxAmount, total };
+    const taxRate = appSettings.tax?.rate || 18;
+    const taxEnabled = appSettings.tax?.enabled || true;
+    const totalDiscount = discount + loyaltyDiscount;
+    const taxAmount = taxEnabled ? Math.round((subtotal - totalDiscount) * (taxRate / 100)) : 0;
+    
+    const total = Math.max(0, subtotal - totalDiscount + shippingCost + taxAmount);
+    
+    return { subtotal, shippingCost, taxAmount, total, taxRate, totalDiscount };
   };
 
-  const { subtotal, shippingCost, taxAmount, total } = calculateTotals();
+  const { subtotal, shippingCost, taxAmount, total, taxRate, totalDiscount } = calculateTotals();
+
+  const handleLoyaltyPointsToggle = (checked) => {
+    setUseLoyaltyPoints(checked);
+    if (checked && user?.loyaltyPoints > 0) {
+      const maxPoints = Math.min(user.loyaltyPoints, Math.floor(subtotal - discount));
+      setLoyaltyPointsToUse(maxPoints);
+      setLoyaltyDiscount(maxPoints);
+    } else {
+      setLoyaltyPointsToUse(0);
+      setLoyaltyDiscount(0);
+    }
+  };
+
+  const handleLoyaltyPointsChange = (points) => {
+    const maxPoints = Math.min(user?.loyaltyPoints || 0, Math.floor(subtotal - discount));
+    const validPoints = Math.max(0, Math.min(points, maxPoints));
+    setLoyaltyPointsToUse(validPoints);
+    setLoyaltyDiscount(validPoints);
+  };
 
   const validateStep = (step) => {
     switch (step) {
@@ -249,8 +278,9 @@ const Checkout = () => {
           quantity: item.quantity
         })),
         shippingAddress: formData,
-        paymentMethod: paymentMethod, // Ensure payment method is set correctly
-        couponCode: appliedCoupon?.code
+        paymentMethod: paymentMethod,
+        couponCode: appliedCoupon?.code,
+        loyaltyPointsUsed: useLoyaltyPoints ? loyaltyPointsToUse : 0
       };
 
       console.log('Creating order with payment method:', paymentMethod); // Debug log
@@ -319,7 +349,7 @@ const Checkout = () => {
       });
 
       const options = {
-        key: paymentSettings.razorpay?.keyId,
+        key: appSettings.payment?.razorpay?.keyId,
         amount: paymentResponse.data.amount,
         currency: paymentResponse.data.currency,
         name: 'SilaiMart',
@@ -684,6 +714,70 @@ const Checkout = () => {
                       </div>
                     )}
                   </div>
+                  
+                  {/* Loyalty Points Section */}
+                  {user?.loyaltyPoints > 0 && (
+                    <div className="mt-6 p-4 bg-gray-800 rounded-xl">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="text-white font-semibold">Use Loyalty Points</h3>
+                        <div className="text-bronze text-sm">
+                          Available: {user.loyaltyPoints} points
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3 mb-3">
+                        <input
+                          type="checkbox"
+                          id="useLoyaltyPoints"
+                          checked={useLoyaltyPoints}
+                          onChange={(e) => handleLoyaltyPointsToggle(e.target.checked)}
+                          className="text-bronze focus:ring-bronze"
+                        />
+                        <label htmlFor="useLoyaltyPoints" className="text-white text-sm">
+                          Use loyalty points (1 point = ₹1 discount)
+                        </label>
+                      </div>
+                      
+                      {useLoyaltyPoints && (
+                        <div className="space-y-3">
+                          <div className="flex items-center space-x-3">
+                            <input
+                              type="number"
+                              value={loyaltyPointsToUse}
+                              onChange={(e) => handleLoyaltyPointsChange(Number(e.target.value))}
+                              min="0"
+                              max={Math.min(user.loyaltyPoints, Math.floor(subtotal - discount))}
+                              className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:border-bronze focus:outline-none"
+                              placeholder="Points to use"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => handleLoyaltyPointsChange(Math.min(user.loyaltyPoints, Math.floor(subtotal - discount)))}
+                              className="px-4 py-2 bg-bronze text-black rounded-lg font-semibold hover:bg-gold transition-colors text-sm"
+                            >
+                              Use Max
+                            </button>
+                          </div>
+                          
+                          {loyaltyDiscount > 0 && (
+                            <div className="flex items-center justify-between p-3 bg-green-900/20 border border-green-500/30 rounded-lg">
+                              <div>
+                                <span className="text-green-400 font-semibold">{loyaltyPointsToUse} points</span>
+                                <p className="text-green-300 text-sm">₹{loyaltyDiscount} discount applied</p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => handleLoyaltyPointsToggle(false)}
+                                className="text-red-400 hover:text-red-300 text-sm font-medium"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -827,13 +921,13 @@ const Checkout = () => {
                   )}
                   
                   <div className="space-y-4">
-                    {Object.keys(paymentSettings).length === 0 ? (
+                    {Object.keys(appSettings.payment || {}).length === 0 ? (
                       <div className="text-center py-8">
                         <p className="text-gray-400">Loading payment methods...</p>
                       </div>
                     ) : (
                       <>
-                    {paymentSettings.razorpay?.enabled && (
+                    {appSettings.payment?.razorpay?.enabled && (
                       <label className={`flex items-center p-6 border-2 rounded-xl cursor-pointer transition-all ${
                         paymentMethod === 'razorpay' 
                           ? 'border-bronze bg-bronze/10' 
@@ -857,7 +951,7 @@ const Checkout = () => {
                       </label>
                     )}
                     
-                    {paymentSettings.stripe?.enabled && (
+                    {appSettings.payment?.stripe?.enabled && (
                       <label className={`flex items-center p-6 border-2 rounded-xl cursor-pointer transition-all ${
                         paymentMethod === 'stripe' 
                           ? 'border-bronze bg-bronze/10' 
@@ -881,7 +975,7 @@ const Checkout = () => {
                       </label>
                     )}
                     
-                    {paymentSettings.cod?.enabled && (
+                    {appSettings.payment?.cod?.enabled && (
                       <label className={`flex items-center p-6 border-2 rounded-xl cursor-pointer transition-all ${
                         paymentMethod === 'cod' 
                           ? 'border-bronze bg-bronze/10' 
@@ -901,9 +995,9 @@ const Checkout = () => {
                             <span className="text-white font-semibold text-lg">Cash on Delivery</span>
                             <p className="text-gray-400 text-sm">
                               Pay when you receive your order
-                              {paymentSettings.cod?.maximumAmount && (
+                              {appSettings.payment?.cod?.maximumAmount && (
                                 <span className="block text-xs text-orange-400">
-                                  Available for orders up to ₹{paymentSettings.cod.maximumAmount.toLocaleString()}
+                                  Available for orders up to ₹{appSettings.payment.cod.maximumAmount.toLocaleString()}
                                 </span>
                               )}
                             </p>
@@ -912,7 +1006,7 @@ const Checkout = () => {
                       </label>
                     )}
                     
-                    {paymentSettings.qr?.enabled && (
+                    {appSettings.payment?.qr?.enabled && (
                       <label className={`flex items-center p-6 border-2 rounded-xl cursor-pointer transition-all ${
                         paymentMethod === 'qr' 
                           ? 'border-bronze bg-bronze/10' 
@@ -1030,8 +1124,14 @@ const Checkout = () => {
                           </div>
                           {discount > 0 && (
                             <div className="flex justify-between text-green-400">
-                              <span>Discount ({appliedCoupon?.code})</span>
+                              <span>Coupon Discount ({appliedCoupon?.code})</span>
                               <span>-₹{discount.toLocaleString()}</span>
+                            </div>
+                          )}
+                          {loyaltyDiscount > 0 && (
+                            <div className="flex justify-between text-green-400">
+                              <span>Loyalty Points ({loyaltyPointsToUse} pts)</span>
+                              <span>-₹{loyaltyDiscount.toLocaleString()}</span>
                             </div>
                           )}
                           <div className="flex justify-between text-gray-300">
@@ -1039,7 +1139,7 @@ const Checkout = () => {
                             <span>{shippingCost === 0 ? 'Free' : `₹${shippingCost}`}</span>
                           </div>
                           <div className="flex justify-between text-gray-300">
-                            <span>Tax (18% GST)</span>
+                            <span>Tax ({taxRate}% {appSettings.tax?.name || 'GST'})</span>
                             <span>₹{taxAmount.toLocaleString()}</span>
                           </div>
                           <div className="flex justify-between text-xl font-bold text-white border-t border-gray-700 pt-2">
@@ -1152,8 +1252,15 @@ const Checkout = () => {
                 
                 {discount > 0 && (
                   <div className="flex justify-between text-green-400">
-                    <span>Discount ({appliedCoupon?.code})</span>
+                    <span>Coupon Discount ({appliedCoupon?.code})</span>
                     <span>-₹{discount.toLocaleString()}</span>
+                  </div>
+                )}
+                
+                {loyaltyDiscount > 0 && (
+                  <div className="flex justify-between text-green-400">
+                    <span>Loyalty Points ({loyaltyPointsToUse} pts)</span>
+                    <span>-₹{loyaltyDiscount.toLocaleString()}</span>
                   </div>
                 )}
                 
@@ -1163,7 +1270,7 @@ const Checkout = () => {
                 </div>
                 
                 <div className="flex justify-between text-gray-300">
-                  <span>Tax (18% GST)</span>
+                  <span>Tax ({taxRate}% {appSettings.tax?.name || 'GST'})</span>
                   <span>₹{taxAmount.toLocaleString()}</span>
                 </div>
                 
@@ -1182,7 +1289,7 @@ const Checkout = () => {
                   </div>
                   <div className="flex items-center space-x-2 text-blue-400">
                     <TruckIcon className="h-4 w-4" />
-                    <span>Fast Delivery</span>
+                    <span>Delivery: {appSettings.shipping?.estimatedDelivery?.standard || '5-7 business days'}</span>
                   </div>
                 </div>
               </div>

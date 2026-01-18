@@ -10,7 +10,8 @@ import {
   CreditCardIcon,
   BanknotesIcon,
   QrCodeIcon,
-  StarIcon
+  StarIcon,
+  MagnifyingGlassIcon
 } from '@heroicons/react/24/outline';
 import { StarIcon as StarSolid } from '@heroicons/react/24/solid';
 import axios from 'axios';
@@ -31,6 +32,7 @@ const Orders = () => {
     comment: '',
     images: []
   });
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -190,9 +192,16 @@ const Orders = () => {
     }
   };
 
-  const filteredOrders = orders.filter(order => 
-    statusFilter === 'all' || order.orderStatus === statusFilter
-  );
+  const filteredOrders = orders.filter(order => {
+    const matchesStatus = statusFilter === 'all' || order.orderStatus === statusFilter;
+    const matchesSearch = searchTerm === '' || 
+      order.orderNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.items?.some(item => 
+        item.product?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    return matchesStatus && matchesSearch;
+  });
 
   if (loading) {
     return (
@@ -245,19 +254,31 @@ const Orders = () => {
             <h1 className="text-4xl font-bold text-white mb-2">My Orders</h1>
             <p className="text-gray-400">Track and manage your sculpture orders</p>
           </div>
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-gray-800 border border-gray-700 rounded-xl px-4 py-2 text-white focus:border-bronze focus:outline-none"
-          >
-            <option value="all">All Orders</option>
-            <option value="pending">Pending</option>
-            <option value="confirmed">Confirmed</option>
-            <option value="processing">Processing</option>
-            <option value="shipped">Shipped</option>
-            <option value="delivered">Delivered</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
+          <div className="flex items-center space-x-4">
+            <div className="relative">
+              <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search orders..."
+                className="pl-10 pr-4 py-2 bg-gray-800 border border-gray-700 rounded-xl text-white focus:border-bronze focus:outline-none w-64"
+              />
+            </div>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="bg-gray-800 border border-gray-700 rounded-xl px-4 py-2 text-white focus:border-bronze focus:outline-none"
+            >
+              <option value="all">All Orders</option>
+              <option value="pending">Pending</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="processing">Processing</option>
+              <option value="shipped">Shipped</option>
+              <option value="delivered">Delivered</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
         </div>
 
         {/* Orders List */}
