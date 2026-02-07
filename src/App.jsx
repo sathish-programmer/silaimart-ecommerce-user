@@ -5,7 +5,6 @@ import { useAuthStore } from './store/authStore';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ChatBot from './components/Chatbot';
-import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/Home';
 import Shop from './pages/Shop';
 import ProductDetail from './pages/ProductDetail';
@@ -27,6 +26,7 @@ import Support from './pages/Support';
 import UserProfile from './pages/UserProfile';
 import CustomOrder from './pages/CustomOrder';
 import LoyaltyHistory from './pages/LoyaltyHistory';
+import TrackOrderPage from './pages/TrackOrderPage';
 
 function App() {
   return (
@@ -37,7 +37,7 @@ function App() {
 }
 
 function AppContent() {
-  const { checkAuth, user } = useAuthStore();
+  const { checkAuth } = useAuthStore();
   const navigate = useNavigate();
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
@@ -45,7 +45,16 @@ function AppContent() {
     const authenticate = async () => {
       setIsAuthLoading(true);
       const isAuthenticated = await checkAuth();
-      if (!isAuthenticated && window.location.pathname !== '/login' && window.location.pathname !== '/signup' && window.location.pathname !== '/forgot-password' && !window.location.pathname.startsWith('/reset-password')) {
+      if (!isAuthenticated &&
+        window.location.pathname !== '/login' &&
+        window.location.pathname !== '/signup' &&
+        window.location.pathname !== '/forgot-password' &&
+        !window.location.pathname.startsWith('/reset-password') &&
+        window.location.pathname !== '/' &&
+        window.location.pathname !== '/shop' &&
+        window.location.pathname !== '/track-order' &&
+        !window.location.pathname.startsWith('/product/')
+      ) {
         navigate('/login');
       }
       setIsAuthLoading(false);
@@ -69,6 +78,7 @@ function AppContent() {
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
           <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/track-order" element={<TrackOrderPage />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/checkout" element={<Checkout />} />
@@ -76,7 +86,7 @@ function AppContent() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
-          {/* Protected Routes */} 
+          {/* Protected Routes */}
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/orders/:orderId" element={<Orders />} />
@@ -93,7 +103,7 @@ function AppContent() {
       </main>
       <Footer />
       <ChatBot />
-      <Toaster 
+      <Toaster
         position="top-right"
         toastOptions={{
           style: {
