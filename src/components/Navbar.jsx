@@ -47,7 +47,7 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             {/* Logo */}
-            <Link to="/" className="flex items-center flex-shrink-0">
+            <Link to="/" className="flex items-center flex-shrink-0 -ml-4">
               <img src="/silaimartlogo.png" alt="SilaiMart" className="w-auto" style={{ height: '11.5rem', marginTop: '15px' }} />
             </Link>
 

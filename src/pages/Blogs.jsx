@@ -50,23 +50,23 @@ const Blogs = () => {
   return (
     <div className="min-h-screen bg-stone-50">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-violet-900 via-purple-900 to-fuchsia-900 py-16 px-4 text-center">
-        <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-amber-300 px-4 py-2 rounded-full text-sm font-medium mb-5">
+      <div className="bg-stone-50 border-b border-gray-100 py-20 px-4 text-center">
+        <div className="inline-flex items-center gap-2 bg-primary-50 border border-primary-100/50 text-primary-600 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-6">
           <NewspaperIcon className="h-4 w-4" />
           Stories & Insights
         </div>
-        <h1 className="text-4xl font-bold text-white mb-3">Our Blog</h1>
-        <p className="text-violet-200 text-lg">Stories, insights, and inspiration from the world of divine art</p>
+        <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 tracking-tighter">Sacred Stories</h1>
+        <p className="text-gray-500 text-lg max-w-2xl mx-auto font-medium">Unveiling the wisdom, artistry, and spiritual significance behind every divine sculpture.</p>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {blogs.length === 0 ? (
-          <div className="text-center py-20">
-            <div className="w-20 h-20 bg-violet-100 rounded-3xl flex items-center justify-center mx-auto mb-5">
-              <NewspaperIcon className="h-10 w-10 text-violet-400" />
+          <div className="text-center py-20 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm">
+            <div className="w-20 h-20 bg-primary-50 rounded-3xl flex items-center justify-center mx-auto mb-6">
+              <NewspaperIcon className="h-10 w-10 text-primary-300" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">No Blogs Yet</h2>
-            <p className="text-gray-500">Check back soon for new articles about sculptures and spiritual art</p>
+            <h2 className="text-2xl font-black text-gray-900 mb-2">No Stories Yet</h2>
+            <p className="text-gray-500 max-w-xs mx-auto">Our artisans and storytellers are currently crafting new wisdom to share. Check back soon.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -77,7 +77,7 @@ const Blogs = () => {
                 className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-card hover:shadow-card-hover transition-all duration-300 group hover:-translate-y-1"
               >
                 {/* Image */}
-                <div className="aspect-video overflow-hidden bg-violet-50">
+                <div className="aspect-[16/10] overflow-hidden bg-stone-50 border-b border-gray-100/50">
                   {blog.featuredImage?.url ? (
                     <img
                       src={blog.featuredImage.url}
@@ -87,7 +87,7 @@ const Blogs = () => {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <NewspaperIcon className="h-12 w-12 text-violet-200" />
+                      <NewspaperIcon className="h-12 w-12 text-primary-200" />
                     </div>
                   )}
                 </div>
@@ -100,15 +100,15 @@ const Blogs = () => {
                   {blog.excerpt && (
                     <p className="text-gray-500 text-sm mb-4 line-clamp-3">{blog.excerpt}</p>
                   )}
-                  <div className="flex items-center justify-between text-xs text-gray-400">
-                    <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-gray-400 pt-4 border-t border-gray-50">
+                    <div className="flex items-center gap-4">
                       {blog.author?.name && (
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1.5 text-gray-600">
                           <UserIcon className="h-3.5 w-3.5" />
                           <span>{blog.author.name}</span>
                         </div>
                       )}
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1.5">
                         <CalendarIcon className="h-3.5 w-3.5" />
                         <span>{new Date(blog.publishedAt || blog.createdAt).toLocaleDateString()}</span>
                       </div>

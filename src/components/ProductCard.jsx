@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { StarIcon, ShoppingCartIcon, HeartIcon } from '@heroicons/react/24/solid';
-import { HeartIcon as HeartOutlineIcon } from '@heroicons/react/24/outline';
+import { StarIcon, ShoppingCartIcon, HeartIcon, PhotoIcon } from '@heroicons/react/24/solid';
+import { HeartIcon as HeartOutlineIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { useCartStore } from '../store/cartStore';
 import { useWishlistStore } from '../store/wishlistStore';
 import toast from 'react-hot-toast';
@@ -58,13 +58,22 @@ const ProductCard = ({ product, index = 0 }) => {
                 onError={() => setImgError(true)}
               />
             ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-primary-50 to-indigo-50">
-                <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mb-3">
-                  <svg className="w-8 h-8 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
+              <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-stone-100 to-stone-50 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none">
+                  <svg width="100%" height="100%"><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" /></pattern><rect width="100%" height="100%" fill="url(#grid)" /></svg>
                 </div>
-                <span className="text-gray-500 font-medium text-sm leading-tight">{product.name}</span>
+                <div className="relative group/placeholder">
+                  <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-4 shadow-sm border border-stone-100 transform rotate-3 group-hover/placeholder:rotate-0 transition-transform duration-500">
+                    <PhotoIcon className="w-8 h-8 text-stone-300" />
+                  </div>
+                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-amber-50 rounded-full flex items-center justify-center border border-amber-100 animate-pulse">
+                    <SparklesIcon className="w-3 h-3 text-amber-500" />
+                  </div>
+                </div>
+                <span className="text-stone-400 font-bold text-[10px] uppercase tracking-[0.2em] leading-tight max-w-[120px]">
+                  Coming Soon
+                </span>
+                <div className="mt-2 h-0.5 w-8 bg-stone-200 rounded-full"></div>
               </div>
             )}
 
@@ -113,8 +122,8 @@ const ProductCard = ({ product, index = 0 }) => {
                     <StarIcon
                       key={i}
                       className={`h-3.5 w-3.5 ${i < Math.floor(product.rating.average)
-                          ? 'text-amber-400'
-                          : 'text-gray-200'
+                        ? 'text-amber-400'
+                        : 'text-gray-200'
                         }`}
                     />
                   ))}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { MagnifyingGlassIcon, FunnelIcon, StarIcon, XMarkIcon, AdjustmentsHorizontalIcon, PlusIcon, MinusIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, FunnelIcon, StarIcon, SparklesIcon, XMarkIcon, AdjustmentsHorizontalIcon, PlusIcon, MinusIcon } from '@heroicons/react/24/outline';
 import { HeartIcon, ShoppingCartIcon } from '@heroicons/react/24/solid';
 import { Link } from 'react-router-dom';
 import { useCartStore } from '../store/cartStore';
@@ -246,8 +246,8 @@ const Shop = () => {
               <button
                 onClick={() => setShowFilters(!showFilters)}
                 className={`relative flex items-center space-x-2 px-4 py-3 rounded-xl font-medium transition-all ${showFilters
-                    ? 'bg-violet-600 text-white'
-                    : 'bg-white border border-gray-200 text-gray-700 hover:border-violet-400'
+                  ? 'bg-violet-600 text-white'
+                  : 'bg-white border border-gray-200 text-gray-700 hover:border-violet-400'
                   }`}
               >
                 <AdjustmentsHorizontalIcon className="h-5 w-5" />
@@ -475,8 +475,8 @@ const Shop = () => {
             {products.length > 0 ? (
               <>
                 <div className={`${viewMode === 'grid'
-                    ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
-                    : 'space-y-6'
+                  ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
+                  : 'space-y-6'
                   }`}>
                   {products.map((product) => (
                     viewMode === 'grid' ? (
@@ -489,67 +489,71 @@ const Shop = () => {
                                 <img
                                   src={product.images[0].url}
                                   alt={product.name}
-                                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                  className={`w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ${product.stock === 0 ? 'grayscale' : ''}`}
                                   onError={(e) => {
                                     e.target.style.display = 'none';
                                     e.target.nextSibling.style.display = 'flex';
                                   }}
                                 />
-                                <div className="w-full h-full bg-gradient-to-br from-violet-50 to-purple-50 flex items-center justify-center" style={{ display: 'none' }}>
-                                  <div className="text-center">
-                                    <div className="w-16 h-16 bg-primary-600/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                                      <svg className="w-8 h-8 text-primary-600" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                                      </svg>
+                                <div className="w-full h-full bg-gradient-to-br from-stone-200 via-stone-100 to-white flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-transform duration-700">
+                                  {/* Pattern overlay */}
+                                  <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+                                    <svg width="100%" height="100%"><pattern id={`grid-pattern-${product._id}`} width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" /></pattern><rect width="100%" height="100%" fill={`url(#grid-pattern-${product._id})`} /></svg>
+                                  </div>
+                                  <div className="text-center relative z-10">
+                                    <div className="w-20 h-20 bg-white rounded-[2rem] flex items-center justify-center mx-auto mb-4 shadow-sm border border-stone-100 rotate-3 transition-transform duration-500 group-hover:rotate-0">
+                                      <SparklesIcon className="w-10 h-10 text-stone-300" />
                                     </div>
-                                    <div className="text-gray-900 font-semibold text-sm">{product.name}</div>
-                                    <div className="text-gray-400 text-xs mt-1">{product.category?.name}</div>
+                                    <div className="text-gray-400 font-black text-[10px] uppercase tracking-[0.3em]">Sanctuary Art</div>
                                   </div>
                                 </div>
                               </>
                             ) : (
-                              <div className="w-full h-full bg-gradient-to-br from-violet-50 to-purple-50 flex items-center justify-center">
-                                <div className="text-center">
-                                  <div className="w-16 h-16 bg-primary-600/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                                    <svg className="w-8 h-8 text-primary-600" fill="currentColor" viewBox="0 0 24 24">
-                                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                                    </svg>
+                              <div className="w-full h-full bg-gradient-to-br from-stone-200 via-stone-100 to-white flex items-center justify-center relative overflow-hidden">
+                                <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+                                  <svg width="100%" height="100%"><pattern id={`grid-pattern-none-${product._id}`} width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" /></pattern><rect width="100%" height="100%" fill={`url(#grid-pattern-none-${product._id})`} /></svg>
+                                </div>
+                                <div className="text-center relative z-10">
+                                  <div className="w-20 h-20 bg-white rounded-[2rem] flex items-center justify-center mx-auto mb-4 shadow-sm border border-stone-100 rotate-6 group-hover:rotate-0 transition-transform duration-700">
+                                    <SparklesIcon className="w-10 h-10 text-stone-300" />
                                   </div>
-                                  <div className="text-gray-900 font-semibold text-sm">{product.name}</div>
-                                  <div className="text-gray-400 text-xs mt-1">{product.category?.name}</div>
+                                  <div className="text-gray-400 font-black text-[10px] uppercase tracking-[0.3em]">Sanctuary Art</div>
                                 </div>
                               </div>
                             )}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                            {/* Badges */}
-                            <div className="absolute top-3 left-3 flex flex-col space-y-2">
+                            {/* Modern Status Badges */}
+                            <div className="absolute top-4 left-4 flex flex-col gap-2 z-20">
                               {product.discountPrice && (
-                                <div className="bg-gradient-to-r from-red-600 to-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
-                                  -{Math.round(((product.price - product.discountPrice) / product.price) * 100)}%
+                                <div className="bg-rose-500 text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-lg shadow-rose-500/20 backdrop-blur-sm">
+                                  -{Math.round(((product.price - product.discountPrice) / product.price) * 100)}% Off
                                 </div>
                               )}
                               {product.isFeatured && (
-                                <div className="bg-gradient-to-r from-amber-400 to-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold shadow-sm">
-                                  ⭐ Featured
+                                <div className="bg-amber-400 text-gray-900 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-lg shadow-amber-400/20 backdrop-blur-sm flex items-center gap-1.5">
+                                  <SparklesIcon className="h-3 w-3" />
+                                  <span>Featured</span>
                                 </div>
                               )}
                             </div>
 
-                            {/* Quick Actions */}
-                            <div className="absolute top-3 right-3 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              <button className="p-2 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-colors">
-                                <HeartIcon className="h-5 w-5" />
-                              </button>
-                            </div>
-
+                            {/* Modern Out of Stock UI */}
                             {product.stock === 0 && (
-                              <div className="absolute inset-0 bg-stone-50/70 flex items-center justify-center">
-                                <div className="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold">
-                                  Out of Stock
+                              <div className="absolute inset-0 bg-stone-900/40 backdrop-blur-[2px] z-30 flex items-center justify-center p-6">
+                                <div className="w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl flex flex-col items-center justify-center transform -rotate-12 shadow-2xl">
+                                  <span className="text-white font-black text-xl uppercase tracking-[0.2em]">Sold Out</span>
+                                  <span className="text-white/60 text-[8px] font-black uppercase tracking-[0.4em] mt-1">SilaMart Sanctuary</span>
                                 </div>
                               </div>
                             )}
+
+                            {/* Quick Actions (moved to avoid overlap) */}
+                            <div className="absolute bottom-4 right-4 flex flex-col gap-2 z-20 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                              <button className="p-3 bg-white text-rose-500 rounded-xl shadow-xl hover:scale-110 active:scale-95 transition-all">
+                                <HeartIcon className="h-5 w-5" />
+                              </button>
+                            </div>
                           </div>
                         </Link>
 
@@ -574,19 +578,12 @@ const Shop = () => {
 
                           {/* Rating */}
                           {product.rating?.average > 0 && (
-                            <div className="flex items-center mb-3">
-                              <div className="flex items-center">
-                                {[...Array(5)].map((_, i) => (
-                                  <StarIcon
-                                    key={i}
-                                    className={`h-4 w-4 ${i < Math.floor(product.rating.average)
-                                        ? 'text-yellow-400'
-                                        : 'text-gray-600'
-                                      }`}
-                                  />
-                                ))}
-                              </div>
-                              <span className="text-gray-400 text-sm ml-2">
+                            <div className="flex items-center gap-1.5 mb-3 bg-gray-50/50 w-fit px-2 py-1 rounded-lg">
+                              <StarIcon className="h-4 w-4 text-amber-400 fill-amber-400" />
+                              <span className="text-gray-900 font-bold text-sm">
+                                {product.rating.average.toFixed(1)}
+                              </span>
+                              <span className="text-gray-400 text-xs font-medium">
                                 ({product.rating.count})
                               </span>
                             </div>
@@ -680,40 +677,42 @@ const Shop = () => {
                                   <img
                                     src={product.images[0].url}
                                     alt={product.name}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                    className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${product.stock === 0 ? 'grayscale' : ''}`}
                                     onError={(e) => {
                                       e.target.style.display = 'none';
                                       e.target.nextSibling.style.display = 'flex';
                                     }}
                                   />
-                                  <div className="w-full h-full bg-gradient-to-br from-violet-50 to-purple-50 flex items-center justify-center" style={{ display: 'none' }}>
-                                    <div className="text-center">
-                                      <div className="w-20 h-20 bg-primary-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                                        <svg className="w-10 h-10 text-primary-600" fill="currentColor" viewBox="0 0 24 24">
-                                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                                        </svg>
+                                  <div className="w-full h-full bg-gradient-to-br from-stone-200 via-stone-100 to-white flex items-center justify-center relative overflow-hidden" style={{ display: 'none' }}>
+                                    <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+                                      <svg width="100%" height="100%"><pattern id={`list-pattern-${product._id}`} width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" /></pattern><rect width="100%" height="100%" fill={`url(#list-pattern-${product._id})`} /></svg>
+                                    </div>
+                                    <div className="text-center relative z-10 p-4">
+                                      <div className="w-16 h-16 bg-white/80 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl border border-white rotate-3 group-hover:rotate-0 transition-transform duration-700">
+                                        <SparklesIcon className="w-8 h-8 text-stone-300" />
                                       </div>
-                                      <div className="text-gray-900 font-semibold">{product.name}</div>
-                                      <div className="text-gray-400 text-sm mt-1">{product.category?.name}</div>
+                                      <div className="text-gray-400 font-black text-[10px] uppercase tracking-[0.3em]">Divine Art</div>
                                     </div>
                                   </div>
                                 </>
                               ) : (
-                                <div className="w-full h-full bg-gradient-to-br from-violet-50 to-purple-50 flex items-center justify-center">
-                                  <div className="text-center">
-                                    <div className="w-20 h-20 bg-primary-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                                      <svg className="w-10 h-10 text-primary-600" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                                      </svg>
+                                <div className="w-full h-full bg-gradient-to-br from-stone-200 via-stone-100 to-white flex items-center justify-center relative overflow-hidden">
+                                  <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+                                    <svg width="100%" height="100%"><pattern id={`list-pattern-none-${product._id}`} width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" /></pattern><rect width="100%" height="100%" fill={`url(#list-pattern-none-${product._id})`} /></svg>
+                                  </div>
+                                  <div className="text-center relative z-10 p-4">
+                                    <div className="w-16 h-16 bg-white/80 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl border border-white rotate-6 group-hover:rotate-0 transition-transform duration-700">
+                                      <SparklesIcon className="w-8 h-8 text-stone-300" />
                                     </div>
-                                    <div className="text-gray-900 font-semibold">{product.name}</div>
-                                    <div className="text-gray-400 text-sm mt-1">{product.category?.name}</div>
+                                    <div className="text-gray-400 font-black text-[10px] uppercase tracking-[0.3em]">Divine Art</div>
                                   </div>
                                 </div>
                               )}
-                              {product.discountPrice && (
-                                <div className="absolute top-3 left-3 bg-gradient-to-r from-red-600 to-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                                  -{Math.round(((product.price - product.discountPrice) / product.price) * 100)}%
+                              {product.stock === 0 && (
+                                <div className="absolute inset-0 bg-stone-900/40 backdrop-blur-[2px] z-30 flex items-center justify-center p-6">
+                                  <div className="w-full py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl flex flex-col items-center justify-center transform -rotate-12 shadow-2xl">
+                                    <span className="text-white font-black text-lg uppercase tracking-[0.2em]">Sold Out</span>
+                                  </div>
                                 </div>
                               )}
                             </div>
@@ -748,19 +747,12 @@ const Shop = () => {
                               </p>
 
                               {product.rating?.average > 0 && (
-                                <div className="flex items-center mb-4">
-                                  <div className="flex items-center">
-                                    {[...Array(5)].map((_, i) => (
-                                      <StarIcon
-                                        key={i}
-                                        className={`h-4 w-4 ${i < Math.floor(product.rating.average)
-                                            ? 'text-yellow-400'
-                                            : 'text-gray-600'
-                                          }`}
-                                      />
-                                    ))}
-                                  </div>
-                                  <span className="text-gray-400 text-sm ml-2">
+                                <div className="flex items-center gap-1.5 mb-4 bg-gray-50/50 w-fit px-2 py-1 rounded-lg">
+                                  <StarIcon className="h-4 w-4 text-amber-400 fill-amber-400" />
+                                  <span className="text-gray-900 font-bold text-sm">
+                                    {product.rating.average.toFixed(1)}
+                                  </span>
+                                  <span className="text-gray-400 text-xs font-medium font-medium">
                                     ({product.rating.count} reviews)
                                   </span>
                                 </div>
@@ -874,8 +866,8 @@ const Shop = () => {
                             key={pageNum}
                             onClick={() => setPagination(prev => ({ ...prev, currentPage: pageNum }))}
                             className={`px-4 py-2 rounded-xl transition-all ${pagination.currentPage === pageNum
-                                ? 'bg-gradient-to-r from-amber-400 to-yellow-400 text-gray-900 font-bold'
-                                : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+                              ? 'bg-gradient-to-r from-amber-400 to-yellow-400 text-gray-900 font-bold'
+                              : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
                               }`}
                           >
                             {pageNum}

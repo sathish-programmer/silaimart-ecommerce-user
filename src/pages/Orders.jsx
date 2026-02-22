@@ -174,11 +174,11 @@ const Orders = () => {
               <MagnifyingGlassIcon className="h-4 w-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search orders..."
-                className="pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-gray-900 text-sm focus:border-violet-400 focus:ring-2 focus:ring-violet-100 focus:outline-none w-full sm:w-56" />
+                className="pl-9 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-gray-900 text-sm focus:border-primary-400 focus:ring-2 focus:ring-primary-100 focus:outline-none w-full sm:w-56" />
             </div>
             <div className="relative">
               <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
-                className="appearance-none pl-4 pr-9 py-2.5 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm focus:border-violet-400 focus:ring-2 focus:ring-violet-100 focus:outline-none w-full sm:w-auto">
+                className="appearance-none pl-4 pr-9 py-2.5 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm focus:border-primary-400 focus:ring-2 focus:ring-primary-100 focus:outline-none w-full sm:w-auto">
                 <option value="all">All Orders</option>
                 <option value="pending">Pending</option>
                 <option value="confirmed">Confirmed</option>
@@ -195,8 +195,8 @@ const Orders = () => {
         {/* Orders List */}
         {filteredOrders.length === 0 ? (
           <div className="text-center py-20 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm">
-            <div className="w-20 h-20 bg-violet-50 rounded-3xl flex items-center justify-center mx-auto mb-6">
-              <TruckIcon className="h-10 w-10 text-violet-300" />
+            <div className="w-20 h-20 bg-primary-50 rounded-3xl flex items-center justify-center mx-auto mb-6">
+              <TruckIcon className="h-10 w-10 text-primary-300" />
             </div>
             <h3 className="text-2xl font-black text-gray-900 mb-2">No Sacred Orders Yet</h3>
             <p className="text-gray-500 mb-8 max-w-xs mx-auto">Your journey of divine art collection hasn't started. Explore our artisan sculptures.</p>
@@ -269,7 +269,7 @@ const Orders = () => {
                               {item.product?.images?.[0]?.url ? (
                                 <img src={item.product.images[0].url} alt={item.product.name} className="w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-500" />
                               ) : (
-                                <SparklesIcon className="w-6 h-6 text-violet-200" />
+                                <SparklesIcon className="w-6 h-6 text-primary-200" />
                               )}
                             </div>
                             <div className="min-w-0">
@@ -351,10 +351,10 @@ const Orders = () => {
               <div className="flex justify-between items-center p-6 border-b border-gray-100 sticky top-0 bg-white rounded-t-3xl z-10">
                 <h2 className="text-xl font-bold text-gray-900">Order Details</h2>
                 <button onClick={() => setShowModal(false)} className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors">
-                  <XCircleIcon className="h-5 w-5" />
+                  <XCircleIcon className="h-6 w-6" />
                 </button>
               </div>
-              <div className="p-6 space-y-6">
+              <div className="p-8 space-y-8">
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 bg-stone-50 rounded-2xl">
                   <div>
@@ -379,18 +379,18 @@ const Orders = () => {
                   <div className="space-y-3">
                     {selectedOrder.items?.map((item, idx) => (
                       <div key={idx} className="flex items-center gap-4 p-4 bg-stone-50 rounded-xl">
-                        <div className="w-14 h-14 bg-violet-50 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0">
+                        <div className="w-16 h-16 bg-primary-50 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm border border-primary-100/50">
                           {item.product?.images?.[0]?.url ? (
-                            <img src={item.product.images[0].url} alt={item.product.name} className="w-full h-full object-cover rounded-xl" />
-                          ) : <span className="text-violet-400 text-xs font-bold">{item.product?.name?.slice(0, 5)}</span>}
+                            <img src={item.product.images[0].url} alt={item.product.name} className="w-full h-full object-cover" />
+                          ) : <span className="text-primary-400 text-xs font-bold">{item.product?.name?.slice(0, 5)}</span>}
                         </div>
                         <div className="flex-1">
-                          <h5 className="font-medium text-gray-900">{item.product?.name || 'Product'}</h5>
-                          <p className="text-gray-500 text-sm">Qty: {item.quantity}</p>
+                          <h5 className="font-bold text-gray-900 group-hover:text-primary-600 transition-colors">{item.product?.name || 'Product'}</h5>
+                          <p className="text-gray-500 text-xs font-medium mt-0.5">Quantity: {item.quantity}</p>
                           {selectedOrder.orderStatus === 'delivered' && (
                             <button onClick={() => openReviewModal(item.product, selectedOrder._id)}
-                              className="flex items-center gap-1 text-violet-600 text-sm hover:text-violet-700 mt-1 font-medium">
-                              <StarIcon className="h-4 w-4" />Write Review
+                              className="flex items-center gap-1.5 text-primary-600 text-[10px] font-black hover:text-primary-700 mt-2 uppercase tracking-wider">
+                              <StarIcon className="h-3.5 w-3.5" />Write Review
                             </button>
                           )}
                         </div>
@@ -463,15 +463,15 @@ const Orders = () => {
                 </button>
               </div>
               <div className="p-6">
-                <div className="flex items-center gap-4 p-4 bg-stone-50 rounded-2xl mb-5">
-                  <div className="w-14 h-14 bg-violet-50 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0">
+                <div className="flex items-center gap-4 p-5 bg-stone-50 rounded-[2rem] border border-gray-100/50 mb-6">
+                  <div className="w-16 h-16 bg-primary-50 rounded-2xl flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm border border-primary-100/50">
                     {reviewProduct.images?.[0]?.url ? (
-                      <img src={reviewProduct.images[0].url} alt={reviewProduct.name} className="w-full h-full object-cover rounded-xl" />
-                    ) : <span className="text-violet-400 text-xs font-bold">{reviewProduct.name?.slice(0, 5)}</span>}
+                      <img src={reviewProduct.images[0].url} alt={reviewProduct.name} className="w-full h-full object-cover" />
+                    ) : <span className="text-primary-400 text-xs font-bold">{reviewProduct.name?.slice(0, 5)}</span>}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{reviewProduct.name}</h3>
-                    <p className="text-gray-500 text-sm">Share your experience</p>
+                    <h3 className="text-lg font-black text-gray-900 tracking-tight">{reviewProduct.name}</h3>
+                    <p className="text-gray-500 text-xs font-medium">Share your divine experience</p>
                   </div>
                 </div>
 
@@ -487,16 +487,16 @@ const Orders = () => {
                     <div className="flex gap-1">{renderStars(reviewForm.rating, true, (rating) => setReviewForm({ ...reviewForm, rating }))}</div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Comment</label>
+                    <label className="block text-gray-700 font-bold mb-3 uppercase text-[10px] tracking-widest pl-1">Comment</label>
                     <textarea value={reviewForm.comment} onChange={(e) => setReviewForm({ ...reviewForm, comment: e.target.value })}
-                      className="w-full px-4 py-3 bg-stone-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:border-violet-400 focus:outline-none resize-none"
+                      className="w-full px-5 py-4 bg-stone-50 border border-gray-100 rounded-2xl text-gray-900 placeholder-gray-400 focus:ring-4 focus:ring-primary-500/10 focus:border-primary-500 focus:outline-none transition-all resize-none font-medium"
                       rows="4" placeholder="Share your experience..." required />
                   </div>
                   <div className="flex justify-end gap-3">
                     <button type="button" onClick={() => setShowReviewModal(false)}
                       className="px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 text-sm font-medium transition-colors">Cancel</button>
                     <button type="submit"
-                      className="px-4 py-2 bg-gradient-to-r from-violet-600 to-purple-700 text-white rounded-xl hover:shadow-md text-sm font-medium transition-all">
+                      className="px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-2xl hover:shadow-xl hover:shadow-primary-100 text-sm font-bold transition-all active:scale-[0.98]">
                       {reviewProduct.existingReview ? 'Update Review' : 'Submit Review'}
                     </button>
                   </div>
