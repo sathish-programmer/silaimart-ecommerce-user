@@ -179,33 +179,26 @@ const Home = () => {
                 <div className="bg-stone-50 rounded-2xl overflow-hidden border border-gray-100 hover:border-violet-200 hover:shadow-lg transition-all duration-300">
                   <div className="aspect-square relative overflow-hidden">
                     {category.image?.url ? (
-                      <>
-                        <img
-                          src={category.image.url}
-                          alt={category.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          onError={(e) => {
-                            e.target.style.display = 'none';
-                            e.target.nextSibling.style.display = 'flex';
-                          }}
-                        />
-                        <div className="w-full h-full bg-gradient-to-br from-violet-50 to-purple-50 flex items-center justify-center" style={{ display: 'none' }}>
-                          <div className="text-center p-4">
-                            <div className="w-12 h-12 bg-violet-100 rounded-2xl flex items-center justify-center mx-auto mb-2">
-                              <SparklesIcon className="w-6 h-6 text-violet-500" />
-                            </div>
-                          </div>
-                        </div>
-                      </>
-                    ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-violet-50 to-purple-50 flex items-center justify-center">
-                        <div className="text-center p-4">
-                          <div className="w-12 h-12 bg-violet-100 rounded-2xl flex items-center justify-center mx-auto mb-2">
-                            <SparklesIcon className="w-6 h-6 text-violet-500" />
-                          </div>
+                      <img
+                        src={category.image.url}
+                        alt={category.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                    ) : null}
+                    <div
+                      className="w-full h-full bg-gradient-to-br from-violet-50 to-purple-50 flex items-center justify-center"
+                      style={{ display: category.image?.url ? 'none' : 'flex' }}
+                    >
+                      <div className="text-center p-4">
+                        <div className="w-12 h-12 bg-violet-100 rounded-2xl flex items-center justify-center mx-auto mb-2">
+                          <SparklesIcon className="w-6 h-6 text-violet-500" />
                         </div>
                       </div>
-                    )}
+                    </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                     <div className="absolute bottom-3 left-3 right-3">
                       <h3 className="text-white font-semibold text-base group-hover:text-amber-300 transition-colors drop-shadow">
