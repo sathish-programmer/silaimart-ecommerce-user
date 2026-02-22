@@ -53,7 +53,12 @@ function AppContent() {
         window.location.pathname !== '/' &&
         window.location.pathname !== '/shop' &&
         window.location.pathname !== '/track-order' &&
-        !window.location.pathname.startsWith('/product/')
+        !window.location.pathname.startsWith('/product/') &&
+        !window.location.pathname.startsWith('/policy/') &&
+        window.location.pathname !== '/about' &&
+        window.location.pathname !== '/support' &&
+        window.location.pathname !== '/blogs' &&
+        !window.location.pathname.startsWith('/blog/')
       ) {
         navigate('/login');
       }
