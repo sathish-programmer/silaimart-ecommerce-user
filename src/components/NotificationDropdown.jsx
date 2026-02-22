@@ -119,7 +119,7 @@ const NotificationDropdown = () => {
         className="relative p-2 text-gray-400 hover:text-white transition-colors"
       >
         {unreadCount > 0 ? (
-          <BellSolid className="h-6 w-6 text-bronze" />
+          <BellSolid className="h-6 w-6 text-primary-600" />
         ) : (
           <BellIcon className="h-6 w-6" />
         )}
@@ -137,15 +137,15 @@ const NotificationDropdown = () => {
             className="fixed inset-0 z-10" 
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 mt-2 w-96 bg-gray-900 border border-gray-700 rounded-xl shadow-2xl z-20 max-h-96 overflow-hidden">
+          <div className="absolute right-0 mt-2 w-96 bg-white border border-gray-200 rounded-xl shadow-2xl z-20 max-h-96 overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-700">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
               <h3 className="text-white font-semibold">Notifications</h3>
               <div className="flex items-center space-x-2">
                 {unreadCount > 0 && (
                   <button
                     onClick={markAllAsRead}
-                    className="text-bronze text-sm hover:text-gold transition-colors"
+                    className="text-primary-600 text-sm hover:text-accent-600 transition-colors"
                   >
                     Mark all read
                   </button>
@@ -163,7 +163,7 @@ const NotificationDropdown = () => {
             <div className="max-h-80 overflow-y-auto">
               {loading ? (
                 <div className="p-4 text-center">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-bronze mx-auto"></div>
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600 mx-auto"></div>
                 </div>
               ) : notifications.length === 0 ? (
                 <div className="p-8 text-center">
@@ -174,8 +174,8 @@ const NotificationDropdown = () => {
                 notifications.map((notification) => (
                   <div
                     key={notification._id}
-                    className={`p-4 border-l-4 ${getPriorityColor(notification.priority)} hover:bg-gray-800 transition-colors cursor-pointer ${
-                      notification.status === 'unread' ? 'bg-gray-800/50' : ''
+                    className={`p-4 border-l-4 ${getPriorityColor(notification.priority)} hover:bg-gray-50 transition-colors cursor-pointer ${
+                      notification.status === 'unread' ? 'bg-gray-50/50' : ''
                     }`}
                     onClick={() => {
                       if (notification.status === 'unread') {
@@ -198,7 +198,7 @@ const NotificationDropdown = () => {
                             {notification.title}
                           </h4>
                           {notification.status === 'unread' && (
-                            <div className="w-2 h-2 bg-bronze rounded-full flex-shrink-0"></div>
+                            <div className="w-2 h-2 bg-primary-600 rounded-full flex-shrink-0"></div>
                           )}
                         </div>
                         <p className="text-gray-400 text-sm mt-1 line-clamp-2">
@@ -216,13 +216,13 @@ const NotificationDropdown = () => {
 
             {/* Footer */}
             {notifications.length > 0 && (
-              <div className="p-3 border-t border-gray-700 text-center">
+              <div className="p-3 border-t border-gray-200 text-center">
                 <button
                   onClick={() => {
                     setIsOpen(false);
                     window.location.href = '/notifications';
                   }}
-                  className="text-bronze text-sm hover:text-gold transition-colors"
+                  className="text-primary-600 text-sm hover:text-accent-600 transition-colors"
                 >
                   View all notifications
                 </button>

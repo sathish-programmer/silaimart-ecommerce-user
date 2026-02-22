@@ -54,20 +54,20 @@ const BlogDetail = () => {
     return (
       <div className="min-h-screen py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="h-6 bg-gray-800 rounded w-32 mb-8 animate-pulse"></div>
+          <div className="h-6 bg-gray-50 rounded w-32 mb-8 animate-pulse"></div>
           
-          <div className="bg-gray-900 rounded-2xl overflow-hidden border border-gray-700">
-            <div className="aspect-video bg-gray-800 animate-pulse"></div>
+          <div className="bg-white rounded-2xl overflow-hidden border border-gray-200">
+            <div className="aspect-video bg-gray-50 animate-pulse"></div>
             <div className="p-8 space-y-6">
-              <div className="h-10 bg-gray-800 rounded w-3/4 animate-pulse"></div>
+              <div className="h-10 bg-gray-50 rounded w-3/4 animate-pulse"></div>
               <div className="flex space-x-6">
-                <div className="h-4 bg-gray-800 rounded w-24 animate-pulse"></div>
-                <div className="h-4 bg-gray-800 rounded w-32 animate-pulse"></div>
-                <div className="h-4 bg-gray-800 rounded w-20 animate-pulse"></div>
+                <div className="h-4 bg-gray-50 rounded w-24 animate-pulse"></div>
+                <div className="h-4 bg-gray-50 rounded w-32 animate-pulse"></div>
+                <div className="h-4 bg-gray-50 rounded w-20 animate-pulse"></div>
               </div>
               <div className="space-y-3">
                 {[...Array(8)].map((_, i) => (
-                  <div key={i} className="h-4 bg-gray-800 rounded w-full animate-pulse"></div>
+                  <div key={i} className="h-4 bg-gray-50 rounded w-full animate-pulse"></div>
                 ))}
               </div>
             </div>
@@ -82,12 +82,12 @@ const BlogDetail = () => {
       <div className="min-h-screen py-8">
         <div className="max-w-4xl mx-auto px-4">
           <nav className="mb-8">
-            <Link to="/blogs" className="text-bronze hover:text-gold">← Back to Blog</Link>
+            <Link to="/blogs" className="text-primary-600 hover:text-accent-600">← Back to Blog</Link>
           </nav>
 
           <div className="text-center py-12">
             <h2 className="text-2xl font-bold text-white mb-4">Blog Post Not Found</h2>
-            <Link to="/blogs" className="bg-bronze text-black px-8 py-3 rounded-lg font-semibold hover:bg-gold">
+            <Link to="/blogs" className="bg-primary-600 text-black px-8 py-3 rounded-lg font-semibold hover:bg-accent-500">
               Back to Blog
             </Link>
           </div>
@@ -100,10 +100,10 @@ const BlogDetail = () => {
     <div className="min-h-screen py-8">
       <div className="max-w-4xl mx-auto px-4">
         <nav className="mb-8">
-          <Link to="/blogs" className="text-bronze hover:text-gold">← Back to Blog</Link>
+          <Link to="/blogs" className="text-primary-600 hover:text-accent-600">← Back to Blog</Link>
         </nav>
 
-        <article className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl overflow-hidden border border-gray-700">
+        <article className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl overflow-hidden border border-gray-200">
           {blog.featuredImage?.url ? (
             <div className="aspect-video overflow-hidden">
               <img
@@ -117,8 +117,8 @@ const BlogDetail = () => {
               />
               <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-700 flex items-center justify-center" style={{display: 'none'}}>
                 <div className="text-center p-8">
-                  <div className="w-20 h-20 bg-bronze/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-10 h-10 text-bronze" fill="currentColor" viewBox="0 0 24 24">
+                  <div className="w-20 h-20 bg-primary-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-10 h-10 text-primary-600" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
                     </svg>
                   </div>
@@ -131,8 +131,8 @@ const BlogDetail = () => {
             <div className="aspect-video overflow-hidden">
               <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-700 flex items-center justify-center">
                 <div className="text-center p-8">
-                  <div className="w-20 h-20 bg-bronze/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-10 h-10 text-bronze" fill="currentColor" viewBox="0 0 24 24">
+                  <div className="w-20 h-20 bg-primary-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-10 h-10 text-primary-600" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
                     </svg>
                   </div>
@@ -168,10 +168,10 @@ const BlogDetail = () => {
               
               {blog.tags && blog.tags.length > 0 && (
                 <div className="flex items-center space-x-2 mb-4">
-                  <TagIcon className="h-4 w-4 text-bronze" />
+                  <TagIcon className="h-4 w-4 text-primary-600" />
                   <div className="flex flex-wrap gap-2">
                     {blog.tags.map((tag, index) => (
-                      <span key={index} className="bg-bronze/20 text-bronze px-3 py-1 rounded-full text-sm">
+                      <span key={index} className="bg-primary-600/20 text-primary-600 px-3 py-1 rounded-full text-sm">
                         {tag}
                       </span>
                     ))}
@@ -180,7 +180,7 @@ const BlogDetail = () => {
               )}
               
               <div className="flex items-center space-x-2 mb-6">
-                <ShareIcon className="h-4 w-4 text-bronze" />
+                <ShareIcon className="h-4 w-4 text-primary-600" />
                 <span className="text-gray-400 text-sm mr-2">Share:</span>
                 <div className="flex space-x-2">
                   <button

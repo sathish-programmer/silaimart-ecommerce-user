@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { productsAPI, categoriesAPI } from '../services/api';
+import { SparklesIcon, TruckIcon, ShieldCheckIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -17,12 +18,10 @@ const Home = () => {
         productsAPI.getProducts({ featured: true, limit: 6 }),
         categoriesAPI.getCategories({ limit: 8 })
       ]);
-
       setFeaturedProducts(productsRes.data.products || []);
       setCategories(categoriesRes.data.categories || []);
     } catch (error) {
       console.error('Error fetching data:', error);
-      // Set mock data for demo
       setCategories([
         { _id: '1', name: 'Vinayagar', image: { url: 'https://via.placeholder.com/300x300?text=Vinayagar' } },
         { _id: '2', name: 'Murugar', image: { url: 'https://via.placeholder.com/300x300?text=Murugar' } },
@@ -30,65 +29,45 @@ const Home = () => {
         { _id: '4', name: 'Home Decor', image: { url: 'https://via.placeholder.com/300x300?text=Home+Decor' } }
       ]);
       setFeaturedProducts([
-        { _id: '1', name: 'Divine Vinayagar Statue', price: 2500, discountPrice: 2000, images: [{ url: 'https://via.placeholder.com/400x400?text=Vinayagar' }] },
-        { _id: '2', name: 'Peaceful Buddha', price: 3500, images: [{ url: 'https://via.placeholder.com/400x400?text=Buddha' }] },
-        { _id: '3', name: 'Lord Murugar Sculpture', price: 4500, discountPrice: 3500, images: [{ url: 'https://via.placeholder.com/400x400?text=Murugar' }] }
+        { _id: '1', name: 'Divine Vinayagar Statue', price: 2500, discountPrice: 2000, images: [{ url: '' }] },
+        { _id: '2', name: 'Peaceful Buddha', price: 3500, images: [{ url: '' }] },
+        { _id: '3', name: 'Lord Murugar Sculpture', price: 4500, discountPrice: 3500, images: [{ url: '' }] }
       ]);
     } finally {
       setLoading(false);
     }
   };
 
+  const features = [
+    { icon: SparklesIcon, title: 'Handcrafted', desc: 'Artisan-made with devotion' },
+    { icon: ShieldCheckIcon, title: 'Authentic', desc: 'Genuine spiritual sculptures' },
+    { icon: TruckIcon, title: 'Safe Delivery', desc: 'Packed with care, delivered fast' },
+  ];
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-black">
+      <div className="min-h-screen bg-stone-50">
         {/* Hero Skeleton */}
-        <section className="relative h-screen flex items-center justify-center bg-gradient-to-r from-black via-gray-900 to-black">
-          <div className="text-center max-w-4xl mx-auto px-4">
-            <div className="h-16 bg-gray-800 rounded-lg w-96 mx-auto mb-6 animate-pulse"></div>
-            <div className="h-8 bg-gray-800 rounded w-80 mx-auto mb-8 animate-pulse"></div>
-            <div className="flex justify-center space-x-4">
-              <div className="h-12 bg-gray-800 rounded-lg w-32 animate-pulse"></div>
-              <div className="h-12 bg-gray-800 rounded-lg w-32 animate-pulse"></div>
+        <section className="relative h-screen flex items-center justify-center bg-gradient-to-br from-violet-900 via-purple-900 to-fuchsia-900">
+          <div className="text-center max-w-4xl mx-auto px-4 space-y-6">
+            <div className="h-16 bg-white/10 rounded-2xl w-96 mx-auto animate-pulse" />
+            <div className="h-8 bg-white/10 rounded-xl w-80 mx-auto animate-pulse" />
+            <div className="flex justify-center gap-4">
+              <div className="h-14 bg-white/10 rounded-2xl w-40 animate-pulse" />
+              <div className="h-14 bg-white/10 rounded-2xl w-36 animate-pulse" />
             </div>
           </div>
         </section>
-
         {/* Categories Skeleton */}
-        <section className="py-20 px-4 bg-black">
+        <section className="py-20 px-4 bg-white">
           <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <div className="h-10 bg-gray-800 rounded w-64 mx-auto mb-4 animate-pulse"></div>
-              <div className="h-6 bg-gray-800 rounded w-48 mx-auto animate-pulse"></div>
-            </div>
+            <div className="h-10 bg-gray-200 rounded-xl w-64 mx-auto mb-4 animate-pulse" />
+            <div className="h-6 bg-gray-200 rounded w-48 mx-auto mb-12 animate-pulse" />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[...Array(8)].map((_, i) => (
-                <div key={i} className="bg-gray-900 rounded-lg overflow-hidden">
-                  <div className="aspect-square bg-gray-800 animate-pulse"></div>
-                  <div className="p-4">
-                    <div className="h-5 bg-gray-800 rounded w-3/4 animate-pulse"></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Featured Products Skeleton */}
-        <section className="py-20 px-4 bg-gray-900/50">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-16">
-              <div className="h-10 bg-gray-800 rounded w-72 mx-auto mb-4 animate-pulse"></div>
-              <div className="h-6 bg-gray-800 rounded w-48 mx-auto animate-pulse"></div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="bg-gray-900 rounded-lg overflow-hidden">
-                  <div className="aspect-square bg-gray-800 animate-pulse"></div>
-                  <div className="p-4 space-y-3">
-                    <div className="h-5 bg-gray-800 rounded w-3/4 animate-pulse"></div>
-                    <div className="h-6 bg-gray-800 rounded w-1/2 animate-pulse"></div>
-                  </div>
+                <div key={i} className="bg-gray-100 rounded-2xl overflow-hidden animate-pulse">
+                  <div className="aspect-square bg-gray-200" />
+                  <div className="p-4"><div className="h-4 bg-gray-200 rounded w-3/4" /></div>
                 </div>
               ))}
             </div>
@@ -99,86 +78,137 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center bg-gradient-to-r from-black via-gray-900 to-black">
-        <div className="absolute inset-0 bg-black/50"></div>
+    <div className="min-h-screen bg-stone-50">
+
+      {/* ── Hero Section ── */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Rich gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-950 via-purple-900 to-fuchsia-900" />
+        {/* Decorative orbs */}
+        <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-violet-500/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-fuchsia-500/15 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
+
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6">
-            <span className="text-white">Divine </span>
-            <span className="text-bronze">Sculptures</span>
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-amber-300 px-4 py-2 rounded-full text-sm font-medium mb-8">
+            <SparklesIcon className="h-4 w-4" />
+            Handcrafted Divine Sculptures
+          </div>
+
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+            <span className="text-white">Sacred Art,</span>
+            <br />
+            <span className="bg-gradient-to-r from-amber-300 via-yellow-300 to-amber-400 bg-clip-text text-transparent">
+              Divine Beauty
+            </span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-8">
-            Handcrafted spiritual art for your sacred spaces
+
+          <p className="text-lg md:text-xl text-violet-200 mb-10 max-w-2xl mx-auto leading-relaxed">
+            Handcrafted spiritual sculptures and divine art — bringing blessings and beauty to your sacred spaces
           </p>
-          <div className="space-x-4">
-            <Link 
-              to="/shop" 
-              className="inline-block bg-bronze text-black px-8 py-3 rounded-lg font-semibold hover:bg-gold transition-colors"
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              to="/shop"
+              className="group inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-gray-900 px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-amber-500/30 hover:shadow-xl"
             >
               Shop Now
+              <ArrowRightIcon className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Link>
-            <Link 
-              to="/about" 
-              className="inline-block border border-bronze text-bronze px-8 py-3 rounded-lg font-semibold hover:bg-bronze hover:text-black transition-colors"
+            <Link
+              to="/about"
+              className="inline-flex items-center gap-2 border-2 border-white/30 text-white hover:bg-white/10 px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-200 backdrop-blur-sm"
             >
-              Learn More
+              Our Story
             </Link>
+          </div>
+
+          {/* Stats */}
+          <div className="flex items-center justify-center gap-8 mt-16 pt-8 border-t border-white/10">
+            {[
+              { value: '500+', label: 'Sculptures' },
+              { value: '10K+', label: 'Happy Customers' },
+              { value: '4.9★', label: 'Rating' },
+            ].map(({ value, label }) => (
+              <div key={label} className="text-center">
+                <div className="text-2xl font-bold text-white">{value}</div>
+                <div className="text-violet-300 text-sm">{label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-violet-300 animate-bounce">
+          <div className="w-5 h-8 border-2 border-violet-300/50 rounded-full flex items-start justify-center p-1">
+            <div className="w-1 h-2 bg-violet-300 rounded-full animate-bounce" />
           </div>
         </div>
       </section>
 
-      {/* Categories Section */}
-      <section className="py-20 px-4 bg-black">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">Sacred Categories</h2>
-            <p className="text-gray-400 text-lg">Explore our divine collection</p>
+      {/* ── Features Strip ── */}
+      <section className="bg-white border-y border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {features.map(({ icon: Icon, title, desc }) => (
+              <div key={title} className="flex items-center gap-4 p-4">
+                <div className="h-12 w-12 bg-violet-100 rounded-2xl flex items-center justify-center flex-shrink-0">
+                  <Icon className="h-6 w-6 text-violet-600" />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">{title}</p>
+                  <p className="text-gray-500 text-sm">{desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        </div>
+      </section>
+
+      {/* ── Categories Section ── */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="section-title">Sacred Categories</h2>
+            <p className="section-subtitle">Explore our divine collection</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
             {categories.map((category) => (
               <Link key={category._id} to={`/shop?category=${category._id}`} className="group">
-                <div className="bg-gray-900 rounded-lg overflow-hidden hover:bg-gray-800 transition-all group-hover:scale-105">
+                <div className="bg-stone-50 rounded-2xl overflow-hidden border border-gray-100 hover:border-violet-200 hover:shadow-lg transition-all duration-300">
                   <div className="aspect-square relative overflow-hidden">
                     {category.image?.url ? (
                       <>
-                        <img 
-                          src={category.image.url} 
+                        <img
+                          src={category.image.url}
                           alt={category.name}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           onError={(e) => {
                             e.target.style.display = 'none';
                             e.target.nextSibling.style.display = 'flex';
                           }}
                         />
-                        <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-700 flex items-center justify-center" style={{display: 'none'}}>
+                        <div className="w-full h-full bg-gradient-to-br from-violet-50 to-purple-50 flex items-center justify-center" style={{ display: 'none' }}>
                           <div className="text-center p-4">
-                            <div className="w-16 h-16 bg-bronze/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                              <svg className="w-8 h-8 text-bronze" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/>
-                              </svg>
+                            <div className="w-12 h-12 bg-violet-100 rounded-2xl flex items-center justify-center mx-auto mb-2">
+                              <SparklesIcon className="w-6 h-6 text-violet-500" />
                             </div>
-                            <div className="text-white font-semibold text-sm">{category.name}</div>
-                            <div className="text-gray-400 text-xs mt-1">Sacred Category</div>
                           </div>
                         </div>
                       </>
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-700 flex items-center justify-center">
+                      <div className="w-full h-full bg-gradient-to-br from-violet-50 to-purple-50 flex items-center justify-center">
                         <div className="text-center p-4">
-                          <div className="w-16 h-16 bg-bronze/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                            <svg className="w-8 h-8 text-bronze" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/>
-                            </svg>
+                          <div className="w-12 h-12 bg-violet-100 rounded-2xl flex items-center justify-center mx-auto mb-2">
+                            <SparklesIcon className="w-6 h-6 text-violet-500" />
                           </div>
-                          <div className="text-white font-semibold text-sm">{category.name}</div>
-                          <div className="text-gray-400 text-xs mt-1">Sacred Category</div>
                         </div>
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <h3 className="text-white font-semibold text-lg group-hover:text-bronze transition-colors">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                    <div className="absolute bottom-3 left-3 right-3">
+                      <h3 className="text-white font-semibold text-base group-hover:text-amber-300 transition-colors drop-shadow">
                         {category.name}
                       </h3>
                     </div>
@@ -190,70 +220,52 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Featured Products */}
-      <section className="py-20 px-4 bg-gray-900/50">
+      {/* ── Featured Products ── */}
+      <section className="py-20 px-4 bg-stone-50">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">Featured Sculptures</h2>
-            <p className="text-gray-400 text-lg">Handpicked masterpieces</p>
+          <div className="flex items-end justify-between mb-12">
+            <div>
+              <h2 className="section-title">Featured Sculptures</h2>
+              <p className="section-subtitle">Handpicked masterpieces</p>
+            </div>
+            <Link to="/shop" className="hidden sm:flex items-center gap-1.5 text-violet-600 hover:text-violet-700 font-semibold text-sm group">
+              View all
+              <ArrowRightIcon className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredProducts.map((product) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {featuredProducts.map((product, i) => (
               <Link key={product._id} to={`/product/${product._id}`} className="group">
-                <div className="bg-gray-900 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all group-hover:scale-105">
-                  <div className="relative aspect-square overflow-hidden">
+                <div className="bg-white rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 border border-gray-100 group-hover:-translate-y-1">
+                  <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-violet-50 to-purple-50">
                     {product.images?.[0]?.url ? (
-                      <>
-                        <img 
-                          src={product.images[0].url} 
-                          alt={product.name}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                          onError={(e) => {
-                            e.target.style.display = 'none';
-                            e.target.nextSibling.style.display = 'flex';
-                          }}
-                        />
-                        <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-700 flex items-center justify-center" style={{display: 'none'}}>
-                          <div className="text-center p-6">
-                            <div className="w-20 h-20 bg-bronze/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                              <svg className="w-10 h-10 text-bronze" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                              </svg>
-                            </div>
-                            <div className="text-white font-semibold text-lg">{product.name}</div>
-                            <div className="text-gray-400 text-sm mt-2">Featured Sculpture</div>
-                          </div>
-                        </div>
-                      </>
+                      <img
+                        src={product.images[0].url}
+                        alt={product.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        onError={(e) => { e.target.style.display = 'none'; }}
+                      />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-700 flex items-center justify-center">
-                        <div className="text-center p-6">
-                          <div className="w-20 h-20 bg-bronze/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg className="w-10 h-10 text-bronze" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                            </svg>
-                          </div>
-                          <div className="text-white font-semibold text-lg">{product.name}</div>
-                          <div className="text-gray-400 text-sm mt-2">Featured Sculpture</div>
-                        </div>
+                      <div className="w-full h-full flex items-center justify-center">
+                        <SparklesIcon className="w-16 h-16 text-violet-200" />
                       </div>
                     )}
                     {product.discountPrice && (
-                      <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-1 rounded text-sm font-semibold">
+                      <div className="absolute top-3 left-3 bg-secondary-500 text-white px-2.5 py-1 rounded-full text-xs font-bold">
                         -{Math.round(((product.price - product.discountPrice) / product.price) * 100)}%
                       </div>
                     )}
                   </div>
                   <div className="p-4">
-                    <h3 className="text-white font-semibold mb-2 group-hover:text-bronze transition-colors">
+                    <h3 className="text-gray-900 font-semibold mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">
                       {product.name}
                     </h3>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-bronze font-bold text-lg">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-primary-600 font-bold text-xl">
                         ₹{(product.discountPrice || product.price)?.toLocaleString()}
                       </span>
                       {product.discountPrice && (
-                        <span className="text-gray-500 line-through text-sm">
+                        <span className="text-gray-400 line-through text-sm">
                           ₹{product.price?.toLocaleString()}
                         </span>
                       )}
@@ -263,27 +275,37 @@ const Home = () => {
               </Link>
             ))}
           </div>
-          <div className="text-center mt-12">
-            <Link 
-              to="/shop" 
-              className="inline-block bg-bronze text-black px-8 py-3 rounded-lg font-semibold hover:bg-gold transition-colors"
-            >
+          <div className="text-center mt-10">
+            <Link to="/shop" className="btn-primary inline-flex items-center gap-2">
               View All Products
+              <ArrowRightIcon className="h-4 w-4" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-4 bg-gradient-to-r from-bronze/20 to-gold/20">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-white mb-6">Need Help Choosing?</h2>
-          <p className="text-gray-300 text-lg mb-8">
-            Our AI assistant can help you find the perfect sculpture for your needs
+      {/* ── CTA Banner ── */}
+      <section className="py-20 px-4 bg-gradient-to-br from-violet-900 via-purple-900 to-fuchsia-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-5" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl" />
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-amber-300 px-4 py-2 rounded-full text-sm font-medium mb-6">
+            <SparklesIcon className="h-4 w-4" />
+            AI-Powered Recommendations
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-5">
+            Need Help Choosing?
+          </h2>
+          <p className="text-violet-200 text-lg mb-8 max-w-2xl mx-auto">
+            Our AI assistant can guide you to the perfect divine sculpture based on your sacred space and preferences.
           </p>
-          <button className="bg-bronze text-black px-8 py-3 rounded-lg font-semibold hover:bg-gold transition-colors">
-            Get Recommendations
-          </button>
+          <Link
+            to="/shop"
+            className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-gray-900 px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-200 shadow-lg hover:shadow-amber-500/30"
+          >
+            Explore Collection
+            <ArrowRightIcon className="h-5 w-5" />
+          </Link>
         </div>
       </section>
     </div>

@@ -10,7 +10,7 @@ const CategoryCard = ({ category, index }) => {
       className="group"
     >
       <Link to={`/shop?category=${category._id}`}>
-        <div className="bg-gray-900 rounded-lg overflow-hidden hover:bg-gray-800 transition-all duration-300 group-hover:scale-105">
+        <div className="bg-white rounded-lg overflow-hidden hover:bg-gray-50 transition-all duration-300 group-hover:scale-105">
           <div className="aspect-square relative overflow-hidden">
             <img 
               src={category.image?.url || '/placeholder-category.jpg'} 
@@ -19,7 +19,7 @@ const CategoryCard = ({ category, index }) => {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             <div className="absolute bottom-4 left-4 right-4">
-              <h3 className="text-white font-semibold text-lg group-hover:text-bronze transition-colors">
+              <h3 className="text-white font-semibold text-lg group-hover:text-primary-600 transition-colors">
                 {category.name}
               </h3>
               {category.description && (

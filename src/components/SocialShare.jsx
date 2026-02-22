@@ -33,7 +33,7 @@ const SocialShare = ({ product, url }) => {
   };
 
   return (
-    <div className="bg-gray-900 p-4 rounded-lg">
+    <div className="bg-white p-4 rounded-lg">
       <h3 className="text-white font-semibold mb-3 flex items-center">
         <ShareIcon className="h-5 w-5 mr-2" />
         Share this Product

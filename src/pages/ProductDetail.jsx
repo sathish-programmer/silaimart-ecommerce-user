@@ -108,7 +108,7 @@ const ProductDetail = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-bronze"></div>
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
       </div>
     );
   }
@@ -132,11 +132,11 @@ const ProductDetail = () => {
       <div className="max-w-7xl mx-auto px-4">
         {/* Breadcrumb */}
         <div className="flex items-center space-x-2 text-sm text-gray-400 mb-8">
-          <Link to="/" className="hover:text-bronze transition-colors">Home</Link>
+          <Link to="/" className="hover:text-primary-600 transition-colors">Home</Link>
           <span>/</span>
-          <Link to="/shop" className="hover:text-bronze transition-colors">Shop</Link>
+          <Link to="/shop" className="hover:text-primary-600 transition-colors">Shop</Link>
           <span>/</span>
-          <Link to={`/shop?category=${product.category?._id}`} className="hover:text-bronze transition-colors">
+          <Link to={`/shop?category=${product.category?._id}`} className="hover:text-primary-600 transition-colors">
             {product.category?.name}
           </Link>
           <span>/</span>
@@ -146,7 +146,7 @@ const ProductDetail = () => {
         {/* Back Button */}
         <button
           onClick={() => window.history.back()}
-          className="flex items-center space-x-2 text-gray-400 hover:text-bronze transition-colors mb-8"
+          className="flex items-center space-x-2 text-gray-400 hover:text-primary-600 transition-colors mb-8"
         >
           <ArrowLeftIcon className="h-5 w-5" />
           <span>Back to products</span>
@@ -174,7 +174,7 @@ const ProductDetail = () => {
                       }}
                     />
                     <div className="hidden w-full h-full absolute inset-0 flex-col items-center justify-center p-8 text-center bg-gradient-to-br from-gray-800 to-gray-700">
-                      <span className="text-bronze font-bold text-xl leading-tight break-words">{product.name}</span>
+                      <span className="text-primary-600 font-bold text-xl leading-tight break-words">{product.name}</span>
                     </div>
                     
                     {/* Zoom Overlay */}
@@ -191,7 +191,7 @@ const ProductDetail = () => {
                   </>
                 ) : (
                   <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center">
-                    <span className="text-bronze font-bold text-xl leading-tight break-words">{product.name}</span>
+                    <span className="text-primary-600 font-bold text-xl leading-tight break-words">{product.name}</span>
                   </div>
                 )}
               </div>
@@ -201,13 +201,13 @@ const ProductDetail = () => {
                 <>
                   <button
                     onClick={prevImage}
-                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all opacity-0 group-hover:opacity-100"
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-stone-50/50 hover:bg-stone-50/70 text-white p-2 rounded-full transition-all opacity-0 group-hover:opacity-100"
                   >
                     <ChevronLeftIcon className="h-6 w-6" />
                   </button>
                   <button
                     onClick={nextImage}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all opacity-0 group-hover:opacity-100"
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-stone-50/50 hover:bg-stone-50/70 text-white p-2 rounded-full transition-all opacity-0 group-hover:opacity-100"
                   >
                     <ChevronRightIcon className="h-6 w-6" />
                   </button>
@@ -238,8 +238,8 @@ const ProductDetail = () => {
                     onClick={() => setSelectedImage(index)}
                     className={`flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all ${
                       selectedImage === index 
-                        ? 'border-bronze shadow-lg scale-105' 
-                        : 'border-gray-700 hover:border-gray-600'
+                        ? 'border-primary-600 shadow-lg scale-105' 
+                        : 'border-gray-200 hover:border-gray-600'
                     }`}
                   >
                     <img
@@ -258,7 +258,7 @@ const ProductDetail = () => {
             {/* Header */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-bronze font-semibold text-lg">{product.category?.name}</span>
+                <span className="text-primary-600 font-semibold text-lg">{product.category?.name}</span>
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => {
@@ -269,14 +269,14 @@ const ProductDetail = () => {
                       }
                     }}
                     className={`p-2 rounded-full transition-colors ${
-                      isInWishlist(product._id) ? 'bg-red-500 text-white' : 'bg-gray-800 text-gray-400 hover:text-red-400'
+                      isInWishlist(product._id) ? 'bg-red-500 text-white' : 'bg-gray-50 text-gray-400 hover:text-red-400'
                     }`}
                   >
                     <HeartIcon className="h-5 w-5" />
                   </button>
                   <button
                     onClick={handleShare}
-                    className="p-2 bg-gray-800 text-gray-400 hover:text-bronze rounded-full transition-colors"
+                    className="p-2 bg-gray-50 text-gray-400 hover:text-primary-600 rounded-full transition-colors"
                   >
                     <ShareIcon className="h-5 w-5" />
                   </button>
@@ -292,7 +292,7 @@ const ProductDetail = () => {
 
             {/* Rating & Reviews */}
             {product.rating?.average > 0 && (
-              <div className="flex items-center space-x-4 pb-4 border-b border-gray-700">
+              <div className="flex items-center space-x-4 pb-4 border-b border-gray-200">
                 <div className="flex items-center">
                   {[...Array(5)].map((_, i) => (
                     <StarIcon
@@ -315,9 +315,9 @@ const ProductDetail = () => {
             )}
 
             {/* Price & Discount */}
-            <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-6 rounded-2xl border border-gray-700">
+            <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-6 rounded-2xl border border-gray-200">
               <div className="flex items-center space-x-4 mb-2">
-                <span className="text-4xl font-bold text-bronze">
+                <span className="text-4xl font-bold text-primary-600">
                   ₹{(product.discountPrice || product.price).toLocaleString()}
                 </span>
                 {product.discountPrice && (
@@ -336,9 +336,9 @@ const ProductDetail = () => {
 
             {/* Sculpture Details */}
             {product.sculptureDetails && (
-              <div className="bg-gray-900 p-6 rounded-2xl border border-gray-700">
+              <div className="bg-white p-6 rounded-2xl border border-gray-200">
                 <h3 className="text-white font-semibold mb-4 flex items-center">
-                  <span className="w-2 h-2 bg-bronze rounded-full mr-2"></span>
+                  <span className="w-2 h-2 bg-primary-600 rounded-full mr-2"></span>
                   Sculpture Details
                 </h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
@@ -390,10 +390,10 @@ const ProductDetail = () => {
                       disabled={size.stock === 0}
                       className={`px-4 py-3 rounded-lg border transition-all relative ${
                         selectedSize === size.name
-                          ? 'border-bronze bg-bronze text-black font-semibold'
+                          ? 'border-primary-600 bg-primary-600 text-black font-semibold'
                           : size.stock === 0
                           ? 'border-gray-600 text-gray-500 cursor-not-allowed'
-                          : 'border-gray-700 text-gray-300 hover:border-bronze'
+                          : 'border-gray-200 text-gray-300 hover:border-primary-600'
                       }`}
                     >
                       <div className="text-center">
@@ -426,8 +426,8 @@ const ProductDetail = () => {
                       onClick={() => setSelectedColor(color.name)}
                       className={`px-4 py-2 rounded-lg border transition-all ${
                         selectedColor === color.name
-                          ? 'border-bronze bg-bronze text-black font-semibold'
-                          : 'border-gray-700 text-gray-300 hover:border-bronze'
+                          ? 'border-primary-600 bg-primary-600 text-black font-semibold'
+                          : 'border-gray-200 text-gray-300 hover:border-primary-600'
                       }`}
                     >
                       {color.code && (
@@ -447,7 +447,7 @@ const ProductDetail = () => {
             <div className="flex items-center justify-between">
               <div>
                 <label className="text-white font-semibold mb-2 block">Quantity</label>
-                <div className="flex items-center bg-gray-900 border border-gray-700 rounded-xl">
+                <div className="flex items-center bg-white border border-gray-200 rounded-xl">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     className="p-3 text-gray-400 hover:text-white transition-colors"
@@ -497,7 +497,7 @@ const ProductDetail = () => {
               </div>
               
               {/* Trust Badges */}
-              <div className="flex items-center justify-center space-x-8 py-4 bg-gray-900 rounded-xl">
+              <div className="flex items-center justify-center space-x-8 py-4 bg-white rounded-xl">
                 <div className="flex items-center space-x-2 text-green-400">
                   <ShieldCheckIcon className="h-5 w-5" />
                   <span className="text-sm font-medium">Authentic</span>
@@ -517,7 +517,7 @@ const ProductDetail = () => {
 
         {/* Product Details Tabs */}
         <div className="mb-16">
-          <div className="border-b border-gray-700 mb-8">
+          <div className="border-b border-gray-200 mb-8">
             <nav className="flex space-x-8">
               {[
                 { id: 'description', label: 'Description' },
@@ -531,7 +531,7 @@ const ProductDetail = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`py-4 px-2 border-b-2 font-medium text-sm transition-colors ${
                     activeTab === tab.id
-                      ? 'border-bronze text-bronze'
+                      ? 'border-primary-600 text-primary-600'
                       : 'border-transparent text-gray-400 hover:text-white hover:border-gray-600'
                   }`}
                 >
@@ -541,7 +541,7 @@ const ProductDetail = () => {
             </nav>
           </div>
           
-          <div className="bg-gray-900 rounded-2xl p-8">
+          <div className="bg-white rounded-2xl p-8">
             {activeTab === 'description' && (
               <div className="prose prose-invert max-w-none">
                 <h3 className="text-2xl font-bold text-white mb-4">About this sculpture</h3>
@@ -551,7 +551,7 @@ const ProductDetail = () => {
                 />
                 
                 {product.sculptureDetails?.artisan && (
-                  <div className="bg-gray-800 p-6 rounded-xl">
+                  <div className="bg-gray-50 p-6 rounded-xl">
                     <h4 className="text-white font-semibold mb-2">Artisan Information</h4>
                     <p className="text-gray-300">{product.sculptureDetails.artisan}</p>
                   </div>
@@ -565,7 +565,7 @@ const ProductDetail = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     {product.dimensions && (
-                      <div className="flex justify-between py-3 border-b border-gray-700">
+                      <div className="flex justify-between py-3 border-b border-gray-200">
                         <span className="text-gray-400">Dimensions</span>
                         <span className="text-white font-medium">
                           {product.dimensions.length}" × {product.dimensions.width}" × {product.dimensions.height}"
@@ -573,13 +573,13 @@ const ProductDetail = () => {
                       </div>
                     )}
                     {product.weight && (
-                      <div className="flex justify-between py-3 border-b border-gray-700">
+                      <div className="flex justify-between py-3 border-b border-gray-200">
                         <span className="text-gray-400">Weight</span>
                         <span className="text-white font-medium">{product.weight} kg</span>
                       </div>
                     )}
                     {product.material && (
-                      <div className="flex justify-between py-3 border-b border-gray-700">
+                      <div className="flex justify-between py-3 border-b border-gray-200">
                         <span className="text-gray-400">Material</span>
                         <span className="text-white font-medium">{product.material}</span>
                       </div>
@@ -587,25 +587,25 @@ const ProductDetail = () => {
                   </div>
                   <div className="space-y-4">
                     {product.sculptureDetails?.origin && (
-                      <div className="flex justify-between py-3 border-b border-gray-700">
+                      <div className="flex justify-between py-3 border-b border-gray-200">
                         <span className="text-gray-400">Origin</span>
                         <span className="text-white font-medium">{product.sculptureDetails.origin}</span>
                       </div>
                     )}
                     {product.sculptureDetails?.stone && (
-                      <div className="flex justify-between py-3 border-b border-gray-700">
+                      <div className="flex justify-between py-3 border-b border-gray-200">
                         <span className="text-gray-400">Stone Type</span>
                         <span className="text-white font-medium">{product.sculptureDetails.stone}</span>
                       </div>
                     )}
                     {product.sculptureDetails?.finish && (
-                      <div className="flex justify-between py-3 border-b border-gray-700">
+                      <div className="flex justify-between py-3 border-b border-gray-200">
                         <span className="text-gray-400">Finish</span>
                         <span className="text-white font-medium">{product.sculptureDetails.finish}</span>
                       </div>
                     )}
                     {product.sculptureDetails?.technique && (
-                      <div className="flex justify-between py-3 border-b border-gray-700">
+                      <div className="flex justify-between py-3 border-b border-gray-200">
                         <span className="text-gray-400">Technique</span>
                         <span className="text-white font-medium">{product.sculptureDetails.technique}</span>
                       </div>
@@ -619,9 +619,9 @@ const ProductDetail = () => {
               <div>
                 <h3 className="text-2xl font-bold text-white mb-6">Shipping & Returns</h3>
                 <div className="space-y-6">
-                  <div className="bg-gray-800 p-6 rounded-xl">
+                  <div className="bg-gray-50 p-6 rounded-xl">
                     <h4 className="text-white font-semibold mb-3 flex items-center">
-                      <TruckIcon className="h-5 w-5 mr-2 text-bronze" />
+                      <TruckIcon className="h-5 w-5 mr-2 text-primary-600" />
                       Shipping Information
                     </h4>
                     <ul className="text-gray-300 space-y-2">
@@ -632,7 +632,7 @@ const ProductDetail = () => {
                     </ul>
                   </div>
                   
-                  <div className="bg-gray-800 p-6 rounded-xl">
+                  <div className="bg-gray-50 p-6 rounded-xl">
                     <h4 className="text-white font-semibold mb-3 flex items-center">
                       <ShieldCheckIcon className="h-5 w-5 mr-2 text-green-400" />
                       Return Policy
@@ -665,7 +665,7 @@ const ProductDetail = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {relatedProducts.map((relatedProduct) => (
                 <Link key={relatedProduct._id} to={`/product/${relatedProduct._id}`}>
-                  <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 group border border-gray-700 hover:border-bronze/50">
+                  <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 group border border-gray-200 hover:border-primary-600/50">
                     <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-800 to-gray-700">
                       {relatedProduct.images?.[0]?.url ? (
                         <>
@@ -679,12 +679,12 @@ const ProductDetail = () => {
                             }}
                           />
                           <div className="hidden w-full h-full absolute inset-0 flex-col items-center justify-center p-4 text-center bg-gradient-to-br from-gray-800 to-gray-700">
-                            <span className="text-bronze font-bold text-sm leading-tight break-words">{relatedProduct.name}</span>
+                            <span className="text-primary-600 font-bold text-sm leading-tight break-words">{relatedProduct.name}</span>
                           </div>
                         </>
                       ) : (
                         <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
-                          <span className="text-bronze font-bold text-sm leading-tight break-words">{relatedProduct.name}</span>
+                          <span className="text-primary-600 font-bold text-sm leading-tight break-words">{relatedProduct.name}</span>
                         </div>
                       )}
                       {relatedProduct.discountPrice && (
@@ -694,11 +694,11 @@ const ProductDetail = () => {
                       )}
                     </div>
                     <div className="p-4">
-                      <h3 className="text-white font-semibold mb-2 group-hover:text-bronze transition-colors line-clamp-2">
+                      <h3 className="text-white font-semibold mb-2 group-hover:text-primary-600 transition-colors line-clamp-2">
                         {relatedProduct.name}
                       </h3>
                       <div className="flex items-center space-x-2">
-                        <span className="text-bronze font-bold text-lg">
+                        <span className="text-primary-600 font-bold text-lg">
                           ₹{(relatedProduct.discountPrice || relatedProduct.price).toLocaleString()}
                         </span>
                         {relatedProduct.discountPrice && (

@@ -1,42 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   * {
-    @apply border-gray-800;
+    @apply border-gray-200;
   }
+
   body {
-    @apply bg-black text-white font-sans;
+    @apply bg-stone-50 text-gray-900 font-sans antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold tracking-tight;
   }
 }
 
 @layer utilities {
+
+  /* Legacy bronze/gold mappings → violet/amber */
   .text-bronze {
-    color: #CD7F32;
+    @apply text-primary-600;
   }
+
   .bg-bronze {
-    background-color: #CD7F32;
+    @apply bg-primary-600;
   }
+
   .border-bronze {
-    border-color: #CD7F32;
+    @apply border-primary-600;
   }
+
   .text-gold {
-    color: #D4AF37;
+    @apply text-accent-600;
   }
+
   .bg-gold {
-    background-color: #D4AF37;
+    @apply bg-accent-500;
   }
+
+  /* Hover maps */
+  .hover\:text-bronze:hover {
+    @apply text-primary-600;
+  }
+
+  .hover\:bg-bronze:hover {
+    @apply bg-primary-700;
+  }
+
+  .hover\:bg-gold:hover {
+    @apply bg-accent-400;
+  }
+
+  .hover\:text-bronze {
+    @apply text-primary-600;
+  }
+
+  /* Gradient compat */
+  .from-bronze\/20 {
+    --tw-gradient-from: rgb(124 58 237 / 0.2);
+  }
+
+  .to-gold\/20 {
+    --tw-gradient-to: rgb(217 119 6 / 0.2);
+  }
+
+  .from-bronze\/30 {
+    --tw-gradient-from: rgb(124 58 237 / 0.3);
+  }
+
+  .to-gold\/30 {
+    --tw-gradient-to: rgb(217 119 6 / 0.3);
+  }
+
+  .bg-bronze\/20 {
+    background-color: rgb(124 58 237 / 0.2);
+  }
+
+  /* Line clamp */
   .line-clamp-2 {
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
   }
+
   .line-clamp-3 {
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
+  }
+
+  /* Reusable design tokens */
+  .card {
+    @apply bg-white rounded-2xl shadow-card border border-gray-100;
+  }
+
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md;
+  }
+
+  .btn-outline {
+    @apply border border-primary-600 text-primary-600 hover:bg-primary-50 font-semibold px-6 py-3 rounded-xl transition-all duration-200;
+  }
+
+  .btn-accent {
+    @apply bg-accent-600 hover:bg-accent-700 text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-gray-900;
+  }
+
+  .section-subtitle {
+    @apply text-gray-500 text-lg mt-2;
   }
 }

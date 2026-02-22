@@ -165,10 +165,10 @@ const CustomerReviews = ({ productId }) => {
     <div className="space-y-6">
       {/* Review Stats */}
       {stats && (
-        <div className="bg-gray-900 p-6 rounded-lg">
+        <div className="bg-white p-6 rounded-lg">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="text-center">
-              <div className="text-4xl font-bold text-bronze mb-2">
+              <div className="text-4xl font-bold text-primary-600 mb-2">
                 {stats.averageRating.toFixed(1)}
               </div>
               <div className="flex justify-center mb-2">
@@ -191,7 +191,7 @@ const CustomerReviews = ({ productId }) => {
         <div className="text-center">
           <button
             onClick={() => setShowReviewForm(true)}
-            className="bg-bronze text-black px-6 py-2 rounded-lg hover:bg-gold transition-colors"
+            className="bg-primary-600 text-black px-6 py-2 rounded-lg hover:bg-accent-500 transition-colors"
           >
             Write a Review
           </button>
@@ -200,8 +200,8 @@ const CustomerReviews = ({ productId }) => {
 
       {/* Review Form Modal */}
       {showReviewForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-stone-50 bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <h3 className="text-xl font-bold text-white mb-4">Write a Review</h3>
               
@@ -211,7 +211,7 @@ const CustomerReviews = ({ productId }) => {
                   <select
                     value={reviewForm.orderId}
                     onChange={(e) => setReviewForm({...reviewForm, orderId: e.target.value})}
-                    className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded text-white"
+                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-white"
                     required
                   >
                     <option value="">Select an order</option>
@@ -237,7 +237,7 @@ const CustomerReviews = ({ productId }) => {
                   <textarea
                     value={reviewForm.comment}
                     onChange={(e) => setReviewForm({...reviewForm, comment: e.target.value})}
-                    className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded text-white"
+                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-white"
                     rows="4"
                     placeholder="Share your experience with this product..."
                     required
@@ -251,7 +251,7 @@ const CustomerReviews = ({ productId }) => {
                     multiple
                     accept="image/*"
                     onChange={handleImageUpload}
-                    className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded text-white"
+                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-white"
                   />
                   {reviewForm.images.length > 0 && (
                     <div className="mt-2 grid grid-cols-3 gap-2">
@@ -277,7 +277,7 @@ const CustomerReviews = ({ productId }) => {
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-bronze text-black rounded hover:bg-gold"
+                    className="px-4 py-2 bg-primary-600 text-black rounded hover:bg-accent-500"
                   >
                     Submit Review
                   </button>
@@ -298,7 +298,7 @@ const CustomerReviews = ({ productId }) => {
           </div>
         ) : (
           reviews.map((review) => (
-            <div key={review._id} className="bg-gray-900 p-6 rounded-lg">
+            <div key={review._id} className="bg-white p-6 rounded-lg">
               <div className="flex justify-between items-start mb-3">
                 <div>
                   <div className="flex items-center space-x-2 mb-1">
@@ -329,8 +329,8 @@ const CustomerReviews = ({ productId }) => {
               )}
               
               {review.adminResponse && (
-                <div className="bg-gray-800 p-3 rounded mt-3">
-                  <div className="text-bronze text-sm font-semibold mb-1">SilaiMart Response:</div>
+                <div className="bg-gray-50 p-3 rounded mt-3">
+                  <div className="text-primary-600 text-sm font-semibold mb-1">SilaiMart Response:</div>
                   <p className="text-gray-300 text-sm">{review.adminResponse}</p>
                 </div>
               )}

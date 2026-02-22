@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuthStore } from './store/authStore';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import ChatBot from './components/Chatbot';
+import ChatBot from './components/ChatBot';
 import Home from './pages/Home';
 import Shop from './pages/Shop';
 import ProductDetail from './pages/ProductDetail';
@@ -64,16 +64,19 @@ function AppContent() {
 
   if (isAuthLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-black">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-bronze"></div>
+      <div className="flex justify-center items-center min-h-screen bg-stone-50">
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-primary-100 border-t-primary-600"></div>
+          <p className="text-gray-500 text-sm font-medium">Loading...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-stone-50 text-gray-900">
       <Navbar />
-      <main className="pt-16">
+      <main className="pt-20">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
@@ -107,10 +110,20 @@ function AppContent() {
         position="top-right"
         toastOptions={{
           style: {
-            background: '#1a1a1a',
-            color: '#fff',
-            border: '1px solid #CD7F32'
-          }
+            background: '#ffffff',
+            color: '#111827',
+            border: '1px solid #E0E7FF',
+            borderRadius: '12px',
+            boxShadow: '0 4px 20px rgba(79,70,229,0.12)',
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '14px',
+          },
+          success: {
+            iconTheme: { primary: '#4F46E5', secondary: '#ffffff' },
+          },
+          error: {
+            iconTheme: { primary: '#F43F5E', secondary: '#ffffff' },
+          },
         }}
       />
     </div>

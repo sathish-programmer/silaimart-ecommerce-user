@@ -3,14 +3,14 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
 import { apiCall } from '../services/api';
-import { 
-  ChevronRightIcon, 
-  UserIcon, 
-  MapPinIcon, 
-  CreditCardIcon, 
-  GiftIcon, 
-  TrashIcon, 
-  PencilIcon, 
+import {
+  ChevronRightIcon,
+  UserIcon,
+  MapPinIcon,
+  CreditCardIcon,
+  GiftIcon,
+  TrashIcon,
+  PencilIcon,
   PlusIcon,
   StarIcon,
   MagnifyingGlassIcon,
@@ -63,87 +63,87 @@ const AddressModal = ({ address, isEditing, onClose, onSave }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-900 rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto border border-gray-700">
-        <div className="flex justify-between items-center p-6 border-b border-gray-800">
-          <h2 className="text-2xl font-bold text-white">{isEditing ? 'Edit Address' : 'Add New Address'}</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
+    <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto border border-gray-200">
+        <div className="flex justify-between items-center p-6 border-b border-gray-100">
+          <h2 className="text-2xl font-bold text-gray-900">{isEditing ? 'Edit Address' : 'Add New Address'}</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-700 transition-colors">
             ✕
           </button>
         </div>
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
-            <label htmlFor="fullName" className="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
+            <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
             <input
               type="text"
               id="fullName"
               name="fullName"
               value={addressFormData.fullName}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:border-bronze focus:outline-none"
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:border-primary-600 focus:outline-none"
               required
             />
           </div>
           <div>
-            <label htmlFor="street" className="block text-sm font-medium text-gray-300 mb-2">Street Address</label>
+            <label htmlFor="street" className="block text-sm font-medium text-gray-700 mb-2">Street Address</label>
             <input
               type="text"
               id="street"
               name="street"
               value={addressFormData.street}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:border-bronze focus:outline-none"
+              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:border-primary-600 focus:outline-none"
               required
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="city" className="block text-sm font-medium text-gray-300 mb-2">City</label>
+              <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2">City</label>
               <input
                 type="text"
                 id="city"
                 name="city"
                 value={addressFormData.city}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:border-bronze focus:outline-none"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:border-primary-600 focus:outline-none"
                 required
               />
             </div>
             <div>
-              <label htmlFor="state" className="block text-sm font-medium text-gray-300 mb-2">State</label>
+              <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-2">State</label>
               <input
                 type="text"
                 id="state"
                 name="state"
                 value={addressFormData.state}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:border-bronze focus:outline-none"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:border-primary-600 focus:outline-none"
                 required
               />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="pincode" className="block text-sm font-medium text-gray-300 mb-2">PIN Code</label>
+              <label htmlFor="pincode" className="block text-sm font-medium text-gray-700 mb-2">PIN Code</label>
               <input
                 type="text"
                 id="pincode"
                 name="pincode"
                 value={addressFormData.pincode}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:border-bronze focus:outline-none"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:border-primary-600 focus:outline-none"
                 required
               />
             </div>
             <div>
-              <label htmlFor="country" className="block text-sm font-medium text-gray-300 mb-2">Country</label>
+              <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-2">Country</label>
               <input
                 type="text"
                 id="country"
                 name="country"
                 value={addressFormData.country}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:border-bronze focus:outline-none"
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:border-primary-600 focus:outline-none"
                 required
               />
             </div>
@@ -157,19 +157,19 @@ const AddressModal = ({ address, isEditing, onClose, onSave }) => {
               onChange={handleChange}
               className="mr-2"
             />
-            <label htmlFor="isDefault" className="text-sm font-medium text-gray-300">Set as default address</label>
+            <label htmlFor="isDefault" className="text-sm font-medium text-gray-700">Set as default address</label>
           </div>
           <div className="flex justify-end space-x-4 mt-6">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-bronze text-black rounded-lg hover:bg-gold transition-colors"
+              className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
             >
               Save Address
             </button>
@@ -211,7 +211,7 @@ const UserProfile = () => {
       });
       setAddresses(user.addresses || []);
       fetchLoyaltySettings();
-      
+
       // Check for tab parameter in URL
       const tabParam = searchParams.get('tab');
       if (tabParam) {
@@ -325,7 +325,7 @@ const UserProfile = () => {
           }
         );
       }
-      
+
       if (response.ok) {
         toast.success(`Address ${isEditingAddress ? 'updated' : 'added'} successfully!`);
         await checkAuth();
@@ -419,10 +419,10 @@ const UserProfile = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+      <div className="min-h-screen bg-stone-50 text-white flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-4">Please Login</h2>
-          <Link to="/login" className="bg-bronze text-black px-6 py-3 rounded-xl font-semibold hover:bg-gold transition-colors">
+          <Link to="/login" className="bg-primary-600 text-black px-6 py-3 rounded-xl font-semibold hover:bg-accent-500 transition-colors">
             Login
           </Link>
         </div>
@@ -431,32 +431,32 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white py-8">
+    <div className="min-h-screen bg-stone-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-white mb-2">My Profile</h1>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">My Profile</h1>
             <p className="text-gray-400">Manage your account settings and preferences</p>
           </div>
-          <div className="flex items-center space-x-2 bg-bronze/20 px-4 py-2 rounded-xl">
-            <StarIcon className="h-5 w-5 text-bronze" />
-            <span className="text-bronze font-semibold">{user.loyaltyPoints || 0} Points</span>
+          <div className="flex items-center space-x-2 bg-primary-600/20 px-4 py-2 rounded-xl">
+            <StarIcon className="h-5 w-5 text-primary-600" />
+            <span className="text-primary-600 font-semibold">{user.loyaltyPoints || 0} Points</span>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-gray-900 rounded-2xl p-6 border border-gray-700 sticky top-8">
+            <div className="bg-white rounded-2xl p-6 border border-gray-200 sticky top-8">
               <div className="text-center mb-6">
-                <div className="w-20 h-20 bg-bronze/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <UserIcon className="h-10 w-10 text-bronze" />
+                <div className="w-20 h-20 bg-primary-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <UserIcon className="h-10 w-10 text-primary-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-white">{user.name}</h3>
+                <h3 className="text-xl font-semibold text-gray-900">{user.name}</h3>
                 <p className="text-gray-400">{user.email}</p>
               </div>
-              
+
               <nav className="space-y-2">
                 {[
                   { id: 'profile', label: 'Profile Info', icon: UserIcon },
@@ -471,11 +471,10 @@ const UserProfile = () => {
                     <button
                       key={item.id}
                       onClick={() => setActiveTab(item.id)}
-                      className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-colors ${
-                        activeTab === item.id 
-                          ? 'bg-bronze text-black' 
-                          : 'text-gray-300 hover:bg-gray-800'
-                      }`}
+                      className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-colors ${activeTab === item.id
+                          ? 'bg-primary-600 text-white'
+                          : 'text-gray-600 hover:bg-violet-50 hover:text-primary-600'
+                        }`}
                     >
                       <Icon className="h-5 w-5" />
                       <span>{item.label}</span>
@@ -489,7 +488,7 @@ const UserProfile = () => {
           {/* Main Content */}
           <div className="lg:col-span-2">
             {activeTab === 'profile' && (
-              <ProfileSection 
+              <ProfileSection
                 user={user}
                 formData={formData}
                 setFormData={setFormData}
@@ -499,9 +498,9 @@ const UserProfile = () => {
                 isLoading={isLoading}
               />
             )}
-            
+
             {activeTab === 'addresses' && (
-              <AddressSection 
+              <AddressSection
                 addresses={user.addresses || []}
                 setShowAddressModal={setShowAddressModal}
                 setCurrentAddress={setCurrentAddress}
@@ -511,13 +510,13 @@ const UserProfile = () => {
                 isLoading={isLoading}
               />
             )}
-            
+
             {activeTab === 'payment' && (
               <PaymentSection />
             )}
-            
+
             {activeTab === 'loyalty' && (
-              <LoyaltySection 
+              <LoyaltySection
                 user={user}
                 loyaltySettings={loyaltySettings}
                 pointsToRedeem={pointsToRedeem}
@@ -526,13 +525,13 @@ const UserProfile = () => {
                 isLoading={isLoading}
               />
             )}
-            
+
             {activeTab === 'custom-orders' && (
               <CustomOrdersSection />
             )}
-            
+
             {activeTab === 'delete' && (
-              <DeleteAccountSection 
+              <DeleteAccountSection
                 handleDeleteAccount={handleDeleteAccount}
                 isLoading={isLoading}
               />
@@ -560,68 +559,68 @@ const UserProfile = () => {
 
 // Profile Section Component
 const ProfileSection = ({ user, formData, setFormData, isEditing, setIsEditing, handleUpdateProfile, isLoading }) => (
-  <div className="bg-gray-900 rounded-2xl p-6 border border-gray-700">
+  <div className="bg-white rounded-2xl p-6 border border-gray-200">
     <div className="flex items-center justify-between mb-6">
-      <h2 className="text-2xl font-bold text-white">Profile Information</h2>
+      <h2 className="text-2xl font-bold text-gray-900">Profile Information</h2>
       <button
         onClick={() => setIsEditing(!isEditing)}
-        className="flex items-center space-x-2 px-4 py-2 bg-bronze text-black rounded-xl hover:bg-gold transition-colors"
+        className="flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors"
       >
         <PencilIcon className="h-4 w-4" />
         <span>{isEditing ? 'Cancel' : 'Edit'}</span>
       </button>
     </div>
-    
+
     <form onSubmit={handleUpdateProfile} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
           <input
             type="text"
             name="name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             disabled={!isEditing}
-            className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:border-bronze focus:outline-none disabled:opacity-50"
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:border-primary-600 focus:outline-none disabled:opacity-50"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
           <input
             type="email"
             value={formData.email}
             disabled
-            className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white opacity-50"
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 opacity-50"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Phone</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
           <input
             type="tel"
             name="phone"
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             disabled={!isEditing}
-            className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:border-bronze focus:outline-none disabled:opacity-50"
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:border-primary-600 focus:outline-none disabled:opacity-50"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Member Since</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Member Since</label>
           <input
             type="text"
             value={new Date(user.createdAt).toLocaleDateString()}
             disabled
-            className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white opacity-50"
+            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 opacity-50"
           />
         </div>
       </div>
-      
+
       {isEditing && (
         <div className="flex justify-end">
           <button
             type="submit"
             disabled={isLoading}
-            className="px-6 py-3 bg-bronze text-black rounded-xl hover:bg-gold transition-colors disabled:opacity-50"
+            className="px-6 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors disabled:opacity-50"
           >
             {isLoading ? 'Saving...' : 'Save Changes'}
           </button>
@@ -633,22 +632,22 @@ const ProfileSection = ({ user, formData, setFormData, isEditing, setIsEditing, 
 
 // Address Section Component
 const AddressSection = ({ addresses, setShowAddressModal, setCurrentAddress, setIsEditingAddress, handleDeleteAddress, handleSetDefaultAddress, isLoading }) => (
-  <div className="bg-gray-900 rounded-2xl p-6 border border-gray-700">
+  <div className="bg-white rounded-2xl p-6 border border-gray-200">
     <div className="flex items-center justify-between mb-6">
-      <h2 className="text-2xl font-bold text-white">Addresses</h2>
+      <h2 className="text-2xl font-bold text-gray-900">Addresses</h2>
       <button
         onClick={() => {
           setCurrentAddress(null);
           setIsEditingAddress(false);
           setShowAddressModal(true);
         }}
-        className="flex items-center space-x-2 px-4 py-2 bg-bronze text-black rounded-xl hover:bg-gold transition-colors"
+        className="flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors"
       >
         <PlusIcon className="h-4 w-4" />
         <span>Add Address</span>
       </button>
     </div>
-    
+
     {addresses.length === 0 ? (
       <div className="text-center py-8">
         <MapPinIcon className="h-12 w-12 text-gray-600 mx-auto mb-4" />
@@ -657,25 +656,25 @@ const AddressSection = ({ addresses, setShowAddressModal, setCurrentAddress, set
     ) : (
       <div className="space-y-4">
         {addresses.map((address) => (
-          <div key={address._id} className="bg-gray-800 rounded-xl p-4 border border-gray-700">
+          <div key={address._id} className="bg-gray-50 rounded-xl p-4 border border-gray-200">
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <div className="flex items-center space-x-2 mb-2">
-                  <h3 className="text-white font-semibold">{address.fullName}</h3>
+                  <h3 className="text-gray-900 font-semibold">{address.fullName}</h3>
                   {address.isDefault && (
-                    <span className="bg-bronze text-black px-2 py-1 rounded-full text-xs font-medium">Default</span>
+                    <span className="bg-primary-600 text-white px-2 py-1 rounded-full text-xs font-medium">Default</span>
                   )}
                 </div>
-                <p className="text-gray-300">{address.street}</p>
-                <p className="text-gray-300">{address.city}, {address.state} {address.pincode}</p>
-                <p className="text-gray-300">{address.country}</p>
+                <p className="text-gray-600">{address.street}</p>
+                <p className="text-gray-600">{address.city}, {address.state} {address.pincode}</p>
+                <p className="text-gray-600">{address.country}</p>
               </div>
               <div className="flex items-center space-x-2">
                 {!address.isDefault && (
                   <button
                     onClick={() => handleSetDefaultAddress(address._id)}
                     disabled={isLoading}
-                    className="text-bronze hover:text-gold transition-colors text-sm"
+                    className="text-primary-600 hover:text-accent-600 transition-colors text-sm"
                   >
                     Set Default
                   </button>
@@ -711,36 +710,36 @@ const PaymentSection = () => {
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [showAddCard, setShowAddCard] = useState(false);
   const [cardForm, setCardForm] = useState({ number: '', expiry: '', cvv: '', name: '' });
-  
+
   return (
-    <div className="bg-gray-900 rounded-2xl p-6 border border-gray-700">
+    <div className="bg-white rounded-2xl p-6 border border-gray-200">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-white">Payment Methods</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Payment Methods</h2>
         <button
           onClick={() => setShowAddCard(true)}
-          className="flex items-center space-x-2 px-4 py-2 bg-bronze text-black rounded-xl hover:bg-gold transition-colors"
+          className="flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors"
         >
           <PlusIcon className="h-4 w-4" />
           <span>Add Card</span>
         </button>
       </div>
-      
+
       <div className="space-y-4">
         {/* UPI Apps */}
-        <div className="bg-gray-800 rounded-xl p-4">
-          <h3 className="text-white font-semibold mb-4 flex items-center">
+        <div className="bg-gray-50 rounded-xl p-4">
+          <h3 className="text-gray-900 font-semibold mb-4 flex items-center">
             <DevicePhoneMobileIcon className="h-5 w-5 mr-2" />
             UPI Apps
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {['GPay', 'PhonePe', 'Paytm', 'BHIM'].map((app) => (
-              <button key={app} className="bg-gray-700 hover:bg-gray-600 rounded-lg p-3 text-center transition-colors">
-                <span className="text-white text-sm">{app}</span>
+              <button key={app} className="bg-violet-50 hover:bg-violet-100 rounded-lg p-3 text-center transition-colors border border-violet-100">
+                <span className="text-gray-800 text-sm font-medium">{app}</span>
               </button>
             ))}
           </div>
         </div>
-        
+
         {/* Saved Cards */}
         {paymentMethods.length === 0 ? (
           <div className="text-center py-8">
@@ -749,59 +748,59 @@ const PaymentSection = () => {
           </div>
         ) : (
           paymentMethods.map((method, index) => (
-            <div key={index} className="bg-gray-800 rounded-xl p-4 border border-gray-700">
+            <div key={index} className="bg-gray-50 rounded-xl p-4 border border-gray-200">
               {/* Payment method details */}
             </div>
           ))
         )}
       </div>
-      
+
       {showAddCard && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-900 rounded-2xl p-6 w-full max-w-md">
-            <h3 className="text-xl font-bold text-white mb-4">Add Payment Method</h3>
+        <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Add Payment Method</h3>
             <form className="space-y-4">
               <input
                 type="text"
                 placeholder="Card Number"
                 value={cardForm.number}
-                onChange={(e) => setCardForm({...cardForm, number: e.target.value})}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white"
+                onChange={(e) => setCardForm({ ...cardForm, number: e.target.value })}
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900"
               />
               <div className="grid grid-cols-2 gap-4">
                 <input
                   type="text"
                   placeholder="MM/YY"
                   value={cardForm.expiry}
-                  onChange={(e) => setCardForm({...cardForm, expiry: e.target.value})}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white"
+                  onChange={(e) => setCardForm({ ...cardForm, expiry: e.target.value })}
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900"
                 />
                 <input
                   type="text"
                   placeholder="CVV"
                   value={cardForm.cvv}
-                  onChange={(e) => setCardForm({...cardForm, cvv: e.target.value})}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white"
+                  onChange={(e) => setCardForm({ ...cardForm, cvv: e.target.value })}
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-white"
                 />
               </div>
               <input
                 type="text"
                 placeholder="Cardholder Name"
                 value={cardForm.name}
-                onChange={(e) => setCardForm({...cardForm, name: e.target.value})}
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white"
+                onChange={(e) => setCardForm({ ...cardForm, name: e.target.value })}
+                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900"
               />
               <div className="flex space-x-4">
                 <button
                   type="button"
                   onClick={() => setShowAddCard(false)}
-                  className="flex-1 px-4 py-3 bg-gray-700 text-white rounded-xl hover:bg-gray-600"
+                  className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-3 bg-bronze text-black rounded-xl hover:bg-gold"
+                  className="flex-1 px-4 py-3 bg-primary-600 text-white rounded-xl hover:bg-primary-700"
                 >
                   Add Card
                 </button>
@@ -816,17 +815,17 @@ const PaymentSection = () => {
 
 // Loyalty Section Component
 const LoyaltySection = ({ user, loyaltySettings, pointsToRedeem, setPointsToRedeem, handleRedeemPoints, isLoading }) => (
-  <div className="bg-gray-900 rounded-2xl p-6 border border-gray-700">
-    <h2 className="text-2xl font-bold text-white mb-6">Loyalty Program</h2>
-    
+  <div className="bg-white rounded-2xl p-6 border border-gray-200">
+    <h2 className="text-2xl font-bold text-gray-900 mb-6">Loyalty Program</h2>
+
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-      <div className="bg-gradient-to-r from-bronze to-gold rounded-xl p-6 text-black">
+      <div className="bg-gradient-to-br from-violet-600 to-purple-700 rounded-xl p-6 text-white">
         <h3 className="text-xl font-bold mb-2">Available Points</h3>
         <p className="text-3xl font-bold">{user.loyaltyPoints || 0}</p>
         <p className="text-sm opacity-80">Earn 1 point per ₹10 spent</p>
       </div>
-      
-      {/* <div className="bg-gray-800 rounded-xl p-6 d-none">
+
+      {/* <div className="bg-gray-50 rounded-xl p-6 d-none">
         <h3 className="text-xl font-bold text-white mb-4">Redeem Points</h3>
         <div className="space-y-4">
           <input
@@ -841,7 +840,7 @@ const LoyaltySection = ({ user, loyaltySettings, pointsToRedeem, setPointsToRede
            <button
             onClick={handleRedeemPoints}
             disabled={isLoading || pointsToRedeem <= 0}
-            className="w-full px-4 py-3 bg-bronze text-black rounded-xl hover:bg-gold transition-colors disabled:opacity-50"
+            className="w-full px-4 py-3 bg-primary-600 text-black rounded-xl hover:bg-accent-500 transition-colors disabled:opacity-50"
           >
             {isLoading ? 'Redeeming...' : 'Redeem Points'}
           </button> 
@@ -853,10 +852,10 @@ const LoyaltySection = ({ user, loyaltySettings, pointsToRedeem, setPointsToRede
         )}
       </div> */}
     </div>
-    
-    <div className="bg-gray-800 rounded-xl p-4">
-      <h4 className="text-white font-semibold mb-2">How it works:</h4>
-      <ul className="text-gray-300 text-sm space-y-1">
+
+    <div className="bg-violet-50 rounded-xl p-4">
+      <h4 className="text-gray-900 font-semibold mb-2">How it works:</h4>
+      <ul className="text-gray-600 text-sm space-y-1">
         <li>• Earn 1 point for every ₹10 spent</li>
         <li>• Redeem points for discounts on future orders</li>
         <li>• 1 point = ₹1 discount</li>
@@ -872,11 +871,11 @@ const CustomOrdersSection = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     fetchCustomOrders();
   }, []);
-  
+
   const fetchCustomOrders = async () => {
     try {
       const response = await apiCall('/auth/custom-order-requests');
@@ -890,7 +889,7 @@ const CustomOrdersSection = () => {
       setLoading(false);
     }
   };
-  
+
   const parseRequestDetails = (requestDetails) => {
     try {
       return JSON.parse(requestDetails);
@@ -898,28 +897,28 @@ const CustomOrdersSection = () => {
       return { description: requestDetails };
     }
   };
-  
+
   const filteredOrders = customOrders.filter(order => {
     const details = parseRequestDetails(order.requestDetails);
-    const searchText = typeof details === 'object' 
+    const searchText = typeof details === 'object'
       ? Object.values(details).join(' ').toLowerCase()
       : order.requestDetails.toLowerCase();
     return searchText.includes(searchTerm.toLowerCase());
   });
-  
+
   return (
-    <div className="bg-gray-900 rounded-2xl p-6 border border-gray-700">
+    <div className="bg-white rounded-2xl p-6 border border-gray-200">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-white">Custom Orders</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Custom Orders</h2>
         <button
           onClick={() => navigate('/custom-order')}
-          className="flex items-center space-x-2 px-4 py-2 bg-bronze text-black rounded-xl hover:bg-gold transition-colors"
+          className="flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-colors"
         >
           <PlusIcon className="h-4 w-4" />
           <span>New Request</span>
         </button>
       </div>
-      
+
       <div className="mb-6">
         <div className="relative">
           <MagnifyingGlassIcon className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -928,14 +927,14 @@ const CustomOrdersSection = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search custom orders..."
-            className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-700 rounded-xl text-white focus:border-bronze focus:outline-none"
+            className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:border-primary-600 focus:outline-none"
           />
         </div>
       </div>
-      
+
       {loading ? (
         <div className="text-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-bronze mx-auto"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto"></div>
         </div>
       ) : filteredOrders.length === 0 ? (
         <div className="text-center py-8">
@@ -947,24 +946,23 @@ const CustomOrdersSection = () => {
           {filteredOrders.map((order) => {
             const details = parseRequestDetails(order.requestDetails);
             return (
-              <div key={order._id} className="bg-gray-800 rounded-xl p-4 border border-gray-700">
+              <div key={order._id} className="bg-gray-50 rounded-xl p-4 border border-gray-200">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        order.status === 'pending' ? 'bg-yellow-900/20 text-yellow-400' :
-                        order.status === 'quoted' ? 'bg-blue-900/20 text-blue-400' :
-                        order.status === 'accepted' ? 'bg-green-900/20 text-green-400' :
-                        order.status === 'rejected' ? 'bg-red-900/20 text-red-400' :
-                        'bg-gray-900/20 text-gray-400'
-                      }`}>
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.status === 'pending' ? 'bg-yellow-900/20 text-yellow-400' :
+                          order.status === 'quoted' ? 'bg-blue-900/20 text-blue-400' :
+                            order.status === 'accepted' ? 'bg-green-900/20 text-green-400' :
+                              order.status === 'rejected' ? 'bg-red-900/20 text-red-400' :
+                                'bg-white/20 text-gray-400'
+                        }`}>
                         {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                       </span>
                       <span className="text-gray-400 text-sm">
                         {new Date(order.createdAt).toLocaleDateString()}
                       </span>
                     </div>
-                    
+
                     {typeof details === 'object' && details.sculptureType ? (
                       <div className="space-y-2">
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
@@ -1005,7 +1003,7 @@ const CustomOrdersSection = () => {
                             </div>
                           )}
                         </div>
-                        
+
                         {details.dimensions && (details.dimensions.height || details.dimensions.width || details.dimensions.depth) && (
                           <div className="text-sm">
                             <span className="text-gray-400">Dimensions:</span>
@@ -1017,21 +1015,21 @@ const CustomOrdersSection = () => {
                             </span>
                           </div>
                         )}
-                        
+
                         {details.color && (
                           <div className="text-sm">
                             <span className="text-gray-400">Color:</span>
                             <span className="text-white ml-2">{details.color}</span>
                           </div>
                         )}
-                        
+
                         {details.description && (
                           <div>
                             <p className="text-gray-400 text-sm mb-1">Description:</p>
                             <p className="text-gray-300 text-sm">{details.description}</p>
                           </div>
                         )}
-                        
+
                         {details.specialRequirements && (
                           <div>
                             <p className="text-gray-400 text-sm mb-1">Special Requirements:</p>
@@ -1047,12 +1045,12 @@ const CustomOrdersSection = () => {
                     )}
                   </div>
                 </div>
-                
+
                 {order.quotedPrice && (
                   <div className="bg-gray-700 rounded-lg p-3 mt-3">
                     <div className="flex items-center justify-between">
                       <span className="text-gray-300">Quoted Price:</span>
-                      <span className="text-bronze font-bold text-lg">₹{order.quotedPrice.toLocaleString()}</span>
+                      <span className="text-primary-600 font-bold text-lg">₹{order.quotedPrice.toLocaleString()}</span>
                     </div>
                     {order.estimatedDeliveryDate && (
                       <div className="flex items-center justify-between mt-2">
@@ -1062,7 +1060,7 @@ const CustomOrdersSection = () => {
                     )}
                   </div>
                 )}
-                
+
                 {order.adminNotes && (
                   <div className="mt-3 p-3 bg-blue-900/20 rounded-lg">
                     <p className="text-blue-400 text-sm font-medium mb-1">Admin Notes:</p>
@@ -1080,15 +1078,15 @@ const CustomOrdersSection = () => {
 
 // Delete Account Section Component
 const DeleteAccountSection = ({ handleDeleteAccount, isLoading }) => (
-  <div className="bg-gray-900 rounded-2xl p-6 border border-red-500/30">
+  <div className="bg-white rounded-2xl p-6 border border-red-500/30">
     <h2 className="text-2xl font-bold text-red-400 mb-6">Delete Account</h2>
-    
-    <div className="bg-red-900/20 border border-red-500/30 rounded-xl p-4 mb-6">
-      <h3 className="text-red-400 font-semibold mb-2">Warning!</h3>
-      <p className="text-red-300 text-sm mb-4">
+
+    <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+      <h3 className="text-red-600 font-semibold mb-2">Warning!</h3>
+      <p className="text-red-500 text-sm mb-4">
         This action cannot be undone. Deleting your account will:
       </p>
-      <ul className="text-red-300 text-sm space-y-1 mb-4">
+      <ul className="text-red-500 text-sm space-y-1 mb-4">
         <li>• Permanently delete your profile and personal information</li>
         <li>• Remove all your addresses and payment methods</li>
         <li>• Delete your order history and custom order requests</li>
@@ -1096,7 +1094,7 @@ const DeleteAccountSection = ({ handleDeleteAccount, isLoading }) => (
         <li>• Cancel any pending orders</li>
       </ul>
     </div>
-    
+
     <button
       onClick={handleDeleteAccount}
       disabled={isLoading}

@@ -38,7 +38,7 @@ const ResetPassword = () => {
     <div className="min-h-screen flex items-center justify-center py-12 px-4">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <Link to="/" className="text-3xl font-bold text-bronze">SilaiMart</Link>
+          <Link to="/" className="text-3xl font-bold text-primary-600">SilaiMart</Link>
           <h2 className="mt-6 text-3xl font-bold text-white">Reset Password</h2>
           <p className="mt-2 text-gray-400">
             Enter your new password
@@ -55,7 +55,7 @@ const ResetPassword = () => {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-bronze focus:outline-none"
+              className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-white focus:border-primary-600 focus:outline-none"
               placeholder="Enter new password"
               minLength={6}
             />
@@ -70,7 +70,7 @@ const ResetPassword = () => {
               required
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white focus:border-bronze focus:outline-none"
+              className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-white focus:border-primary-600 focus:outline-none"
               placeholder="Confirm new password"
               minLength={6}
             />
@@ -79,7 +79,7 @@ const ResetPassword = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-bronze text-black py-2 px-4 rounded-lg font-medium hover:bg-gold focus:outline-none disabled:opacity-50"
+            className="w-full bg-primary-600 text-black py-2 px-4 rounded-lg font-medium hover:bg-accent-500 focus:outline-none disabled:opacity-50"
           >
             {isLoading ? 'Resetting...' : 'Reset Password'}
           </button>
