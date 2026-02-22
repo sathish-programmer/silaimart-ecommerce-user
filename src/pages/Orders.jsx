@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   EyeIcon, DocumentArrowDownIcon, TruckIcon, CheckCircleIcon,
   ClockIcon, XCircleIcon, CreditCardIcon, BanknotesIcon, QrCodeIcon,
-  StarIcon, MagnifyingGlassIcon, ChevronDownIcon
+  StarIcon, MagnifyingGlassIcon, ChevronDownIcon, SparklesIcon
 } from '@heroicons/react/24/outline';
 import { StarIcon as StarSolid } from '@heroicons/react/24/solid';
 import axios from 'axios';
@@ -194,115 +194,147 @@ const Orders = () => {
 
         {/* Orders List */}
         {filteredOrders.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
-            <div className="w-16 h-16 bg-violet-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <TruckIcon className="h-8 w-8 text-violet-300" />
+          <div className="text-center py-20 bg-white rounded-[2.5rem] border border-gray-100 shadow-sm">
+            <div className="w-20 h-20 bg-violet-50 rounded-3xl flex items-center justify-center mx-auto mb-6">
+              <TruckIcon className="h-10 w-10 text-violet-300" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No Orders Found</h3>
-            <p className="text-gray-500 mb-6">You haven't placed any orders yet.</p>
+            <h3 className="text-2xl font-black text-gray-900 mb-2">No Sacred Orders Yet</h3>
+            <p className="text-gray-500 mb-8 max-w-xs mx-auto">Your journey of divine art collection hasn't started. Explore our artisan sculptures.</p>
             <button onClick={() => navigate('/shop')}
-              className="bg-gradient-to-r from-violet-600 to-purple-700 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-md transition-all">
-              Start Shopping
+              className="bg-primary-600 text-white px-8 py-4 rounded-2xl font-bold hover:bg-primary-700 hover:shadow-xl hover:shadow-primary-100 transition-all active:scale-95">
+              Start Your Collection
             </button>
           </div>
         ) : (
-          <div className="space-y-5">
+          <div className="space-y-8">
             {filteredOrders.map((order) => {
               const sc = getStatusConfig(order.orderStatus);
               const progress = getProgress(order.orderStatus);
+
+              // Timeline steps
+              const timelineSteps = [
+                { id: 'pending', label: 'Placed', icon: ClockIcon },
+                { id: 'confirmed', label: 'Confirmed', icon: CheckCircleIcon },
+                { id: 'shipped', label: 'Out for Delivery', icon: TruckIcon },
+                { id: 'delivered', label: 'Delivered', icon: StarIcon }
+              ];
+
+              const currentStepIdx = timelineSteps.findIndex(s => s.id === order.orderStatus);
+              const displayIdx = currentStepIdx === -1 ? (order.orderStatus === 'processing' ? 1 : 0) : currentStepIdx;
+
               return (
-                <div key={order._id} className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                <div key={order._id} className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-xl hover:shadow-gray-200/30 transition-all duration-500 overflow-hidden group">
                   {/* Card Header */}
-                  <div className="p-6 border-b border-gray-50">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-violet-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                          <span className="text-violet-600 font-bold text-sm">#{order.orderNumber?.slice(-4) || order._id?.slice(-4) || '????'}</span>
+                  <div className="p-8 border-b border-gray-50 bg-stone-50/30">
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                      <div className="flex items-center gap-6">
+                        <div className="w-16 h-16 bg-white rounded-2xl border border-gray-100 flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-110 transition-transform duration-500">
+                          <span className="text-primary-600 font-black text-xs uppercase tracking-tighter">#{order.orderNumber?.slice(-4) || 'ORD'}</span>
                         </div>
                         <div>
-                          <h3 className="font-bold text-gray-900">Order #{order.orderNumber || order._id?.slice(-8) || 'Unknown'}</h3>
-                          <p className="text-gray-500 text-sm">{new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-                          <div className="flex items-center gap-2 mt-0.5">
-                            {getPaymentIcon(order.paymentMethod)}
-                            <span className="text-gray-400 text-xs capitalize">{order.paymentMethod}</span>
-                            <span className="text-gray-300">•</span>
-                            <span className="text-gray-400 text-xs">{order.items?.length || 0} item(s)</span>
+                          <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1">Order Ref: {order.orderNumber || order._id?.slice(-8)}</p>
+                          <h3 className="text-xl font-black text-gray-900">Ordered on {new Date(order.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</h3>
+                          <div className="flex items-center gap-3 mt-2">
+                            <div className="flex items-center gap-1.5 px-3 py-1 bg-white rounded-full border border-gray-100 shadow-sm">
+                              {getPaymentIcon(order.paymentMethod)}
+                              <span className="text-gray-600 text-[10px] font-bold uppercase">{order.paymentMethod}</span>
+                            </div>
+                            <span className="text-gray-300">|</span>
+                            <span className="text-gray-500 text-xs font-medium">{order.items?.length || 0} sacred item(s)</span>
                           </div>
                         </div>
                       </div>
-                      <div className="flex flex-col sm:items-end gap-2">
-                        <p className="text-2xl font-bold text-gray-900">₹{order.total?.toLocaleString()}</p>
-                        <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold ${sc.bg} ${sc.text} ${sc.border}`}>
-                          <span className={`w-1.5 h-1.5 rounded-full ${sc.dot}`} />
+                      <div className="flex flex-col lg:items-end gap-3">
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-gray-400 text-sm font-medium">Total:</span>
+                          <p className="text-3xl font-black text-gray-900 tracking-tighter">₹{order.total?.toLocaleString()}</p>
+                        </div>
+                        <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-[10px] font-black uppercase tracking-widest ${sc.bg} ${sc.text} ${sc.border} shadow-sm`}>
+                          <span className={`w-2 h-2 rounded-full ${sc.dot} animate-pulse`} />
                           {order.orderStatus}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Items Preview */}
-                  <div className="px-6 py-4">
-                    <div className="flex items-center gap-3 overflow-x-auto pb-1">
-                      {order.items?.slice(0, 4).map((item, idx) => (
-                        <div key={idx} className="flex-shrink-0 flex items-center gap-3 bg-stone-50 rounded-xl p-3 min-w-0">
-                          <div className="w-10 h-10 bg-violet-50 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
-                            {item.product?.images?.[0]?.url ? (
-                              <img src={item.product.images[0].url} alt={item.product.name} className="w-full h-full object-cover rounded-lg" onError={(e) => { e.target.style.display = 'none'; }} />
-                            ) : (
-                              <span className="text-violet-400 font-bold text-[8px] text-center leading-tight px-1">{item.product?.name?.slice(0, 6) || 'Item'}</span>
-                            )}
+                  {/* Items and Timeline Grid */}
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 p-8">
+                    {/* Items */}
+                    <div className="space-y-4">
+                      <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest pl-1">Order Contents</p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {order.items?.map((item, idx) => (
+                          <div key={idx} className="flex items-center gap-4 bg-stone-50/50 hover:bg-white border border-transparent hover:border-gray-100 rounded-2xl p-3 transition-all duration-300">
+                            <div className="w-14 h-14 bg-white rounded-xl border border-gray-50 flex items-center justify-center overflow-hidden flex-shrink-0 shadow-sm">
+                              {item.product?.images?.[0]?.url ? (
+                                <img src={item.product.images[0].url} alt={item.product.name} className="w-full h-full object-cover transform scale-110 group-hover:scale-100 transition-transform duration-500" />
+                              ) : (
+                                <SparklesIcon className="w-6 h-6 text-violet-200" />
+                              )}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-gray-900 text-xs font-black truncate">{item.product?.name || 'Art Piece'}</p>
+                              <p className="text-gray-400 text-[10px] font-bold">Qty: {item.quantity}</p>
+                              {order.orderStatus === 'delivered' && (
+                                <button onClick={() => openReviewModal(item.product, order._id)}
+                                  className="text-primary-600 text-[10px] font-black flex items-center gap-1 mt-1 hover:text-primary-700 uppercase tracking-wide">
+                                  <StarIcon className="h-3 w-3" /> Rate Art
+                                </button>
+                              )}
+                            </div>
                           </div>
-                          <div className="min-w-0">
-                            <p className="text-gray-900 text-xs font-medium truncate max-w-[80px]">{item.product?.name || 'Product'}</p>
-                            <p className="text-gray-400 text-xs">Qty: {item.quantity}</p>
-                            {order.orderStatus === 'delivered' && (
-                              <button onClick={() => openReviewModal(item.product, order._id)}
-                                className="flex items-center gap-0.5 text-violet-600 text-xs hover:text-violet-700 mt-0.5 font-medium">
-                                <StarIcon className="h-3 w-3" />Review
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                      {order.items?.length > 4 && (
-                        <div className="flex-shrink-0 bg-stone-50 rounded-xl p-3 flex items-center">
-                          <span className="text-gray-400 text-xs">+{order.items.length - 4} more</span>
-                        </div>
-                      )}
+                        ))}
+                      </div>
                     </div>
+
+                    {/* Timeline */}
+                    {order.orderStatus !== 'cancelled' && (
+                      <div className="flex flex-col justify-center bg-stone-50/30 rounded-3xl p-6 border border-gray-50/50">
+                        <div className="relative mb-2">
+                          <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gray-100 -translate-y-1/2" />
+                          <div className="absolute top-1/2 left-0 h-0.5 bg-primary-500 -translate-y-1/2 transition-all duration-1000" style={{ width: `${(displayIdx / (timelineSteps.length - 1)) * 100}%` }} />
+                          <div className="relative flex justify-between">
+                            {timelineSteps.map((step, idx) => {
+                              const StatusIcon = step.icon;
+                              const isCompleted = idx <= displayIdx;
+                              const isCurrent = idx === displayIdx;
+                              return (
+                                <div key={step.id} className="flex flex-col items-center">
+                                  <div className={`w-10 h-10 rounded-full flex items-center justify-center border-4 z-10 transition-all duration-500 ${isCurrent ? 'bg-primary-600 border-primary-100 text-white scale-110 shadow-lg shadow-primary-200' :
+                                    isCompleted ? 'bg-white border-primary-500 text-primary-600' :
+                                      'bg-white border-gray-100 text-gray-300'
+                                    }`}>
+                                    <StatusIcon className={`h-5 w-5 ${isCurrent ? 'animate-pulse' : ''}`} />
+                                  </div>
+                                  <span className={`text-[9px] font-black uppercase tracking-wider mt-3 whitespace-nowrap ${isCompleted ? 'text-gray-900' : 'text-gray-300'
+                                    }`}>{step.label}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Progress */}
-                  {order.orderStatus !== 'cancelled' && (
-                    <div className="px-6 pb-4">
-                      <div className="flex justify-between text-xs text-gray-400 mb-1.5">
-                        <span>Progress</span><span>{progress}%</span>
-                      </div>
-                      <div className="w-full bg-gray-100 rounded-full h-1.5">
-                        <div className="bg-gradient-to-r from-violet-500 to-purple-600 h-1.5 rounded-full transition-all duration-500"
-                          style={{ width: `${progress}%` }} />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Actions */}
-                  <div className="px-6 pb-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-t border-gray-50 pt-4">
-                    <div className="flex gap-2">
+                  {/* Footer Actions */}
+                  <div className="px-8 py-6 bg-stone-50/30 border-t border-gray-50 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div className="flex gap-3 w-full sm:w-auto">
                       <button onClick={() => viewOrderDetails(order._id)}
-                        className="flex items-center gap-2 px-4 py-2 bg-violet-50 text-violet-700 border border-violet-200 hover:bg-violet-100 rounded-xl text-sm font-medium transition-colors">
-                        <EyeIcon className="h-4 w-4" /> View Details
+                        className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2.5 bg-white border border-gray-100 text-gray-900 hover:bg-primary-50 hover:text-primary-700 hover:border-primary-100 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-sm">
+                        <EyeIcon className="h-4 w-4" /> Expand Details
                       </button>
                       {order.orderStatus === 'delivered' && (
                         <button onClick={() => downloadInvoice(order._id)}
-                          className="flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 border border-green-200 hover:bg-green-100 rounded-xl text-sm font-medium transition-colors">
-                          <DocumentArrowDownIcon className="h-4 w-4" /> Invoice
+                          className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2.5 bg-green-50 text-green-700 border border-green-100 hover:bg-green-100 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-sm">
+                          <DocumentArrowDownIcon className="h-4 w-4" /> Download PDF
                         </button>
                       )}
                     </div>
                     {order.trackingNumber && (
-                      <div className="text-left sm:text-right">
-                        <p className="text-gray-400 text-xs">Tracking</p>
-                        <p className="text-violet-600 font-mono text-sm">{order.trackingNumber}</p>
+                      <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl border border-gray-100 shadow-sm">
+                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Tracking:</p>
+                        <p className="text-primary-600 font-mono text-sm font-bold tracking-tighter">{order.trackingNumber}</p>
                       </div>
                     )}
                   </div>

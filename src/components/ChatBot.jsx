@@ -23,14 +23,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
 const SUGGESTED_PROMPTS = [
-  { text: '🛍️ Show Products', action: 'Show me your products' },
-  { text: '✂️ Custom Order', action: 'redirect:/custom-order' },
-  { text: '🚚 Track My Order', action: 'redirect:/track-order' },
-  { text: '💰 Offers & Deals', action: 'Show me current offers and discounts' },
-  { text: '📏 Size Guide', action: 'What sizes do you offer?' },
-  { text: '🔄 Returns Policy', action: 'What is your return policy?' },
-  { text: '💬 Talk to Support', action: 'I need help with my order' },
-  { text: '❤️ My Wishlist', action: 'redirect:/wishlist' },
+  { text: '🕉️ Sacred Products', action: 'Show me your sculptures' },
+  { text: '🚚 Track Order', action: 'redirect:/orders' },
+  { text: '💎 Our Materials', action: 'What materials do you use?' },
+  { text: '💰 Great Deals', action: 'Show me current offers and discounts' },
+  { text: '🎨 Design Stories', action: 'Tell me about your artisan craftsmanship' },
+  { text: '🔄 Return Policy', action: 'What is your return policy?' },
+  { text: '💬 Support Info', action: 'I need help with my order' },
+  { text: '❤️ Wishlist', action: 'redirect:/wishlist' },
 ];
 
 const Chatbot = () => {
@@ -206,8 +206,8 @@ const Chatbot = () => {
                       )}
                       {/* Bubble */}
                       <div className={`px-4 py-3 rounded-2xl text-sm leading-relaxed shadow-sm ${message.sender === 'user'
-                          ? 'bg-gradient-to-br from-violet-600 to-purple-700 text-white rounded-br-sm'
-                          : 'bg-white border border-gray-100 text-gray-800 rounded-bl-sm'
+                        ? 'bg-gradient-to-br from-violet-600 to-purple-700 text-white rounded-br-sm'
+                        : 'bg-white border border-gray-100 text-gray-800 rounded-bl-sm'
                         }`}>
                         <p className="whitespace-pre-wrap">{message.message}</p>
                       </div>
@@ -218,35 +218,41 @@ const Chatbot = () => {
 
                     {/* Product Cards */}
                     {message.sender === 'bot' && message.type === 'product' && message.data?.products && (
-                      <div className="ml-9 mt-2 w-[88%] space-y-2">
+                      <div className="ml-9 mt-2 w-[90%] space-y-3">
                         {message.data.products.map((product, idx) => (
                           <div key={idx}
-                            className="bg-white rounded-2xl p-3 flex gap-3 border border-gray-100 hover:border-violet-300 hover:shadow-md transition-all cursor-pointer group"
+                            className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-primary-300 hover:shadow-lg transition-all cursor-pointer group flex flex-col sm:flex-row"
                             onClick={() => navigate(`/product/${product._id}`)}>
-                            <div className="w-14 h-14 bg-violet-50 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+                            <div className="w-full sm:w-20 h-24 sm:h-20 bg-stone-50 flex-shrink-0">
                               {product.images?.[0] ? (
-                                <img src={product.images[0].url} alt={product.name} className="w-full h-full object-cover rounded-xl" />
+                                <img src={product.images[0].url} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                               ) : (
-                                <ShoppingBagIcon className="h-5 w-5 text-violet-300" />
+                                <div className="w-full h-full flex items-center justify-center text-violet-100">
+                                  <ShoppingBagIcon className="h-6 w-6" />
+                                </div>
                               )}
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <h4 className="text-gray-900 text-sm font-semibold truncate group-hover:text-violet-600 transition-colors">{product.name}</h4>
-                              <div className="flex items-center gap-1.5 mt-0.5">
-                                <span className="text-violet-600 font-bold text-sm">₹{(product.discountPrice || product.price).toLocaleString()}</span>
-                                {product.discountPrice && (
-                                  <span className="text-gray-400 text-xs line-through">₹{product.price.toLocaleString()}</span>
-                                )}
+                            <div className="p-3 flex-1 flex flex-col justify-center min-w-0">
+                              <h4 className="text-gray-900 text-[11px] font-black uppercase tracking-wider truncate mb-1">{product.name}</h4>
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="text-primary-600 font-bold text-sm">₹{(product.discountPrice || product.price).toLocaleString()}</span>
+                                  {product.discountPrice && (
+                                    <span className="text-gray-400 text-[10px] line-through">₹{product.price.toLocaleString()}</span>
+                                  )}
+                                </div>
+                                <span className="text-[9px] font-black text-primary-500 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                                  EXPLORE <span className="text-xs">→</span>
+                                </span>
                               </div>
                             </div>
-                            <span className="text-xs text-violet-500 self-center opacity-0 group-hover:opacity-100 transition-opacity font-medium">View →</span>
                           </div>
                         ))}
                         {message.data.suggestions && (
-                          <div className="flex flex-wrap gap-2 mt-1">
+                          <div className="flex flex-wrap gap-2 mt-3">
                             {message.data.suggestions.map((s, idx) => (
-                              <button key={idx} onClick={() => handleQuickAction(s)}
-                                className="text-xs bg-violet-50 hover:bg-violet-100 text-violet-600 px-3 py-1.5 rounded-full border border-violet-100 transition-all font-medium">
+                              <button key={idx} onClick={() => sendMessage(s)}
+                                className="text-[10px] bg-white hover:bg-primary-600 hover:text-white text-gray-700 px-3 py-1.5 rounded-full border border-gray-100 hover:border-primary-600 transition-all font-bold shadow-sm">
                                 {s}
                               </button>
                             ))}
