@@ -14,8 +14,10 @@ import {
   PlusIcon,
   StarIcon,
   MagnifyingGlassIcon,
-  DevicePhoneMobileIcon
+  DevicePhoneMobileIcon,
+  ShoppingBagIcon
 } from '@heroicons/react/24/outline';
+import Orders from './Orders';
 
 const AddressModal = ({ address, isEditing, onClose, onSave }) => {
   const [addressFormData, setAddressFormData] = useState({
@@ -419,7 +421,7 @@ const UserProfile = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-stone-50 text-white flex items-center justify-center">
+      <div className="min-h-screen bg-stone-50 text-gray-900 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold mb-4">Please Login</h2>
           <Link to="/login" className="bg-primary-600 text-black px-6 py-3 rounded-xl font-semibold hover:bg-accent-500 transition-colors">
@@ -460,6 +462,7 @@ const UserProfile = () => {
               <nav className="space-y-2">
                 {[
                   { id: 'profile', label: 'Profile Info', icon: UserIcon },
+                  { id: 'orders', label: 'My Orders', icon: ShoppingBagIcon },
                   { id: 'addresses', label: 'Addresses', icon: MapPinIcon },
                   { id: 'payment', label: 'Payment Methods', icon: CreditCardIcon },
                   { id: 'loyalty', label: 'Loyalty Points', icon: StarIcon },
@@ -497,6 +500,10 @@ const UserProfile = () => {
                 handleUpdateProfile={handleUpdateProfile}
                 isLoading={isLoading}
               />
+            )}
+
+            {activeTab === 'orders' && (
+              <Orders />
             )}
 
             {activeTab === 'addresses' && (
@@ -780,7 +787,7 @@ const PaymentSection = () => {
                   placeholder="CVV"
                   value={cardForm.cvv}
                   onChange={(e) => setCardForm({ ...cardForm, cvv: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-white"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900"
                 />
               </div>
               <input
@@ -965,49 +972,49 @@ const CustomOrdersSection = () => {
 
                     {typeof details === 'object' && details.sculptureType ? (
                       <div className="space-y-2">
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
                           {details.sculptureType && (
                             <div>
-                              <span className="text-gray-400">Type:</span>
-                              <span className="text-white ml-2">{details.sculptureType}</span>
+                              <span className="text-gray-500">Type:</span>
+                              <span className="text-gray-900 ml-2">{details.sculptureType}</span>
                             </div>
                           )}
                           {details.material && (
                             <div>
-                              <span className="text-gray-400">Material:</span>
-                              <span className="text-white ml-2">{details.material}</span>
+                              <span className="text-gray-500">Material:</span>
+                              <span className="text-gray-900 ml-2">{details.material}</span>
                             </div>
                           )}
                           {details.size && (
                             <div>
-                              <span className="text-gray-400">Size:</span>
-                              <span className="text-white ml-2">{details.size}</span>
+                              <span className="text-gray-500">Size:</span>
+                              <span className="text-gray-900 ml-2">{details.size}</span>
                             </div>
                           )}
                           {details.finish && (
                             <div>
-                              <span className="text-gray-400">Finish:</span>
-                              <span className="text-white ml-2">{details.finish}</span>
+                              <span className="text-gray-500">Finish:</span>
+                              <span className="text-gray-900 ml-2">{details.finish}</span>
                             </div>
                           )}
                           {details.budget && (
                             <div>
-                              <span className="text-gray-400">Budget:</span>
-                              <span className="text-white ml-2">{details.budget}</span>
+                              <span className="text-gray-500">Budget:</span>
+                              <span className="text-gray-900 ml-2">{details.budget}</span>
                             </div>
                           )}
                           {details.timeline && (
                             <div>
-                              <span className="text-gray-400">Timeline:</span>
-                              <span className="text-white ml-2">{details.timeline}</span>
+                              <span className="text-gray-500">Timeline:</span>
+                              <span className="text-gray-900 ml-2">{details.timeline}</span>
                             </div>
                           )}
                         </div>
 
                         {details.dimensions && (details.dimensions.height || details.dimensions.width || details.dimensions.depth) && (
                           <div className="text-sm">
-                            <span className="text-gray-400">Dimensions:</span>
-                            <span className="text-white ml-2">
+                            <span className="text-gray-500">Dimensions:</span>
+                            <span className="text-gray-900 ml-2">
                               {details.dimensions.height && `${details.dimensions.height}H`}
                               {details.dimensions.width && ` × ${details.dimensions.width}W`}
                               {details.dimensions.depth && ` × ${details.dimensions.depth}D`}
@@ -1018,44 +1025,44 @@ const CustomOrdersSection = () => {
 
                         {details.color && (
                           <div className="text-sm">
-                            <span className="text-gray-400">Color:</span>
-                            <span className="text-white ml-2">{details.color}</span>
+                            <span className="text-gray-500">Color:</span>
+                            <span className="text-gray-900 ml-2">{details.color}</span>
                           </div>
                         )}
 
                         {details.description && (
                           <div>
-                            <p className="text-gray-400 text-sm mb-1">Description:</p>
-                            <p className="text-gray-300 text-sm">{details.description}</p>
+                            <p className="text-gray-500 text-sm mb-1">Description:</p>
+                            <p className="text-gray-700 text-sm">{details.description}</p>
                           </div>
                         )}
 
                         {details.specialRequirements && (
                           <div>
-                            <p className="text-gray-400 text-sm mb-1">Special Requirements:</p>
-                            <p className="text-gray-300 text-sm">{details.specialRequirements}</p>
+                            <p className="text-gray-500 text-sm mb-1">Special Requirements:</p>
+                            <p className="text-gray-700 text-sm">{details.specialRequirements}</p>
                           </div>
                         )}
                       </div>
                     ) : (
                       <div>
-                        <p className="text-white font-medium mb-2">Request Details:</p>
-                        <p className="text-gray-300 text-sm">{order.requestDetails}</p>
+                        <p className="text-gray-900 font-medium mb-2">Request Details:</p>
+                        <p className="text-gray-700 text-sm">{order.requestDetails}</p>
                       </div>
                     )}
                   </div>
                 </div>
 
                 {order.quotedPrice && (
-                  <div className="bg-gray-700 rounded-lg p-3 mt-3">
+                  <div className="bg-gray-100 rounded-lg p-3 mt-3">
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-300">Quoted Price:</span>
+                      <span className="text-gray-600">Quoted Price:</span>
                       <span className="text-primary-600 font-bold text-lg">₹{order.quotedPrice.toLocaleString()}</span>
                     </div>
                     {order.estimatedDeliveryDate && (
                       <div className="flex items-center justify-between mt-2">
-                        <span className="text-gray-300">Estimated Delivery:</span>
-                        <span className="text-gray-300">{new Date(order.estimatedDeliveryDate).toLocaleDateString()}</span>
+                        <span className="text-gray-600">Estimated Delivery:</span>
+                        <span className="text-gray-700">{new Date(order.estimatedDeliveryDate).toLocaleDateString()}</span>
                       </div>
                     )}
                   </div>

@@ -227,12 +227,12 @@ const Shop = () => {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8 space-y-4 lg:space-y-0">
           <div>
             <h1 className="text-4xl font-bold text-gray-900 mb-2">Divine Sculptures</h1>
-            <p className="text-gray-500">Discover our handcrafted collection of {pagination.total} sculptures</p>
+            <p className="text-gray-600">Discover our handcrafted collection of {pagination.total} sculptures</p>
           </div>
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
             <div className="relative flex-1 sm:flex-none">
-              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500" />
               <input
                 type="text"
                 placeholder="Search sculptures, deities, materials..."
@@ -307,7 +307,7 @@ const Shop = () => {
               <div className="p-5 space-y-6">
                 {/* Categories */}
                 <div>
-                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Categories</h4>
+                  <h4 className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-3">Categories</h4>
                   <div className="space-y-1 max-h-48 overflow-y-auto">
                     <label className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-violet-50 transition-colors cursor-pointer group">
                       <input type="radio" name="category" value=""
@@ -330,22 +330,22 @@ const Shop = () => {
 
                 {/* Price Range */}
                 <div>
-                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Price Range</h4>
+                  <h4 className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-3">Price Range</h4>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-xs text-gray-400 mb-1 block">Min</label>
+                      <label className="text-xs text-gray-600 mb-1 block">Min</label>
                       <input type="number" placeholder="₹0" value={filters.minPrice}
                         onChange={(e) => handleFilterChange('minPrice', e.target.value)}
                         className="w-full px-3 py-2 bg-stone-50 border border-gray-200 rounded-lg text-gray-900 text-sm focus:border-violet-400 focus:ring-2 focus:ring-violet-100 focus:outline-none" />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-400 mb-1 block">Max</label>
+                      <label className="text-xs text-gray-600 mb-1 block">Max</label>
                       <input type="number" placeholder="₹∞" value={filters.maxPrice}
                         onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
                         className="w-full px-3 py-2 bg-stone-50 border border-gray-200 rounded-lg text-gray-900 text-sm focus:border-violet-400 focus:ring-2 focus:ring-violet-100 focus:outline-none" />
                     </div>
                   </div>
-                  <div className="flex justify-between text-[10px] text-gray-400 mt-1.5 px-1">
+                  <div className="flex justify-between text-[10px] text-gray-600 mt-1.5 px-1">
                     <span>₹500</span><span>₹50,000+</span>
                   </div>
                 </div>
@@ -353,7 +353,7 @@ const Shop = () => {
                 {/* Stone Type */}
                 {masterValues.stone_types && masterValues.stone_types.length > 0 && (
                   <div>
-                    <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Stone Type</h4>
+                    <h4 className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-3">Stone Type</h4>
                     <select value={filters.stone} onChange={(e) => handleFilterChange('stone', e.target.value)}
                       className="w-full px-3 py-2.5 bg-stone-50 border border-gray-200 rounded-xl text-gray-700 text-sm focus:border-violet-400 focus:ring-2 focus:ring-violet-100 focus:outline-none">
                       <option value="">All Stones</option>
@@ -365,7 +365,7 @@ const Shop = () => {
                 {/* Finish */}
                 {masterValues.finishes && masterValues.finishes.length > 0 && (
                   <div>
-                    <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Finish</h4>
+                    <h4 className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-3">Finish</h4>
                     <select value={filters.finish} onChange={(e) => handleFilterChange('finish', e.target.value)}
                       className="w-full px-3 py-2.5 bg-stone-50 border border-gray-200 rounded-xl text-gray-700 text-sm focus:border-violet-400 focus:ring-2 focus:ring-violet-100 focus:outline-none">
                       <option value="">All Finishes</option>
@@ -377,7 +377,7 @@ const Shop = () => {
                 {/* Deity */}
                 {filterOptions.deities && filterOptions.deities.length > 0 && (
                   <div>
-                    <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Deity</h4>
+                    <h4 className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-3">Deity</h4>
                     <select value={filters.deity} onChange={(e) => handleFilterChange('deity', e.target.value)}
                       className="w-full px-3 py-2.5 bg-stone-50 border border-gray-200 rounded-xl text-gray-700 text-sm focus:border-violet-400 focus:ring-2 focus:ring-violet-100 focus:outline-none">
                       <option value="">All Deities</option>
@@ -388,7 +388,7 @@ const Shop = () => {
 
                 {/* Rating */}
                 <div>
-                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Minimum Rating</h4>
+                  <h4 className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-3">Minimum Rating</h4>
                   <div className="space-y-1">
                     {[4, 3, 2, 1].map((rating) => (
                       <label key={rating} className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-amber-50 transition-colors cursor-pointer group">
@@ -409,7 +409,7 @@ const Shop = () => {
 
                 {/* Sort By */}
                 <div>
-                  <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Sort By</h4>
+                  <h4 className="text-xs font-bold text-gray-600 uppercase tracking-wider mb-3">Sort By</h4>
                   <select value={filters.sort} onChange={(e) => handleFilterChange('sort', e.target.value)}
                     className="w-full px-3 py-2.5 bg-stone-50 border border-gray-200 rounded-xl text-gray-700 text-sm focus:border-violet-400 focus:ring-2 focus:ring-violet-100 focus:outline-none">
                     <option value="createdAt">✨ Newest First</option>
@@ -429,7 +429,7 @@ const Shop = () => {
             {/* Results Info & Active Filters */}
             <div className="mb-6">
               <div className="flex items-center justify-between mb-4">
-                <p className="text-gray-400">
+                <p className="text-gray-600">
                   Showing <span className="text-gray-900 font-medium">{products.length}</span> of <span className="text-primary-600 font-medium">{pagination.total}</span> sculptures
                 </p>
                 <select
@@ -465,7 +465,7 @@ const Shop = () => {
                     );
                   })}
                   <button onClick={clearFilters}
-                    className="text-xs text-gray-400 hover:text-gray-700 transition-colors font-medium">
+                    className="text-xs text-gray-600 hover:text-gray-700 transition-colors font-medium">
                     Clear all
                   </button>
                 </div>
@@ -570,7 +570,7 @@ const Shop = () => {
                               {product.category?.name}
                             </span>
                             {product.sculptureDetails?.stone && (
-                              <span className="text-gray-400 text-xs bg-gray-50 px-2 py-1 rounded-full">
+                              <span className="text-gray-600 text-xs bg-gray-50 px-2 py-1 rounded-full">
                                 {product.sculptureDetails.stone}
                               </span>
                             )}
@@ -583,7 +583,7 @@ const Shop = () => {
                               <span className="text-gray-900 font-bold text-sm">
                                 {product.rating.average.toFixed(1)}
                               </span>
-                              <span className="text-gray-400 text-xs font-medium">
+                              <span className="text-gray-600 text-xs font-medium">
                                 ({product.rating.count})
                               </span>
                             </div>
@@ -596,7 +596,7 @@ const Shop = () => {
                                 ₹{(product.discountPrice || product.price).toLocaleString()}
                               </span>
                               {product.discountPrice && (
-                                <span className="text-gray-500 line-through text-sm font-medium">
+                                <span className="text-gray-600 line-through text-sm font-medium">
                                   ₹{product.price.toLocaleString()}
                                 </span>
                               )}
@@ -619,7 +619,7 @@ const Shop = () => {
                                     updateQuantity(product._id, 'dec');
                                   }}
                                   disabled={product.stock === 0 || (quantities[product._id] || 1) <= 1}
-                                  className="p-2.5 text-gray-400 hover:text-primary-600 hover:bg-gray-100 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-gray-400 disabled:hover:bg-transparent"
+                                  className="p-2.5 text-gray-600 hover:text-primary-600 hover:bg-gray-100 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-gray-400 disabled:hover:bg-transparent"
                                 >
                                   <MinusIcon className="h-4 w-4" />
                                 </button>
@@ -632,7 +632,7 @@ const Shop = () => {
                                     updateQuantity(product._id, 'inc');
                                   }}
                                   disabled={product.stock === 0 || (quantities[product._id] || 1) >= Math.min(product.stock, 99)}
-                                  className="p-2.5 text-gray-400 hover:text-primary-600 hover:bg-gray-100 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-gray-400 disabled:hover:bg-transparent"
+                                  className="p-2.5 text-gray-600 hover:text-primary-600 hover:bg-gray-100 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:text-gray-400 disabled:hover:bg-transparent"
                                 >
                                   <PlusIcon className="h-4 w-4" />
                                 </button>
@@ -731,12 +731,12 @@ const Shop = () => {
                                   {product.category?.name}
                                 </span>
                                 {product.sculptureDetails?.stone && (
-                                  <span className="text-gray-400 text-sm bg-gray-50 px-2 py-1 rounded-full">
+                                  <span className="text-gray-600 text-sm bg-gray-50 px-2 py-1 rounded-full">
                                     {product.sculptureDetails.stone}
                                   </span>
                                 )}
                                 {product.sculptureDetails?.finish && (
-                                  <span className="text-gray-400 text-sm bg-gray-50 px-2 py-1 rounded-full">
+                                  <span className="text-gray-600 text-sm bg-gray-50 px-2 py-1 rounded-full">
                                     {product.sculptureDetails.finish}
                                   </span>
                                 )}
@@ -752,7 +752,7 @@ const Shop = () => {
                                   <span className="text-gray-900 font-bold text-sm">
                                     {product.rating.average.toFixed(1)}
                                   </span>
-                                  <span className="text-gray-400 text-xs font-medium font-medium">
+                                  <span className="text-gray-600 text-xs font-medium font-medium">
                                     ({product.rating.count} reviews)
                                   </span>
                                 </div>
@@ -766,7 +766,7 @@ const Shop = () => {
                                     ₹{(product.discountPrice || product.price).toLocaleString()}
                                   </span>
                                   {product.discountPrice && (
-                                    <span className="text-gray-500 line-through text-lg">
+                                    <span className="text-gray-600 line-through text-lg">
                                       ₹{product.price.toLocaleString()}
                                     </span>
                                   )}

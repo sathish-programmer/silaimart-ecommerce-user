@@ -154,10 +154,10 @@ const Checkout = () => {
 
   const calculateTotals = () => {
     const subtotal = getTotal();
-    const freeShippingThreshold = appSettings.shipping?.freeShippingThreshold || 1000;
-    const standardShippingCost = appSettings.shipping?.standardShipping || 50;
+    const freeShippingThreshold = appSettings.shipping?.freeShippingThreshold ?? 1000;
+    const standardShippingCost = appSettings.shipping?.standardShipping ?? 50;
     const shippingCost = subtotal >= freeShippingThreshold ? 0 : standardShippingCost;
-    const taxRate = appSettings.tax?.rate || 18;
+    const taxRate = appSettings.tax?.rate ?? 18;
     const taxEnabled = appSettings.tax?.enabled !== false;
     const totalDiscount = discount + loyaltyDiscount;
     const taxAmount = taxEnabled ? Math.round((subtotal - totalDiscount) * (taxRate / 100)) : 0;
@@ -467,7 +467,7 @@ const Checkout = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-1">Checkout</h1>
-          <p className="text-gray-500">Complete your purchase securely</p>
+          <p className="text-gray-600">Complete your purchase securely</p>
         </div>
 
         {/* Progress Steps */}
@@ -483,12 +483,12 @@ const Checkout = () => {
               <div key={item.step} className="flex items-center">
                 <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all ${currentStep >= item.step
                   ? 'bg-violet-600 border-violet-600 text-white'
-                  : 'border-gray-300 text-gray-400 bg-white'
+                  : 'border-gray-300 text-gray-500 bg-white'
                   }`}>
                   <span className="text-base">{item.icon}</span>
                 </div>
                 <div className="ml-2 hidden sm:block">
-                  <p className={`text-xs font-medium ${currentStep >= item.step ? 'text-violet-600' : 'text-gray-400'}`}>{item.title}</p>
+                  <p className={`text-xs font-medium ${currentStep >= item.step ? 'text-violet-600' : 'text-gray-600'}`}>{item.title}</p>
                 </div>
                 {index < 4 && (
                   <div className={`w-10 h-0.5 mx-3 ${currentStep > item.step ? 'bg-violet-500' : 'bg-gray-200'}`} />
@@ -525,10 +525,10 @@ const Checkout = () => {
                           </div>
                           <div className="flex-1">
                             <h3 className="text-gray-900 font-semibold">{item.product.name}</h3>
-                            <p className="text-gray-400 text-sm">{item.product.category?.name}</p>
+                            <p className="text-gray-600 text-sm">{item.product.category?.name}</p>
                             <div className="flex items-center gap-2 mt-1">
                               <span className="text-violet-600 font-bold">₹{(item.product.discountPrice || item.product.price).toLocaleString()}</span>
-                              <span className="text-gray-400 text-sm">× {item.quantity}</span>
+                              <span className="text-gray-600 text-sm">× {item.quantity}</span>
                             </div>
                           </div>
                           <p className="text-gray-900 font-bold">₹{((item.product.discountPrice || item.product.price) * item.quantity).toLocaleString()}</p>
@@ -655,7 +655,7 @@ const Checkout = () => {
                                     <span className="bg-violet-600 text-white text-[10px] px-2 py-0.5 rounded-full font-medium">Default</span>
                                   )}
                                 </div>
-                                <p className="text-gray-500 text-xs mt-0.5">{addr.street}, {addr.city}, {addr.state} {addr.pincode}</p>
+                                <p className="text-gray-600 text-xs mt-0.5">{addr.street}, {addr.city}, {addr.state} {addr.pincode}</p>
                               </div>
                               {selectedAddressId === addr._id && (
                                 <CheckCircleIcon className="h-5 w-5 text-violet-600 flex-shrink-0" />
@@ -756,7 +756,7 @@ const Checkout = () => {
                                 </div>
                                 <div className="flex-1">
                                   <span className="text-gray-900 font-semibold block">Razorpay</span>
-                                  <p className="text-gray-500 text-sm">Cards, UPI, Net Banking, Wallets & more</p>
+                                  <p className="text-gray-600 text-sm">Cards, UPI, Net Banking, Wallets & more</p>
                                 </div>
                                 {paymentMethod === 'razorpay' && (
                                   <div className="flex gap-1.5 flex-wrap">
@@ -777,7 +777,7 @@ const Checkout = () => {
                                 <TruckIcon className="h-7 w-7 text-green-500" />
                                 <div>
                                   <span className="text-gray-900 font-semibold">Cash on Delivery</span>
-                                  <p className="text-gray-500 text-sm">Pay when you receive your order
+                                  <p className="text-gray-600 text-sm">Pay when you receive your order
                                     {appSettings.payment?.cod?.maximumAmount && <span className="block text-xs text-amber-600">Available for orders up to ₹{appSettings.payment.cod.maximumAmount.toLocaleString()}</span>}
                                   </p>
                                 </div>
@@ -830,7 +830,7 @@ const Checkout = () => {
                               </div>
                               <div className="flex-1">
                                 <p className="text-gray-900 font-medium text-sm">{item.product.name}</p>
-                                <p className="text-gray-400 text-xs">₹{(item.product.discountPrice || item.product.price).toLocaleString()} × {item.quantity}</p>
+                                <p className="text-gray-600 text-xs">₹{(item.product.discountPrice || item.product.price).toLocaleString()} × {item.quantity}</p>
                               </div>
                               <p className="text-violet-600 font-semibold text-sm">₹{((item.product.discountPrice || item.product.price) * item.quantity).toLocaleString()}</p>
                             </div>
@@ -843,9 +843,9 @@ const Checkout = () => {
                           <h3 className="text-base font-semibold text-gray-900 mb-2">Shipping Address</h3>
                           <div className="bg-stone-50 rounded-xl p-4 border border-gray-100 text-sm">
                             <p className="text-gray-900 font-medium">{formData.name}</p>
-                            <p className="text-gray-500">{formData.phone}</p>
-                            {formData.email && <p className="text-gray-500">{formData.email}</p>}
-                            <div className="mt-1.5 text-gray-500">
+                            <p className="text-gray-700">{formData.phone}</p>
+                            {formData.email && <p className="text-gray-700">{formData.email}</p>}
+                            <div className="mt-1.5 text-gray-700">
                               <p>{formData.street}</p>
                               <p>{formData.city}, {formData.state} {formData.pincode}</p>
                               <p>{formData.country}</p>
@@ -860,7 +860,7 @@ const Checkout = () => {
                               {paymentMethod === 'cod' && '🚚 Cash on Delivery'}
                               {paymentMethod === 'qr' && '📱 QR Code Payment'}
                             </p>
-                            <p className="text-gray-500">
+                            <p className="text-gray-700">
                               {paymentMethod === 'razorpay' && 'Cards, UPI, wallets & more'}
                               {paymentMethod === 'cod' && 'Pay when you receive your order'}
                               {paymentMethod === 'qr' && 'Pay using UPI QR code'}
@@ -870,11 +870,11 @@ const Checkout = () => {
                         <div>
                           <h3 className="text-base font-semibold text-gray-900 mb-2">Order Summary</h3>
                           <div className="bg-stone-50 rounded-xl p-4 border border-gray-100 space-y-2 text-sm">
-                            <div className="flex justify-between text-gray-500"><span>Subtotal</span><span>₹{subtotal.toLocaleString()}</span></div>
-                            {discount > 0 && <div className="flex justify-between text-green-600"><span>Coupon ({appliedCoupon?.code})</span><span>-₹{discount.toLocaleString()}</span></div>}
-                            {loyaltyDiscount > 0 && <div className="flex justify-between text-green-600"><span>Loyalty ({loyaltyPointsToUse} pts)</span><span>-₹{loyaltyDiscount.toLocaleString()}</span></div>}
-                            <div className="flex justify-between text-gray-500"><span>Shipping</span><span>{shippingCost === 0 ? 'Free' : `₹${shippingCost}`}</span></div>
-                            <div className="flex justify-between text-gray-500"><span>Tax ({taxRate}% GST)</span><span>₹{taxAmount.toLocaleString()}</span></div>
+                            <div className="flex justify-between text-gray-700"><span>Subtotal</span><span>₹{subtotal.toLocaleString()}</span></div>
+                            {discount > 0 && <div className="flex justify-between text-green-700"><span>Coupon ({appliedCoupon?.code})</span><span>-₹{discount.toLocaleString()}</span></div>}
+                            {loyaltyDiscount > 0 && <div className="flex justify-between text-green-700"><span>Loyalty ({loyaltyPointsToUse} pts)</span><span>-₹{loyaltyDiscount.toLocaleString()}</span></div>}
+                            <div className="flex justify-between text-gray-700"><span>Shipping</span><span>{shippingCost === 0 ? 'Free' : `₹${shippingCost}`}</span></div>
+                            <div className="flex justify-between text-gray-700"><span>Tax ({taxRate}% GST)</span><span>₹{taxAmount.toLocaleString()}</span></div>
                             <div className="flex justify-between font-bold text-gray-900 border-t border-gray-200 pt-2"><span>Total</span><span className="text-violet-600">₹{total.toLocaleString()}</span></div>
                           </div>
                         </div>

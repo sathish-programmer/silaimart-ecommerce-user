@@ -262,7 +262,7 @@ const ProductDetail = () => {
                   <div className="flex items-center gap-1.5">
                     <StarSolid className="h-3 w-3 text-amber-400" />
                     <span className="text-[10px] font-bold text-gray-900">{product.rating.average.toFixed(1)}</span>
-                    <span className="text-[9px] text-gray-400 uppercase tracking-widest">({product.rating.count} Insights)</span>
+                    <span className="text-[9px] text-gray-500 uppercase tracking-widest">({product.rating.count} Insights)</span>
                   </div>
                 )}
               </div>
@@ -270,7 +270,7 @@ const ProductDetail = () => {
                 {product.name}
               </h1>
               {product.sku && (
-                <p className="text-[10px] font-black uppercase tracking-widest text-gray-300">Catalogue Ref: {product.sku}</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-gray-600">Catalogue Ref: {product.sku}</p>
               )}
             </div>
 
@@ -279,7 +279,7 @@ const ProductDetail = () => {
                 ₹{(product.discountPrice || product.price).toLocaleString()}
               </span>
               {product.discountPrice && (
-                <span className="text-2xl text-gray-300 line-through decoration-rose-500/30">
+                <span className="text-2xl text-gray-600 line-through decoration-rose-500/30">
                   ₹{product.price.toLocaleString()}
                 </span>
               )}
@@ -289,11 +289,11 @@ const ProductDetail = () => {
             {/* Quick Details Grid */}
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm">
-                <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-2">Material</p>
+                <p className="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-2">Material</p>
                 <p className="text-sm font-bold text-gray-900">{product.sculptureDetails?.stone || 'Divine Stone'}</p>
               </div>
               <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm">
-                <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-2">Origin</p>
+                <p className="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-2">Origin</p>
                 <p className="text-sm font-bold text-gray-900">{product.sculptureDetails?.origin || 'Varanasi'}</p>
               </div>
             </div>
@@ -508,7 +508,7 @@ const ProductDetail = () => {
           <div className="space-y-10">
             <div className="text-center">
               <h2 className="text-4xl font-black text-gray-900 tracking-tight mb-2">Sacred Kinship</h2>
-              <p className="text-gray-400 text-sm font-medium uppercase tracking-[0.3em]">More divine creations you may resonate with</p>
+              <p className="text-gray-500 text-sm font-medium uppercase tracking-[0.3em]">More divine creations you may resonate with</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {relatedProducts.map((related) => (
@@ -529,7 +529,7 @@ const ProductDetail = () => {
                     <div className="flex items-center gap-3">
                       <span className="font-black text-gray-900">₹{(related.discountPrice || related.price).toLocaleString()}</span>
                       {related.discountPrice && (
-                        <span className="text-gray-300 line-through text-sm">₹{related.price.toLocaleString()}</span>
+                        <span className="text-gray-600 line-through text-sm">₹{related.price.toLocaleString()}</span>
                       )}
                     </div>
                   </div>

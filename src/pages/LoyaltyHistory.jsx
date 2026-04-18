@@ -87,7 +87,7 @@ const LoyaltyHistory = () => {
               <div>
                 <p className="text-green-600 text-sm font-medium">Current Balance</p>
                 <p className="text-3xl font-bold text-gray-900 mt-1">{stats.currentBalance || 0}</p>
-                <p className="text-gray-400 text-xs mt-1">points available</p>
+                <p className="text-gray-600 text-xs mt-1">points available</p>
               </div>
               <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center">
                 <GiftIcon className="h-6 w-6 text-green-500" />
@@ -99,7 +99,7 @@ const LoyaltyHistory = () => {
               <div>
                 <p className="text-blue-600 text-sm font-medium">Total Earned</p>
                 <p className="text-3xl font-bold text-gray-900 mt-1">{stats.totalEarned || 0}</p>
-                <p className="text-gray-400 text-xs mt-1">all time</p>
+                <p className="text-gray-600 text-xs mt-1">all time</p>
               </div>
               <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
                 <ArrowUpIcon className="h-6 w-6 text-blue-500" />
@@ -111,7 +111,7 @@ const LoyaltyHistory = () => {
               <div>
                 <p className="text-red-500 text-sm font-medium">Total Redeemed</p>
                 <p className="text-3xl font-bold text-gray-900 mt-1">{stats.totalRedeemed || 0}</p>
-                <p className="text-gray-400 text-xs mt-1">all time</p>
+                <p className="text-gray-600 text-xs mt-1">all time</p>
               </div>
               <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center">
                 <ArrowDownIcon className="h-6 w-6 text-red-500" />
@@ -128,7 +128,7 @@ const LoyaltyHistory = () => {
           {transactions.length === 0 ? (
             <div className="p-12 text-center">
               <div className="w-16 h-16 bg-violet-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <GiftIcon className="h-8 w-8 text-violet-300" />
+                <GiftIcon className="h-8 w-8 text-violet-500" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-1">No Transactions Yet</h3>
               <p className="text-gray-500 text-sm">Start shopping to earn loyalty points!</p>
@@ -145,12 +145,12 @@ const LoyaltyHistory = () => {
                       <div>
                         <p className="text-gray-900 font-medium text-sm">{transaction.description}</p>
                         <div className="flex items-center gap-2 mt-0.5">
-                          <p className="text-gray-400 text-xs">
+                          <p className="text-gray-600 text-xs">
                             {new Date(transaction.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                           </p>
                           {transaction.orderId && (
-                            <><span className="text-gray-300 text-xs">•</span>
-                              <p className="text-gray-400 text-xs">Order #{transaction.metadata?.orderNumber || transaction.orderId.slice(-8)}</p></>
+                            <><span className="text-gray-600 text-xs">•</span>
+                              <p className="text-gray-600 text-xs">Order #{transaction.metadata?.orderNumber || transaction.orderId.slice(-8)}</p></>
                           )}
                         </div>
                       </div>
@@ -159,7 +159,7 @@ const LoyaltyHistory = () => {
                       <p className={`text-base ${getTransactionColor(transaction.type)}`}>
                         {transaction.type === 'earned' || transaction.type === 'refunded' ? '+' : '-'}{transaction.points}
                       </p>
-                      <p className="text-gray-400 text-xs">Balance: {transaction.balanceAfter}</p>
+                      <p className="text-gray-600 text-xs">Balance: {transaction.balanceAfter}</p>
                     </div>
                   </div>
                 </div>

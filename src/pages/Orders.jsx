@@ -23,7 +23,29 @@ const Orders = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => { fetchOrders(); }, []);
+  useEffect(() => {
+    fetchOrders();
+    // Check for deep link to review
+    const params = new URLSearchParams(window.location.search);
+    const reviewOrderId = params.get('reviewOrderId');
+    if (reviewOrderId) {
+      viewOrderDetails(reviewOrderId);
+    }
+  }, []);
+
+  // auto-trigger review modal if deep-linked and orders are loaded
+  useEffect(() => {
+    if (orders.length > 0) {
+      const params = new URLSearchParams(window.location.search);
+      const reviewOrderId = params.get('reviewOrderId');
+      if (reviewOrderId) {
+        const targetOrder = orders.find(o => o._id === reviewOrderId || o.orderNumber === reviewOrderId);
+        if (targetOrder && targetOrder.items.length > 0) {
+          openReviewModal(targetOrder.items[0].product, targetOrder._id);
+        }
+      }
+    }
+  }, [orders]);
 
   const fetchOrders = async () => {
     try {
@@ -161,8 +183,8 @@ const Orders = () => {
   }
 
   return (
-    <div className="min-h-screen bg-stone-50 py-8">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
           <div>
@@ -232,7 +254,7 @@ const Orders = () => {
                           <span className="text-primary-600 font-black text-xs uppercase tracking-tighter">#{order.orderNumber?.slice(-4) || 'ORD'}</span>
                         </div>
                         <div>
-                          <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest mb-1">Order Ref: {order.orderNumber || order._id?.slice(-8)}</p>
+                          <p className="text-gray-600 text-[10px] font-black uppercase tracking-widest mb-1">Order Ref: {order.orderNumber || order._id?.slice(-8)}</p>
                           <h3 className="text-xl font-black text-gray-900">Ordered on {new Date(order.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</h3>
                           <div className="flex items-center gap-3 mt-2">
                             <div className="flex items-center gap-1.5 px-3 py-1 bg-white rounded-full border border-gray-100 shadow-sm">
@@ -246,7 +268,7 @@ const Orders = () => {
                       </div>
                       <div className="flex flex-col lg:items-end gap-3">
                         <div className="flex items-baseline gap-1">
-                          <span className="text-gray-400 text-sm font-medium">Total:</span>
+                          <span className="text-gray-600 text-sm font-medium">Total:</span>
                           <p className="text-3xl font-black text-gray-900 tracking-tighter">₹{order.total?.toLocaleString()}</p>
                         </div>
                         <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-[10px] font-black uppercase tracking-widest ${sc.bg} ${sc.text} ${sc.border} shadow-sm`}>
@@ -261,7 +283,7 @@ const Orders = () => {
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 p-8">
                     {/* Items */}
                     <div className="space-y-4">
-                      <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest pl-1">Order Contents</p>
+                      <p className="text-gray-600 text-[10px] font-black uppercase tracking-widest pl-1">Order Contents</p>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {order.items?.map((item, idx) => (
                           <div key={idx} className="flex items-center gap-4 bg-stone-50/50 hover:bg-white border border-transparent hover:border-gray-100 rounded-2xl p-3 transition-all duration-300">
@@ -274,7 +296,7 @@ const Orders = () => {
                             </div>
                             <div className="min-w-0">
                               <p className="text-gray-900 text-xs font-black truncate">{item.product?.name || 'Art Piece'}</p>
-                              <p className="text-gray-400 text-[10px] font-bold">Qty: {item.quantity}</p>
+                              <p className="text-gray-600 text-[10px] font-bold">Qty: {item.quantity}</p>
                               {order.orderStatus === 'delivered' && (
                                 <button onClick={() => openReviewModal(item.product, order._id)}
                                   className="text-primary-600 text-[10px] font-black flex items-center gap-1 mt-1 hover:text-primary-700 uppercase tracking-wide">
@@ -302,11 +324,11 @@ const Orders = () => {
                                 <div key={step.id} className="flex flex-col items-center">
                                   <div className={`w-10 h-10 rounded-full flex items-center justify-center border-4 z-10 transition-all duration-500 ${isCurrent ? 'bg-primary-600 border-primary-100 text-white scale-110 shadow-lg shadow-primary-200' :
                                     isCompleted ? 'bg-white border-primary-500 text-primary-600' :
-                                      'bg-white border-gray-100 text-gray-300'
+                                      'bg-white border-gray-100 text-gray-600'
                                     }`}>
                                     <StatusIcon className={`h-5 w-5 ${isCurrent ? 'animate-pulse' : ''}`} />
                                   </div>
-                                  <span className={`text-[9px] font-black uppercase tracking-wider mt-3 whitespace-nowrap ${isCompleted ? 'text-gray-900' : 'text-gray-300'
+                                  <span className={`text-[9px] font-black uppercase tracking-wider mt-3 whitespace-nowrap ${isCompleted ? 'text-gray-900' : 'text-gray-600'
                                     }`}>{step.label}</span>
                                 </div>
                               );
@@ -333,7 +355,7 @@ const Orders = () => {
                     </div>
                     {order.trackingNumber && (
                       <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl border border-gray-100 shadow-sm">
-                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Tracking:</p>
+                        <p className="text-[10px] font-black text-gray-600 uppercase tracking-widest">Tracking:</p>
                         <p className="text-primary-600 font-mono text-sm font-bold tracking-tighter">{order.trackingNumber}</p>
                       </div>
                     )}

@@ -179,7 +179,7 @@ const CustomerReviews = ({ productId }) => {
               </div>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-3">Rating Distribution</h4>
+              <h4 className="text-gray-900 font-semibold mb-3">Rating Distribution</h4>
               {renderRatingDistribution()}
             </div>
           </div>
@@ -203,15 +203,15 @@ const CustomerReviews = ({ productId }) => {
         <div className="fixed inset-0 bg-stone-50 bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6">
-              <h3 className="text-xl font-bold text-white mb-4">Write a Review</h3>
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Write a Review</h3>
               
               <form onSubmit={submitReview} className="space-y-4">
                 <div>
-                  <label className="block text-white mb-2">Select Order</label>
+                  <label className="block text-gray-700 mb-2 font-medium">Select Order</label>
                   <select
                     value={reviewForm.orderId}
                     onChange={(e) => setReviewForm({...reviewForm, orderId: e.target.value})}
-                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-white"
+                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded text-gray-900 focus:ring-primary-500 focus:border-primary-500"
                     required
                   >
                     <option value="">Select an order</option>
@@ -224,7 +224,7 @@ const CustomerReviews = ({ productId }) => {
                 </div>
 
                 <div>
-                  <label className="block text-white mb-2">Rating</label>
+                  <label className="block text-gray-700 mb-2 font-medium">Rating</label>
                   <div className="flex space-x-1">
                     {renderStars(reviewForm.rating, true, (rating) => 
                       setReviewForm({...reviewForm, rating})
@@ -233,11 +233,11 @@ const CustomerReviews = ({ productId }) => {
                 </div>
 
                 <div>
-                  <label className="block text-white mb-2">Comment</label>
+                  <label className="block text-gray-700 mb-2 font-medium">Comment</label>
                   <textarea
                     value={reviewForm.comment}
                     onChange={(e) => setReviewForm({...reviewForm, comment: e.target.value})}
-                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-white"
+                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded text-gray-900 focus:ring-primary-500 focus:border-primary-500"
                     rows="4"
                     placeholder="Share your experience with this product..."
                     required
@@ -245,13 +245,13 @@ const CustomerReviews = ({ productId }) => {
                 </div>
 
                 <div>
-                  <label className="block text-white mb-2">Images (Optional)</label>
+                  <label className="block text-gray-700 mb-2 font-medium">Images (Optional)</label>
                   <input
                     type="file"
                     multiple
                     accept="image/*"
                     onChange={handleImageUpload}
-                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-white"
+                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded text-gray-900 focus:ring-primary-500 focus:border-primary-500"
                   />
                   {reviewForm.images.length > 0 && (
                     <div className="mt-2 grid grid-cols-3 gap-2">
@@ -290,7 +290,7 @@ const CustomerReviews = ({ productId }) => {
 
       {/* Reviews List */}
       <div className="space-y-4">
-        <h3 className="text-xl font-bold text-white">Customer Reviews</h3>
+        <h3 className="text-xl font-bold text-gray-900">Customer Reviews</h3>
         
         {reviews.length === 0 ? (
           <div className="text-center py-8 text-gray-400">
@@ -302,7 +302,7 @@ const CustomerReviews = ({ productId }) => {
               <div className="flex justify-between items-start mb-3">
                 <div>
                   <div className="flex items-center space-x-2 mb-1">
-                    <span className="text-white font-semibold">{review.user.name}</span>
+                    <span className="text-gray-900 font-semibold">{review.user.name}</span>
                     <div className="flex">
                       {renderStars(review.rating)}
                     </div>
@@ -313,7 +313,7 @@ const CustomerReviews = ({ productId }) => {
                 </div>
               </div>
               
-              <p className="text-gray-300 mb-3">{review.comment}</p>
+              <p className="text-gray-700 mb-3">{review.comment}</p>
               
               {review.images && review.images.length > 0 && (
                 <div className="flex space-x-2 mb-3">
@@ -331,7 +331,7 @@ const CustomerReviews = ({ productId }) => {
               {review.adminResponse && (
                 <div className="bg-gray-50 p-3 rounded mt-3">
                   <div className="text-primary-600 text-sm font-semibold mb-1">SilaiMart Response:</div>
-                  <p className="text-gray-300 text-sm">{review.adminResponse}</p>
+                  <p className="text-gray-700 text-sm">{review.adminResponse}</p>
                 </div>
               )}
             </div>
