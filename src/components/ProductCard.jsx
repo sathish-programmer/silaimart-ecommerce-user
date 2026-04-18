@@ -33,8 +33,8 @@ const ProductCard = ({ product, index = 0 }) => {
     }
   };
 
-  const discountPercentage = product.discountPrice
-    ? Math.round(((product.price - product.discountPrice) / product.price) * 100)
+  const discountPercentage = (product.discountPrice && product.discountPrice < product.price)
+    ? Math.abs(Math.round(((product.price - product.discountPrice) / product.price) * 100))
     : 0;
 
   const displayPrice = product.discountPrice || product.price;

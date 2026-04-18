@@ -416,14 +416,45 @@ const Orders = () => {
                         {selectedOrder.paymentMethod}
                       </div>
                     </div>
+                    {selectedOrder.paymentId && (
+                      <div className="flex justify-between items-center text-[10px] pt-1 border-t border-gray-100">
+                        <span className="text-gray-400 font-bold uppercase tracking-tighter">Payment ID:</span>
+                        <span className="text-gray-600 font-mono truncate ml-4">{selectedOrder.paymentId}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between items-center text-sm">
                       <span className="text-gray-500">Status</span>
                       <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                        selectedOrder.paymentStatus === 'paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                        selectedOrder.paymentStatus === 'paid' ? 'bg-green-100 text-green-700' : 
+                        selectedOrder.paymentStatus === 'refunded' ? 'bg-amber-100 text-amber-700' :
+                        'bg-amber-100 text-amber-700'
                       }`}>
                         {selectedOrder.paymentStatus}
                       </span>
                     </div>
+
+                    {/* Refund Details */}
+                    {selectedOrder.refundId && (
+                      <div className="mt-2 pt-2 border-t border-gray-200/50 space-y-2">
+                        <div className="flex justify-between items-center text-xs">
+                          <span className="text-amber-600 font-bold uppercase tracking-widest text-[10px]">Refund Processed</span>
+                        </div>
+                        <div className="flex justify-between items-center text-[10px] font-bold text-gray-400 uppercase tracking-tight">
+                          <span>Amount:</span>
+                          <span className="text-gray-600 font-black">₹{selectedOrder.refundAmount?.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-[10px] font-bold text-gray-400 uppercase tracking-tight">
+                          <span>Refund ID:</span>
+                          <span className="text-gray-600 font-mono lowercase truncate ml-4">{selectedOrder.refundId}</span>
+                        </div>
+                        {selectedOrder.refundReason && (
+                          <div className="bg-white/50 p-2 rounded-lg italic text-[9px] text-gray-500 border border-gray-100">
+                            "{selectedOrder.refundReason}"
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     {selectedOrder.paymentId && (
                       <div className="flex justify-between items-center pt-2 border-t border-gray-200/50">
                         <span className="text-gray-500 text-sm">Transaction ID</span>

@@ -525,9 +525,9 @@ const Shop = () => {
 
                             {/* Modern Status Badges */}
                             <div className="absolute top-4 left-4 flex flex-col gap-2 z-20">
-                              {product.discountPrice && (
+                              {product.discountPrice && product.discountPrice < product.price && (
                                 <div className="bg-rose-500 text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-lg shadow-rose-500/20 backdrop-blur-sm">
-                                  -{Math.round(((product.price - product.discountPrice) / product.price) * 100)}% Off
+                                  -{Math.abs(Math.round(((product.price - product.discountPrice) / product.price) * 100))}% Off
                                 </div>
                               )}
                               {product.isFeatured && (

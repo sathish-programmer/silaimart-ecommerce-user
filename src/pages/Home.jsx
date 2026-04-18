@@ -407,9 +407,9 @@ const Home = () => {
                     )}
 
                     {/* Badge */}
-                    {product.discountPrice && (
+                    {product.discountPrice && product.discountPrice < product.price && (
                       <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md border border-amber-100 text-amber-600 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-lg">
-                        -{Math.round(((product.price - product.discountPrice) / product.price) * 100)}% Off
+                        -{Math.abs(Math.round(((product.price - product.discountPrice) / product.price) * 100))}% Off
                       </div>
                     )}
 
