@@ -405,17 +405,70 @@ const Orders = () => {
                   </div>
                 </div>
 
+                {/* Payment Details */}
+                <div>
+                  <h4 className="font-bold text-gray-900 mb-3">Payment Information</h4>
+                  <div className="bg-stone-50 rounded-2xl p-4 space-y-3">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-gray-500">Method</span>
+                      <div className="flex items-center gap-2 font-bold text-gray-900 uppercase">
+                        {getPaymentIcon(selectedOrder.paymentMethod)}
+                        {selectedOrder.paymentMethod}
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-gray-500">Status</span>
+                      <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                        selectedOrder.paymentStatus === 'paid' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                      }`}>
+                        {selectedOrder.paymentStatus}
+                      </span>
+                    </div>
+                    {selectedOrder.paymentId && (
+                      <div className="flex justify-between items-center pt-2 border-t border-gray-200/50">
+                        <span className="text-gray-500 text-sm">Transaction ID</span>
+                        <span className="font-mono text-[10px] font-bold text-gray-400">{selectedOrder.paymentId}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
                 {/* Summary */}
                 <div className="bg-stone-50 rounded-2xl p-5">
                   <h4 className="font-bold text-gray-900 mb-4">Order Summary</h4>
                   <div className="space-y-2 text-sm">
-                    <div className="flex justify-between text-gray-600"><span>Subtotal</span><span>₹{selectedOrder.subtotal?.toLocaleString() || '0'}</span></div>
-                    {(selectedOrder.discount || 0) > 0 && <div className="flex justify-between text-green-600"><span>Coupon Discount</span><span>-₹{selectedOrder.discount?.toLocaleString() || '0'}</span></div>}
-                    {(selectedOrder.loyaltyDiscount || 0) > 0 && <div className="flex justify-between text-blue-600"><span>Loyalty Points ({selectedOrder.loyaltyPointsUsed || 0} pts)</span><span>-₹{selectedOrder.loyaltyDiscount?.toLocaleString() || '0'}</span></div>}
-                    <div className="flex justify-between text-gray-600"><span>Shipping</span><span>{(selectedOrder.shippingCost || 0) === 0 ? 'Free' : `₹${selectedOrder.shippingCost}`}</span></div>
-                    <div className="flex justify-between text-gray-600"><span>Tax (GST)</span><span>₹{selectedOrder.tax?.toLocaleString() || '0'}</span></div>
-                    <div className="flex justify-between font-bold text-gray-900 border-t border-gray-200 pt-2 text-base">
-                      <span>Total</span><span>₹{selectedOrder.total?.toLocaleString() || '0'}</span>
+                    <div className="flex justify-between text-gray-600">
+                      <span>Subtotal</span>
+                      <span>₹{selectedOrder.subtotal?.toLocaleString() || '0'}</span>
+                    </div>
+
+                    {(selectedOrder.discount || 0) > 0 && (
+                      <div className="flex justify-between text-rose-500">
+                        <span>Discount {selectedOrder.coupon?.code ? `(${selectedOrder.coupon.code})` : ''}</span>
+                        <span>-₹{selectedOrder.discount?.toLocaleString() || '0'}</span>
+                      </div>
+                    )}
+
+                    {(selectedOrder.loyaltyDiscount || 0) > 0 && (
+                      <div className="flex justify-between text-primary-600">
+                        <span>Loyalty Redemption</span>
+                        <span>-₹{selectedOrder.loyaltyDiscount?.toLocaleString() || '0'}</span>
+                      </div>
+                    )}
+
+                    <div className="flex justify-between text-gray-600">
+                      <span>Shipping</span>
+                      <span>{(selectedOrder.shippingCost || 0) === 0 ? 'FREE' : `₹${selectedOrder.shippingCost}`}</span>
+                    </div>
+
+                    <div className="flex justify-between text-gray-600">
+                      <span>Tax (GST)</span>
+                      <span>₹{selectedOrder.tax?.toLocaleString() || '0'}</span>
+                    </div>
+
+                    <div className="flex justify-between font-black text-gray-900 border-t border-gray-200 pt-3 text-lg tracking-tight">
+                      <span>Final Price</span>
+                      <span>₹{selectedOrder.total?.toLocaleString() || '0'}</span>
                     </div>
                   </div>
                 </div>

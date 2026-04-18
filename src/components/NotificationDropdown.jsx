@@ -22,7 +22,7 @@ const NotificationDropdown = () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) return;
-      
+
       const response = await axios.get(`${API_URL}/notifications/unread-count`, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -34,7 +34,7 @@ const NotificationDropdown = () => {
 
   const fetchNotifications = async () => {
     if (loading) return;
-    
+
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
@@ -55,8 +55,8 @@ const NotificationDropdown = () => {
       await axios.put(`${API_URL}/notifications/${notificationId}/read`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      
-      setNotifications(prev => 
+
+      setNotifications(prev =>
         prev.map(n => n._id === notificationId ? { ...n, status: 'read' } : n)
       );
       setUnreadCount(prev => Math.max(0, prev - 1));
@@ -71,7 +71,7 @@ const NotificationDropdown = () => {
       await axios.put(`${API_URL}/notifications/mark-all-read`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      
+
       setNotifications(prev => prev.map(n => ({ ...n, status: 'read' })));
       setUnreadCount(0);
     } catch (error) {
@@ -123,7 +123,7 @@ const NotificationDropdown = () => {
         ) : (
           <BellIcon className="h-6 w-6" />
         )}
-        
+
         {unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
             {unreadCount > 99 ? '99+' : unreadCount}
@@ -133,8 +133,8 @@ const NotificationDropdown = () => {
 
       {isOpen && (
         <>
-          <div 
-            className="fixed inset-0 z-10" 
+          <div
+            className="fixed inset-0 z-10"
             onClick={() => setIsOpen(false)}
           />
           <div className="absolute right-0 mt-2 w-96 bg-white border border-gray-200 rounded-xl shadow-2xl z-20 max-h-96 overflow-hidden">
@@ -174,9 +174,8 @@ const NotificationDropdown = () => {
                 notifications.map((notification) => (
                   <div
                     key={notification._id}
-                    className={`p-4 border-l-4 ${getPriorityColor(notification.priority)} hover:bg-gray-50 transition-colors cursor-pointer ${
-                      notification.status === 'unread' ? 'bg-gray-50/50' : ''
-                    }`}
+                    className={`p-4 border-l-4 ${getPriorityColor(notification.priority)} hover:bg-gray-50 transition-colors cursor-pointer ${notification.status === 'unread' ? 'bg-gray-50/50' : ''
+                      }`}
                     onClick={() => {
                       if (notification.status === 'unread') {
                         markAsRead(notification._id);
@@ -192,9 +191,8 @@ const NotificationDropdown = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
-                          <h4 className={`font-medium ${
-                            notification.status === 'unread' ? 'text-white' : 'text-gray-300'
-                          }`}>
+                          <h4 className={`font-medium ${notification.status === 'unread' ? 'text-black' : 'text-gray-300'
+                            }`}>
                             {notification.title}
                           </h4>
                           {notification.status === 'unread' && (
