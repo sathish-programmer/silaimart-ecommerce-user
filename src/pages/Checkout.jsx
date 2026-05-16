@@ -154,18 +154,21 @@ const Checkout = () => {
 
   const calculateTotals = () => {
     const subtotal = getTotal();
+    const mrpTotal = items.reduce((s, i) => s + (i.product.price || i.product.discountPrice || 0) * i.quantity, 0);
+    const mrpDiscount = mrpTotal - subtotal;
     const freeShippingThreshold = appSettings.shipping?.freeShippingThreshold ?? 1000;
     const standardShippingCost = appSettings.shipping?.standardShipping ?? 50;
     const shippingCost = subtotal >= freeShippingThreshold ? 0 : standardShippingCost;
     const taxRate = appSettings.tax?.rate ?? 18;
     const taxEnabled = appSettings.tax?.enabled !== false;
-    const totalDiscount = discount + loyaltyDiscount;
+    const wowDiscount = appSettings.offers?.wowDeal?.enabled ? Math.round(subtotal * (appSettings.offers.wowDeal.discountPercentage || 15) / 100) : 0;
+    const totalDiscount = discount + loyaltyDiscount + wowDiscount;
     const taxAmount = taxEnabled ? Math.round((subtotal - totalDiscount) * (taxRate / 100)) : 0;
     const total = Math.max(0, subtotal - totalDiscount + shippingCost + taxAmount);
-    return { subtotal, shippingCost, taxAmount, total, taxRate, totalDiscount };
+    return { subtotal, mrpTotal, mrpDiscount, shippingCost, taxAmount, total, taxRate, totalDiscount, wowDiscount };
   };
 
-  const { subtotal, shippingCost, taxAmount, total, taxRate, totalDiscount } = calculateTotals();
+  const { subtotal, mrpTotal, mrpDiscount, shippingCost, taxAmount, total, taxRate, totalDiscount, wowDiscount } = calculateTotals();
 
   const handleLoyaltyPointsToggle = (checked) => {
     setUseLoyaltyPoints(checked);
@@ -271,6 +274,29 @@ const Checkout = () => {
       } else if (paymentMethod === 'qr') {
         clearCart();
         navigate(`/order-success/${order._id}`);
+      } else if (paymentMethod === 'stripe') {
+        const toastId = toast.loading('Initiating Stripe Secure Checkout...');
+        try {
+          const stripeInit = await axios.post(`${API_URL}/payments/stripe/create`, {
+            amount: total,
+            currency: 'inr',
+            orderId: order._id
+          }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+
+          const { payment_intent_id } = stripeInit.data;
+          toast.loading('Confirming payment...', { id: toastId });
+
+          await axios.post(`${API_URL}/payments/stripe/confirm`, {
+            payment_intent_id,
+            orderId: order._id
+          }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
+
+          toast.success('Payment successful!', { id: toastId });
+          clearCart();
+          navigate(`/order-success/${order._id}`);
+        } catch (err) {
+          toast.error(err.response?.data?.message || 'Stripe payment failed', { id: toastId });
+        }
       }
     } catch (error) {
       console.error('Order creation error:', error);
@@ -747,7 +773,7 @@ const Checkout = () => {
                         <>
                           {/* Razorpay */}
                           {appSettings.payment?.razorpay?.enabled && (
-                            <label className={`flex items-center p-5 border-2 rounded-xl cursor-pointer transition-all ${paymentMethod === 'razorpay' ? 'border-violet-500 bg-violet-50' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
+                            <label className={`flex items-center p-5 border-2 rounded-xl cursor-pointer transition-all ${paymentMethod === 'razorpay' ? 'border-violet-500 bg-violet-50 shadow-md shadow-violet-100' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
                               <input type="radio" name="payment" value="razorpay" checked={paymentMethod === 'razorpay'} onChange={(e) => setPaymentMethod(e.target.value)} className="accent-violet-600" />
                               <div className="ml-4 flex items-center gap-3 flex-1">
                                 <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -769,9 +795,32 @@ const Checkout = () => {
                             </label>
                           )}
 
+                          {/* Stripe */}
+                          {appSettings.payment?.stripe?.enabled && (
+                            <label className={`flex items-center p-5 border-2 rounded-xl cursor-pointer transition-all ${paymentMethod === 'stripe' ? 'border-purple-500 bg-purple-50 shadow-md shadow-purple-100' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
+                              <input type="radio" name="payment" value="stripe" checked={paymentMethod === 'stripe'} onChange={(e) => setPaymentMethod(e.target.value)} className="accent-purple-600" />
+                              <div className="ml-4 flex items-center gap-3 flex-1">
+                                <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                                  <CreditCardIcon className="h-6 w-6 text-purple-600" />
+                                </div>
+                                <div className="flex-1">
+                                  <span className="text-gray-900 font-semibold block">Stripe Checkout</span>
+                                  <p className="text-gray-600 text-sm">International & Domestic Credit / Debit Cards</p>
+                                </div>
+                                {paymentMethod === 'stripe' && (
+                                  <div className="flex gap-1.5 flex-wrap">
+                                    {['Visa', 'Mastercard', 'Amex'].map(t => (
+                                      <span key={t} className="text-[10px] bg-purple-200 text-purple-800 px-2 py-0.5 rounded-full font-medium">{t}</span>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            </label>
+                          )}
+
                           {/* Cash on Delivery */}
                           {appSettings.payment?.cod?.enabled && (
-                            <label className={`flex items-center p-5 border-2 rounded-xl cursor-pointer transition-all ${paymentMethod === 'cod' ? 'border-violet-500 bg-violet-50' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
+                            <label className={`flex items-center p-5 border-2 rounded-xl cursor-pointer transition-all ${paymentMethod === 'cod' ? 'border-violet-500 bg-violet-50 shadow-md shadow-violet-100' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
                               <input type="radio" name="payment" value="cod" checked={paymentMethod === 'cod'} onChange={(e) => setPaymentMethod(e.target.value)} className="accent-violet-600" />
                               <div className="ml-4 flex items-center gap-3">
                                 <TruckIcon className="h-7 w-7 text-green-500" />
@@ -787,7 +836,7 @@ const Checkout = () => {
 
                           {/* QR */}
                           {appSettings.payment?.qr?.enabled && (
-                            <label className={`flex items-center p-5 border-2 rounded-xl cursor-pointer transition-all ${paymentMethod === 'qr' ? 'border-violet-500 bg-violet-50' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
+                            <label className={`flex items-center p-5 border-2 rounded-xl cursor-pointer transition-all ${paymentMethod === 'qr' ? 'border-violet-500 bg-violet-50 shadow-md shadow-violet-100' : 'border-gray-200 hover:border-gray-300 bg-white'}`}>
                               <input type="radio" name="payment" value="qr" checked={paymentMethod === 'qr'} onChange={(e) => setPaymentMethod(e.target.value)} className="accent-violet-600" />
                               <div className="ml-4 flex items-center gap-3">
                                 <QrCodeIcon className="h-7 w-7 text-green-500" />
@@ -805,6 +854,16 @@ const Checkout = () => {
                         <ShieldCheckIcon className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
                         <p className="text-blue-700 text-xs leading-relaxed">
                           You'll be redirected to <b>Razorpay's secure checkout</b>. On mobile, selecting <b>UPI</b> will open your installed UPI apps (GPay, PhonePe, Paytm, etc.) directly.
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Stripe info badge when selected */}
+                    {paymentMethod === 'stripe' && (
+                      <div className="mt-4 p-3 bg-purple-50 border border-purple-100 rounded-xl flex items-start gap-3">
+                        <ShieldCheckIcon className="h-5 w-5 text-purple-500 flex-shrink-0 mt-0.5" />
+                        <p className="text-purple-700 text-xs leading-relaxed">
+                          You'll be redirected to <b>Stripe's secure encrypted gateway</b> for processing your credit/debit card payment.
                         </p>
                       </div>
                     )}
@@ -857,11 +916,13 @@ const Checkout = () => {
                           <div className="bg-stone-50 rounded-xl p-4 border border-gray-100 text-sm">
                             <p className="text-gray-900 font-medium">
                               {paymentMethod === 'razorpay' && '💳 Razorpay'}
+                              {paymentMethod === 'stripe' && '💳 Stripe Checkout'}
                               {paymentMethod === 'cod' && '🚚 Cash on Delivery'}
                               {paymentMethod === 'qr' && '📱 QR Code Payment'}
                             </p>
                             <p className="text-gray-700">
                               {paymentMethod === 'razorpay' && 'Cards, UPI, wallets & more'}
+                              {paymentMethod === 'stripe' && 'International & Domestic Credit / Debit Cards'}
                               {paymentMethod === 'cod' && 'Pay when you receive your order'}
                               {paymentMethod === 'qr' && 'Pay using UPI QR code'}
                             </p>
@@ -870,13 +931,20 @@ const Checkout = () => {
                         <div>
                           <h3 className="text-base font-semibold text-gray-900 mb-2">Order Summary</h3>
                           <div className="bg-stone-50 rounded-xl p-4 border border-gray-100 space-y-2 text-sm">
-                            <div className="flex justify-between text-gray-700"><span>Subtotal</span><span>₹{subtotal.toLocaleString()}</span></div>
+                            <div className="flex justify-between text-gray-700"><span>Price ({items.reduce((s, i) => s + i.quantity, 0)} items)</span><span>₹{mrpTotal.toLocaleString()}</span></div>
+                            {mrpDiscount > 0 && <div className="flex justify-between text-emerald-600 font-medium"><span>Discount on MRP</span><span>-₹{mrpDiscount.toLocaleString()}</span></div>}
+                            {wowDiscount > 0 && <div className="flex justify-between text-blue-600 font-bold"><span>WOW! Deal Applied</span><span>-₹{wowDiscount.toLocaleString()}</span></div>}
                             {discount > 0 && <div className="flex justify-between text-green-700"><span>Coupon ({appliedCoupon?.code})</span><span>-₹{discount.toLocaleString()}</span></div>}
                             {loyaltyDiscount > 0 && <div className="flex justify-between text-green-700"><span>Loyalty ({loyaltyPointsToUse} pts)</span><span>-₹{loyaltyDiscount.toLocaleString()}</span></div>}
                             <div className="flex justify-between text-gray-700"><span>Shipping</span><span>{shippingCost === 0 ? 'Free' : `₹${shippingCost}`}</span></div>
                             <div className="flex justify-between text-gray-700"><span>Tax ({taxRate}% GST)</span><span>₹{taxAmount.toLocaleString()}</span></div>
                             <div className="flex justify-between font-bold text-gray-900 border-t border-gray-200 pt-2"><span>Total</span><span className="text-violet-600">₹{total.toLocaleString()}</span></div>
                           </div>
+                          {(mrpDiscount + wowDiscount + discount + loyaltyDiscount) > 0 && (
+                            <div className="mt-3 bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-center text-emerald-700 font-black text-xs shadow-sm">
+                              You'll save ₹{(mrpDiscount + wowDiscount + discount + loyaltyDiscount).toLocaleString()} on this order!
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -944,7 +1012,9 @@ const Checkout = () => {
                   ))}
                 </div>
                 <div className="space-y-2.5 border-t border-gray-100 pt-4 text-sm">
-                  <div className="flex justify-between text-gray-500"><span>Subtotal</span><span>₹{subtotal.toLocaleString()}</span></div>
+                  <div className="flex justify-between text-gray-500"><span>Price ({items.reduce((s, i) => s + i.quantity, 0)} items)</span><span>₹{mrpTotal.toLocaleString()}</span></div>
+                  {mrpDiscount > 0 && <div className="flex justify-between text-emerald-600 font-medium"><span>Discount on MRP</span><span>-₹{mrpDiscount.toLocaleString()}</span></div>}
+                  {wowDiscount > 0 && <div className="flex justify-between text-blue-600 font-bold"><span>WOW! Deal Applied</span><span>-₹{wowDiscount.toLocaleString()}</span></div>}
                   {discount > 0 && <div className="flex justify-between text-green-600"><span>Coupon ({appliedCoupon?.code})</span><span>-₹{discount.toLocaleString()}</span></div>}
                   {loyaltyDiscount > 0 && <div className="flex justify-between text-green-600"><span>Loyalty ({loyaltyPointsToUse} pts)</span><span>-₹{loyaltyDiscount.toLocaleString()}</span></div>}
                   <div className="flex justify-between text-gray-500"><span>Shipping</span><span>{shippingCost === 0 ? 'Free' : `₹${shippingCost}`}</span></div>
@@ -953,6 +1023,11 @@ const Checkout = () => {
                     <span>Total</span><span className="text-violet-600">₹{total.toLocaleString()}</span>
                   </div>
                 </div>
+                {(mrpDiscount + wowDiscount + discount + loyaltyDiscount) > 0 && (
+                  <div className="mt-4 bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-center text-emerald-700 font-black text-xs shadow-sm">
+                    You'll save ₹{(mrpDiscount + wowDiscount + discount + loyaltyDiscount).toLocaleString()} on this order!
+                  </div>
+                )}
                 <div className="mt-5 pt-4 border-t border-gray-100">
                   <div className="flex items-center justify-center gap-5 text-sm">
                     <div className="flex items-center gap-1.5 text-green-600">

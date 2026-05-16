@@ -4,24 +4,24 @@ const sections = [
   {
     icon: SparklesIcon,
     title: 'Our Story',
-    content: 'SilaiMart was founded with a vision to make divine art accessible to everyone. We specialize in handcrafted sculptures and spiritual artifacts that bring peace and positivity to your sacred spaces.',
+    content: 'SilaiMart was founded with a vision to make premium handcrafted art and lifestyle products accessible to everyone. We specialize in artisan-made treasures that bring character and personality to your living spaces.',
   },
   {
     icon: GlobeAltIcon,
     title: 'Our Mission',
-    content: 'To preserve and promote traditional craftsmanship while making spiritual art accessible to modern homes and temples worldwide.',
+    content: 'To preserve and promote traditional craftsmanship while making high-quality artisan products accessible to modern homes and lifestyles worldwide.',
   },
   {
     icon: ShieldCheckIcon,
     title: 'Quality Promise',
-    content: 'Every piece in our collection is carefully selected and crafted by skilled artisans using traditional techniques passed down through generations.',
+    content: 'Every piece in our collection is carefully selected and crafted by skilled artisans using premium materials and traditional techniques.',
   },
 ];
 
 const stats = [
-  { value: '500+', label: 'Sculptures' },
+  { value: '1000+', label: 'Products' },
   { value: '10K+', label: 'Customers' },
-  { value: '50+', label: 'Artisans' },
+  { value: '100+', label: 'Artisans' },
   { value: '4.9★', label: 'Rating' },
 ];
 

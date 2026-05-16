@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
-import { apiCall } from '../services/api';
+import { apiCall, authAPI } from '../services/api';
 import {
   ChevronRightIcon,
   UserIcon,
@@ -466,6 +466,7 @@ const UserProfile = () => {
                   { id: 'addresses', label: 'Addresses', icon: MapPinIcon },
                   { id: 'payment', label: 'Payment Methods', icon: CreditCardIcon },
                   { id: 'loyalty', label: 'Loyalty Points', icon: StarIcon },
+                  { id: 'notifications', label: 'Notifications', icon: DevicePhoneMobileIcon },
                   { id: 'custom-orders', label: 'Custom Orders', icon: GiftIcon },
                   { id: 'delete', label: 'Delete Account', icon: TrashIcon }
                 ].map((item) => {
@@ -530,6 +531,14 @@ const UserProfile = () => {
                 setPointsToRedeem={setPointsToRedeem}
                 handleRedeemPoints={handleRedeemPoints}
                 isLoading={isLoading}
+              />
+            )}
+
+            {activeTab === 'notifications' && (
+              <NotificationSection
+                user={user}
+                isLoading={isLoading}
+                checkAuth={checkAuth}
               />
             )}
 
@@ -1111,5 +1120,135 @@ const DeleteAccountSection = ({ handleDeleteAccount, isLoading }) => (
     </button>
   </div>
 );
+
+// Notification Section Component
+const NotificationSection = ({ user, isLoading, checkAuth }) => {
+  const [prefs, setPrefs] = useState(user.notificationPreferences || {
+    email: true,
+    sms: false,
+    push: true,
+    inApp: true,
+    promotional: false
+  });
+  const [oneClick, setOneClick] = useState(user.oneClickEnabled || false);
+
+  useEffect(() => {
+    if (user) {
+      setOneClick(user.oneClickEnabled || false);
+      if (user.notificationPreferences) {
+        setPrefs(user.notificationPreferences);
+      }
+    }
+  }, [user]);
+
+  const handleToggle = async (key) => {
+    const oldPrefs = prefs;
+    const newPrefs = { ...prefs, [key]: !prefs[key] };
+    setPrefs(newPrefs);
+    
+    try {
+      await authAPI.updateProfile({ notificationPreferences: newPrefs });
+      toast.success('Preferences updated');
+      await checkAuth();
+    } catch (error) {
+      console.error('Failed to update notification prefs:', error);
+      toast.error('Failed to update preferences');
+      setPrefs(oldPrefs); // rollback
+    }
+  };
+
+  const handleOneClickToggle = async () => {
+    const newValue = !oneClick;
+    setOneClick(newValue); // Optimistic update
+    
+    try {
+      const res = await authAPI.updateProfile({ oneClickEnabled: newValue });
+      if (res.data?.user) {
+        // Use the actual value returned by the server as source of truth
+        const savedValue = res.data.user.oneClickEnabled;
+        setOneClick(savedValue);
+        toast.success(savedValue ? '⚡ One-Click Buy enabled!' : 'One-Click Buy disabled');
+        await checkAuth(); // Re-sync store in background
+      } else {
+        throw new Error('Invalid response from server');
+      }
+    } catch (error) {
+      console.error('One-Click toggle error:', error);
+      toast.error('Failed to update One-Click Buy setting');
+      setOneClick(!newValue); // rollback on failure
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-2xl p-6 border border-gray-200">
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">Settings & Notifications</h2>
+      
+      {/* One-Click Buy Toggle Card */}
+      <div className="flex items-center justify-between py-4 border border-amber-100 bg-amber-50/50 p-4 rounded-2xl mb-8 shadow-sm">
+        <div className="flex-1 mr-4">
+          <div className="flex items-center gap-2 font-bold text-gray-900">
+            <span className="bg-amber-400 text-stone-900 text-[10px] px-2.5 py-0.5 rounded-lg font-black uppercase tracking-wider shadow-sm">⚡ Quick Buy</span>
+            <span>One-Click Buy Checkout</span>
+          </div>
+          <p className="text-xs text-gray-600 mt-1">Enable instant 1-tap checkout on product pages using your default shipping address and payment method.</p>
+        </div>
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={handleOneClickToggle}
+            disabled={isLoading}
+            className={`w-12 h-6 rounded-full transition-colors relative ${oneClick ? 'bg-amber-500' : 'bg-gray-200'}`}
+          >
+            <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${oneClick ? 'left-7' : 'left-1'}`} />
+          </button>
+        </div>
+      </div>
+
+      <h3 className="text-lg font-bold text-gray-900 mb-4">Notification Preferences</h3>
+      <div className="space-y-6">
+        {[
+          { key: 'inApp', label: 'In-App Notifications', desc: 'Alerts inside the SilaiMart app' },
+          { key: 'email', label: 'Email Notifications', desc: 'Order updates and account alerts via email' },
+          { key: 'push', label: 'Push Notifications', desc: 'Real-time alerts on your mobile device' },
+          { key: 'sms', label: 'SMS Notifications', desc: 'Urgent order updates via text message' },
+          { key: 'promotional', label: 'Promotional Offers', desc: 'New arrivals, sales, and artisan club rewards' },
+        ].map((item) => (
+          <div key={item.key} className="flex items-center justify-between py-4 border-b border-gray-50 last:border-0">
+            <div className="flex-1">
+              <h3 className="font-bold text-gray-900">{item.label}</h3>
+              <p className="text-xs text-gray-400 mt-1">{item.desc}</p>
+            </div>
+            <div className="flex items-center gap-4">
+              {item.key === 'push' && !prefs.push && (
+                <button 
+                  onClick={() => {
+                    if (Notification.permission !== 'granted') {
+                      Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                          handleToggle('push');
+                          toast.success('Push notifications enabled!');
+                        }
+                      });
+                    } else {
+                      handleToggle('push');
+                    }
+                  }}
+                  className="text-[10px] font-black text-primary-600 uppercase tracking-widest border border-primary-100 px-3 py-1.5 rounded-lg hover:bg-primary-50 transition-colors"
+                >
+                  Enable on this Device
+                </button>
+              )}
+              <button 
+                onClick={() => handleToggle(item.key)}
+                className={`w-12 h-6 rounded-full transition-colors relative ${prefs[item.key] ? 'bg-primary-600' : 'bg-gray-200'}`}
+              >
+                <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${prefs[item.key] ? 'left-7' : 'left-1'}`} />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default UserProfile;

@@ -35,9 +35,9 @@ const Signup = () => {
           </div>
           <img src="/silaimartlogo.png" alt="SilaiMart" className="h-16 w-auto mx-auto mb-6 brightness-0 invert" />
           <h2 className="text-3xl font-bold text-white mb-4">Join Us Today</h2>
-          <p className="text-violet-300 text-lg max-w-sm">Create your account and discover divine sculptures crafted with devotion.</p>
+          <p className="text-violet-300 text-lg max-w-sm">Create your account and discover premium products crafted with excellence.</p>
           <div className="mt-10 bg-white/10 backdrop-blur-sm rounded-2xl p-5 text-left">
-            {['Free account creation', 'Access to 500+ sculptures', 'Earn loyalty points on orders', 'Custom sculpture requests'].map(b => (
+            {['Free account creation', 'Access to 1000+ products', 'Earn loyalty points on orders', 'Exclusive early access'].map(b => (
               <div key={b} className="flex items-center gap-2 py-1.5">
                 <div className="w-1.5 h-1.5 bg-amber-400 rounded-full" />
                 <span className="text-violet-200 text-sm">{b}</span>

@@ -38,9 +38,9 @@ const Login = () => {
           </div>
           <img src="/silaimartlogo.png" alt="SilaiMart" className="h-16 w-auto mx-auto mb-6 brightness-0 invert" />
           <h2 className="text-3xl font-bold text-white mb-4">Welcome Back</h2>
-          <p className="text-violet-300 text-lg max-w-sm">Sign in to explore divine sculptures crafted with devotion.</p>
-          <div className="flex justify-center gap-6 mt-10">
-            {['500+ Sculptures', '10K+ Customers', '4.9★ Rating'].map(s => (
+          <p className="text-violet-300 text-lg max-w-sm">Sign in to explore premium handcrafted products for your lifestyle.</p>
+          <div className="space-y-4">
+            {['1000+ Products', '10K+ Customers', '4.9★ Rating'].map(s => (
               <div key={s} className="bg-white/10 backdrop-blur-sm rounded-2xl px-4 py-3 text-center">
                 <p className="text-white text-xs font-medium">{s}</p>
               </div>

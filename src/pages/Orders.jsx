@@ -220,8 +220,8 @@ const Orders = () => {
             <div className="w-20 h-20 bg-primary-50 rounded-3xl flex items-center justify-center mx-auto mb-6">
               <TruckIcon className="h-10 w-10 text-primary-300" />
             </div>
-            <h3 className="text-2xl font-black text-gray-900 mb-2">No Sacred Orders Yet</h3>
-            <p className="text-gray-500 mb-8 max-w-xs mx-auto">Your journey of divine art collection hasn't started. Explore our artisan sculptures.</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">No orders yet</h3>
+            <p className="text-gray-500 mb-8 max-w-xs mx-auto">Your journey of artisan collection hasn't started. Explore our premium products.</p>
             <button onClick={() => navigate('/shop')}
               className="bg-primary-600 text-white px-8 py-4 rounded-2xl font-bold hover:bg-primary-700 hover:shadow-xl hover:shadow-primary-100 transition-all active:scale-95">
               Start Your Collection

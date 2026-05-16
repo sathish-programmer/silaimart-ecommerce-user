@@ -1,0 +1,29 @@
+User-agent: *
+Allow: /
+Allow: /shop
+Allow: /product/
+Allow: /category/
+Allow: /blogs
+Allow: /blog/
+Allow: /about
+Allow: /support
+Allow: /policy/
+
+# Disallow sensitive paths
+Disallow: /profile
+Disallow: /cart
+Disallow: /checkout
+Disallow: /order-success
+Disallow: /orders
+Disallow: /loyalty-history
+Disallow: /notifications
+Disallow: /login
+Disallow: /signup
+Disallow: /forgot-password
+Disallow: /reset-password
+
+# Disallow API and Admin paths
+Disallow: /api/
+Disallow: /admin/
+
+Sitemap: https://api.silaimart.in/sitemap.xml

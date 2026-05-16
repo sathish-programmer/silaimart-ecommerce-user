@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { StarIcon, ShoppingCartIcon, HeartIcon, PhotoIcon } from '@heroicons/react/24/solid';
-import { HeartIcon as HeartOutlineIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartOutlineIcon, SparklesIcon, CheckBadgeIcon } from '@heroicons/react/24/outline';
 import { useCartStore } from '../store/cartStore';
 import { useWishlistStore } from '../store/wishlistStore';
 import toast from 'react-hot-toast';
@@ -11,6 +11,7 @@ const ProductCard = ({ product, index = 0 }) => {
   const { addItem } = useCartStore();
   const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlistStore();
   const [imgError, setImgError] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const inWishlist = isInWishlist ? isInWishlist(product._id) : false;
 
@@ -42,119 +43,100 @@ const ProductCard = ({ product, index = 0 }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
-      className="group"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="group relative bg-white rounded-[2rem] border border-stone-100 hover:border-primary-200 hover:shadow-2xl hover:shadow-primary-500/10 transition-all duration-500 overflow-hidden"
     >
       <Link to={`/product/${product._id}`} className="block">
-        <div className="bg-white rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 border border-gray-100 group-hover:-translate-y-1">
-          {/* Image */}
-          <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-slate-100 to-gray-50">
-            {product.images?.[0]?.url && !imgError ? (
-              <img
-                src={product.images[0].url}
-                alt={product.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                onError={() => setImgError(true)}
-              />
-            ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-stone-100 to-stone-50 relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none">
-                  <svg width="100%" height="100%"><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" strokeWidth="0.5" /></pattern><rect width="100%" height="100%" fill="url(#grid)" /></svg>
-                </div>
-                <div className="relative group/placeholder">
-                  <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-4 shadow-sm border border-stone-100 transform rotate-3 group-hover/placeholder:rotate-0 transition-transform duration-500">
-                    <PhotoIcon className="w-8 h-8 text-stone-300" />
-                  </div>
-                  <div className="absolute -top-2 -right-2 w-6 h-6 bg-amber-50 rounded-full flex items-center justify-center border border-amber-100 animate-pulse">
-                    <SparklesIcon className="w-3 h-3 text-amber-500" />
-                  </div>
-                </div>
-                <span className="text-stone-400 font-bold text-[10px] uppercase tracking-[0.2em] leading-tight max-w-[120px]">
-                  Coming Soon
-                </span>
-                <div className="mt-2 h-0.5 w-8 bg-stone-200 rounded-full"></div>
-              </div>
-            )}
+        {/* Image Container */}
+        <div className="relative aspect-[4/5] overflow-hidden bg-stone-50">
+          {product.images?.[0]?.url && !imgError ? (
+            <img
+              src={product.images[0].url}
+              alt={product.name}
+              className={`w-full h-full object-cover transition-transform duration-700 ${isHovered ? 'scale-110' : 'scale-100'}`}
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center">
+              <PhotoIcon className="w-12 h-12 text-stone-200 mb-2" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-stone-400">Crafting...</span>
+            </div>
+          )}
 
-            {/* Badges */}
+          {/* Flipkart Style Assured Badge */}
+          <div className="absolute top-4 left-4 flex flex-col gap-2">
+            <div className="flex items-center gap-1.5 bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-sm border border-stone-100">
+              <CheckBadgeIcon className="h-4 w-4 text-primary-600" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-stone-900">Verified</span>
+            </div>
             {discountPercentage > 0 && (
-              <div className="absolute top-2.5 left-2.5 bg-secondary-500 text-white px-2 py-0.5 rounded-full text-xs font-bold shadow-sm">
-                -{discountPercentage}%
+              <div className="bg-secondary-500 text-white px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-secondary-500/20 w-fit">
+                {discountPercentage}% OFF
               </div>
             )}
-            {product.stock === 0 && (
-              <div className="absolute inset-0 bg-white/70 backdrop-blur-sm flex items-center justify-center">
-                <span className="bg-gray-800 text-white text-sm font-semibold px-4 py-1.5 rounded-full">Out of Stock</span>
-              </div>
-            )}
-
-            {/* Wishlist button */}
-            <button
-              onClick={handleWishlistToggle}
-              className="absolute top-2.5 right-2.5 h-8 w-8 bg-white rounded-full flex items-center justify-center shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200 hover:scale-110"
-            >
-              {inWishlist
-                ? <HeartIcon className="h-4 w-4 text-secondary-500" />
-                : <HeartOutlineIcon className="h-4 w-4 text-gray-400" />
-              }
-            </button>
           </div>
 
-          {/* Content */}
-          <div className="p-4">
-            {/* Category */}
-            {product.category?.name && (
-              <span className="text-xs font-medium text-primary-500 uppercase tracking-wider mb-1 block">
-                {product.category.name}
-              </span>
+          {/* Wishlist Overlay */}
+          <button
+            onClick={handleWishlistToggle}
+            className={`absolute top-4 right-4 h-10 w-10 bg-white/90 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-lg transition-all duration-300 ${isHovered ? 'translate-x-0 opacity-100' : 'translate-x-4 opacity-0'}`}
+          >
+            {inWishlist ? (
+              <HeartIcon className="h-5 w-5 text-rose-500" />
+            ) : (
+              <HeartOutlineIcon className="h-5 w-5 text-stone-400 hover:text-rose-500 transition-colors" />
             )}
+          </button>
 
-            <h3 className="text-gray-900 font-semibold text-sm mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors leading-snug">
-              {product.name}
-            </h3>
-
-            {/* Rating */}
-            {product.rating?.average > 0 && (
-              <div className="flex items-center mb-2.5">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <StarIcon
-                      key={i}
-                      className={`h-3.5 w-3.5 ${i < Math.floor(product.rating.average)
-                        ? 'text-amber-400'
-                        : 'text-gray-200'
-                        }`}
-                    />
-                  ))}
-                </div>
-                <span className="text-gray-400 text-xs ml-1.5">({product.rating.count})</span>
-              </div>
-            )}
-
-            {/* Price */}
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-baseline space-x-2">
-                <span className="text-primary-600 font-bold text-lg">
-                  ₹{displayPrice?.toLocaleString()}
-                </span>
-                {product.discountPrice && (
-                  <span className="text-gray-400 line-through text-sm">
-                    ₹{product.price?.toLocaleString()}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Add to Cart Button */}
+          {/* Quick Buy Overlay */}
+          <div className={`absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/20 to-transparent transition-all duration-500 ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
             <button
               onClick={handleAddToCart}
               disabled={product.stock === 0}
-              className="w-full bg-primary-600 hover:bg-primary-700 text-white py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed flex items-center justify-center space-x-2 shadow-sm hover:shadow-md"
+              className="w-full bg-stone-900 hover:bg-black text-white py-3 rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-2xl transition-all flex items-center justify-center gap-2"
             >
               <ShoppingCartIcon className="h-4 w-4" />
-              <span>{product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}</span>
+              {product.stock === 0 ? 'Out of Stock' : 'Quick Add'}
             </button>
+          </div>
+        </div>
+
+        {/* Product Details */}
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-black uppercase tracking-widest text-primary-600 bg-primary-50 px-2 py-0.5 rounded-lg">
+              {product.category?.name || 'Artisan'}
+            </span>
+            {product.rating?.average > 0 && (
+              <div className="flex items-center gap-1 bg-stone-50 px-2 py-0.5 rounded-lg border border-stone-100">
+                <StarIcon className="h-3 w-3 text-amber-400" />
+                <span className="text-[10px] font-black text-stone-600">{product.rating.average}</span>
+              </div>
+            )}
+          </div>
+
+          <h3 className="text-sm font-bold text-stone-900 line-clamp-2 mb-4 h-10 group-hover:text-primary-600 transition-colors">
+            {product.name}
+          </h3>
+
+          <div className="flex items-end justify-between">
+            <div className="flex flex-col">
+              {product.discountPrice && (
+                <span className="text-[10px] text-stone-400 line-through font-bold mb-0.5">
+                  ₹{product.price?.toLocaleString()}
+                </span>
+              )}
+              <span className="text-xl font-black text-stone-900 tracking-tighter">
+                ₹{displayPrice?.toLocaleString()}
+              </span>
+            </div>
+            <div className="h-8 w-8 rounded-full border-2 border-stone-100 flex items-center justify-center group-hover:bg-primary-600 group-hover:border-primary-600 transition-all">
+              <SparklesIcon className="h-4 w-4 text-stone-300 group-hover:text-white" />
+            </div>
           </div>
         </div>
       </Link>

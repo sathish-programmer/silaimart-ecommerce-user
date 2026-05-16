@@ -55,8 +55,8 @@ const Blogs = () => {
           <NewspaperIcon className="h-4 w-4" />
           Stories & Insights
         </div>
-        <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 tracking-tighter">Sacred Stories</h1>
-        <p className="text-gray-500 text-lg max-w-2xl mx-auto font-medium">Unveiling the wisdom, artistry, and spiritual significance behind every divine sculpture.</p>
+        <h1 className="text-4xl md:text-5xl font-black text-gray-900 tracking-tight mb-4">Our Journal</h1>
+        <p className="text-gray-500 text-lg max-w-2xl mx-auto font-medium">Unveiling the wisdom, artistry, and significance behind every artisan creation.</p>
       </div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

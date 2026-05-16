@@ -47,22 +47,46 @@ export const apiCall = async (url, options = {}) => {
 
 
 
-// Add auth token to requests
+// Add auth token and idempotency keys to requests
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
+  // Add idempotency key to POST/PUT requests
+  if (['post', 'put', 'patch'].includes(config.method?.toLowerCase())) {
+    config.headers['Idempotency-Key'] = crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 15);
+  }
+
   return config;
 });
 
-// Handle auth errors
+// Handle auth errors and automatic retries for safe requests
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
+  async (error) => {
+    const { config, response } = error;
+
+    // Handle 401 Unauthorized
+    if (response?.status === 401) {
       localStorage.removeItem('token');
     }
+
+    // Exponential Backoff Retry for GET requests on network/timeout errors
+    if (config && config.method?.toLowerCase() === 'get' && (!response || response.status >= 500)) {
+      config._retryCount = config._retryCount || 0;
+
+      if (config._retryCount < 3) {
+        config._retryCount++;
+        const backoffDelay = Math.pow(2, config._retryCount) * 1000;
+        
+        console.warn(`[API] Retrying ${config.url} (Attempt ${config._retryCount}) after ${backoffDelay}ms`);
+        await new Promise(resolve => setTimeout(resolve, backoffDelay));
+        return api(config);
+      }
+    }
+
     return Promise.reject(error);
   }
 );

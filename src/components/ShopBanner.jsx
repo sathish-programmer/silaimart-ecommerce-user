@@ -82,14 +82,14 @@ const ShopBanner = () => {
         {/* Content Layer */}
         {banner.title && (
           <div className="relative h-full flex items-center px-8 md:px-16 lg:px-24">
-            <div className="max-w-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-8 md:p-12 rounded-[3rem] shadow-2xl animate-fade-in transition-all">
-              <div className="flex items-center gap-3 mb-6">
+            <div className="max-w-2xl bg-white/10 backdrop-blur-xl border border-white/20 p-6 md:p-12 rounded-[2rem] md:rounded-[3rem] shadow-2xl animate-fade-in transition-all">
+              <div className="flex items-center gap-3 mb-4 md:mb-6">
                 <SparklesIcon className="h-5 w-5 text-amber-400 animate-pulse" />
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/80">Divine Collection</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/80">Premium Marketplace</span>
               </div>
 
               <h2
-                className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 leading-[1.05] tracking-tighter drop-shadow-sm uppercase"
+                className="text-2xl md:text-5xl lg:text-6xl font-black mb-4 md:mb-6 leading-[1.1] tracking-tighter drop-shadow-sm uppercase"
                 style={{ color: banner.textColor || '#FFFFFF' }}
               >
                 {banner.title}
@@ -97,7 +97,7 @@ const ShopBanner = () => {
 
               {banner.subtitle && (
                 <p
-                  className="text-xl md:text-2xl mb-8 font-bold opacity-90 tracking-tight"
+                  className="text-lg md:text-2xl mb-6 md:mb-8 font-bold opacity-90 tracking-tight"
                   style={{ color: banner.textColor || '#FFFFFF' }}
                 >
                   {banner.subtitle}

@@ -6,36 +6,45 @@ export const useCartStore = create(
     (set, get) => ({
       items: [],
       
-      addItem: (product, quantity = 1) => {
+      addItem: (product, quantity = 1, size = '', color = '') => {
         const items = get().items;
-        const existingItem = items.find(item => item.product._id === product._id);
+        const existingItemIndex = items.findIndex(item => 
+          item.product._id === product._id && 
+          item.size === size && 
+          item.color === color
+        );
         
-        if (existingItem) {
-          set({
-            items: items.map(item =>
-              item.product._id === product._id
-                ? { ...item, quantity: item.quantity + quantity }
-                : item
-            )
-          });
+        if (existingItemIndex > -1) {
+          const newItems = [...items];
+          newItems[existingItemIndex] = {
+            ...newItems[existingItemIndex],
+            quantity: newItems[existingItemIndex].quantity + quantity
+          };
+          set({ items: newItems });
         } else {
-          set({ items: [...items, { product, quantity }] });
+          set({ items: [...items, { product, quantity, size, color }] });
         }
       },
       
-      removeItem: (productId) => {
-        set({ items: get().items.filter(item => item.product._id !== productId) });
+      removeItem: (productId, size = '', color = '') => {
+        set({ 
+          items: get().items.filter(item => 
+            !(item.product._id === productId && item.size === size && item.color === color)
+          ) 
+        });
       },
       
-      updateQuantity: (productId, quantity) => {
+      updateQuantity: (productId, quantity, size = '', color = '') => {
         if (quantity <= 0) {
-          get().removeItem(productId);
+          get().removeItem(productId, size, color);
           return;
         }
         
         set({
           items: get().items.map(item =>
-            item.product._id === productId ? { ...item, quantity } : item
+            (item.product._id === productId && item.size === size && item.color === color)
+              ? { ...item, quantity } 
+              : item
           )
         });
       },
